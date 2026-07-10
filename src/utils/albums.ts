@@ -48,3 +48,30 @@ export const albums: AlbumGroup[] = Object.entries(albumModules).map(([path, mod
 export const sortedAlbums = [...albums].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 );
+
+export function groupAlbumsByFolder(albums: AlbumGroup[]): {
+    folder: string;
+    items: AlbumGroup[];
+}[] {
+    const folderMap = new Map<string, AlbumGroup[]>();
+    albums.forEach(album => {
+        let folder = '未分类';
+        if (album.basePath) {
+            // basePath 示例: 'content/albums/旅行/2024'
+            const parts = album.basePath.replace(/^content\/albums\//, '').split('/');
+            if (parts.length > 0 && parts[0]) {
+                folder = parts[0];
+            }
+        }
+        if (!folderMap.has(folder)) folderMap.set(folder, []);
+        folderMap.get(folder)!.push(album);
+    });
+
+    const result = Array.from(folderMap.entries()).map(([folder, items]) => ({
+        folder,
+        items: [...items].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+    }));
+
+    result.sort((a, b) => a.folder.localeCompare(b.folder));
+    return result;
+}

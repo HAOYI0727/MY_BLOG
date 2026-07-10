@@ -1,0 +1,21 @@
+{
+  "title": "Physics(2) Study Notes",
+  "description": "My notes from Physics(2) course.",
+  "cover": "./phy4.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["physics", "study", "general"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./phy4.JPG", "alt": "phy4", "title": "Physics Note 4", "description": "", "tags": ["phy"] },
+    { "src": "./phy5.JPG", "alt": "phy5", "title": "Physics Note 5", "description": "", "tags": ["phy"] },
+    { "src": "./phy6.JPG", "alt": "phy6", "title": "Physics Note 6", "description": "", "tags": ["phy"] },
+    { "src": "./phy7.JPG", "alt": "phy7", "title": "Physics Note 7", "description": "", "tags": ["phy"] },
+    { "src": "./phy8.JPG", "alt": "phy8", "title": "Physics Note 8", "description": "", "tags": ["phy"] },
+    { "src": "./phy9.JPG", "alt": "phy9", "title": "Physics Note 9", "description": "", "tags": ["phy"] },
+    { "src": "./phy10.JPG", "alt": "phy10", "title": "Physics Note 10", "description": "", "tags": ["phy"] },
+    { "src": "./phy11.JPG", "alt": "phy11", "title": "Physics Note 11", "description": "", "tags": ["phy"] }
+  ],
+  "visible": true
+}

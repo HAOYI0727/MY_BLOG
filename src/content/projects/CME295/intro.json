@@ -1,0 +1,22 @@
+{
+    "title": "CME295-Study-Notes",
+    "description": "斯坦福大学 CME295 课程（Transformer & Large Language Models）学习笔记仓库，基于 2025 年秋季课程内容整理。笔记综合整理自三个来源：课程幻灯片的核心理念、授课教授强调的重点内容，以及相关学术论文的扩展阅读。",
+    "image": "",
+    "category": "machine-learning",
+    "techStack": [
+        "Markdown"
+    ],
+    "status": "completed",
+    "liveDemo": "",
+    "sourceCode": "https://github.com/HAOYI0727/CME295_Study_Notes",
+    "startDate": "2025-09-01",
+    "endDate": "2025-12-31",
+    "featured": false,
+    "tags": [
+        "Study Notes",
+        "Transformer",
+        "LLM",
+        "Stanford",
+        "Deep Learning"
+    ]
+}

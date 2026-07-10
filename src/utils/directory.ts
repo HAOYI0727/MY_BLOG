@@ -55,12 +55,22 @@ export async function getDirectoryTree(): Promise<DirectoryNode[]> {
         addNode(basePathParts, album.title || album.id, `/albums/${album.id}/`);
     }
 
+    // for (const moment of sortedMoments) {
+    //     const basePathParts = moment.basePath?.split('/') || [];
+    //     if (basePathParts[0] === 'content') basePathParts.shift();
+    //     if (basePathParts[0] === 'diary') basePathParts[0] = rootMap.diary;
+    //     addNode(basePathParts, moment.title || moment.id, `/diary/`);
+    // }
+
     for (const moment of sortedMoments) {
         const basePathParts = moment.basePath?.split('/') || [];
         if (basePathParts[0] === 'content') basePathParts.shift();
         if (basePathParts[0] === 'diary') basePathParts[0] = rootMap.diary;
-        addNode(basePathParts, moment.title || moment.id, `/diary/`);
+        // 构建 URL：如果存在 folder，则包含它
+        const url = moment.folder ? `/diary/${moment.folder}/${moment.id}/` : `/diary/${moment.id}/`;
+        addNode(basePathParts, moment.title || moment.id, url);
     }
+
 
     for (const project of projectsData) {
         const basePathParts = project.basePath?.split('/') || [];

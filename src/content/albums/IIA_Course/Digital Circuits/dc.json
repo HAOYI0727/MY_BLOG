@@ -1,0 +1,23 @@
+{
+  "title": "Digital Circuits Study Notes",
+  "description": "My notes from Digital Circuits course.",
+  "cover": "./dc1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["digital circuits", "study", "professional"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./dc1.JPG", "alt": "dc1", "title": "DC Note 1", "description": "", "tags": ["dc"] },
+    { "src": "./dc2.JPG", "alt": "dc2", "title": "DC Note 2", "description": "", "tags": ["dc"] },
+    { "src": "./dc3.JPG", "alt": "dc3", "title": "DC Note 3", "description": "", "tags": ["dc"] },
+    { "src": "./dc4.JPG", "alt": "dc4", "title": "DC Note 4", "description": "", "tags": ["dc"] },
+    { "src": "./dc5.JPG", "alt": "dc5", "title": "DC Note 5", "description": "", "tags": ["dc"] },
+    { "src": "./dc6.JPG", "alt": "dc6", "title": "DC Note 6", "description": "", "tags": ["dc"] },
+    { "src": "./dc7.JPG", "alt": "dc7", "title": "DC Note 7", "description": "", "tags": ["dc"] },
+    { "src": "./dc8.JPG", "alt": "dc8", "title": "DC Note 8", "description": "", "tags": ["dc"] },
+    { "src": "./dc9.JPG", "alt": "dc9", "title": "DC Note 9", "description": "", "tags": ["dc"] },
+    { "src": "./dc10.JPG", "alt": "dc10", "title": "DC Note 10", "description": "", "tags": ["dc"] }
+  ],
+  "visible": true
+}

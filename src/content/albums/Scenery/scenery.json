@@ -1,0 +1,24 @@
+{
+  "title": "Scenery",
+  "description": "A collection of scenic photographs capturing the beauty of nature and landscapes.",
+  "cover": "./s4.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["scenery", "nature"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./s1.JPG", "alt": "s1", "title": "Scenery 1", "description": "", "tags": ["scenery"] },
+    { "src": "./s2.JPG", "alt": "s2", "title": "Scenery 2", "description": "", "tags": ["scenery"] },
+    { "src": "./s3.JPG", "alt": "s3", "title": "Scenery 3", "description": "", "tags": ["scenery"] },
+    { "src": "./s4.JPG", "alt": "s4", "title": "Scenery 4", "description": "", "tags": ["scenery"] },
+    { "src": "./s5.JPG", "alt": "s5", "title": "Scenery 5", "description": "", "tags": ["scenery"] },
+    { "src": "./s6.JPG", "alt": "s6", "title": "Scenery 6", "description": "", "tags": ["scenery"] },
+    { "src": "./s7.JPG", "alt": "s7", "title": "Scenery 7", "description": "", "tags": ["scenery"] },
+    { "src": "./s8.JPG", "alt": "s8", "title": "Scenery 8", "description": "", "tags": ["scenery"] },
+    { "src": "./s9.JPG", "alt": "s9", "title": "Scenery 9", "description": "", "tags": ["scenery"] },
+    { "src": "./s10.JPG", "alt": "s10", "title": "Scenery 10", "description": "", "tags": ["scenery"] },
+    { "src": "./s11.JPG", "alt": "s11", "title": "Scenery 11", "description": "", "tags": ["scenery"] }
+  ],
+  "visible": true
+}

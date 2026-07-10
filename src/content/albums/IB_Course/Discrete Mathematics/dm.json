@@ -1,0 +1,30 @@
+{
+  "title": "Discrete Mathematics Study Notes",
+  "description": "My notes from Discrete Mathematics course.",
+  "cover": "./dm1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["discrete mathematics", "study", "professional"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./dm1.JPG", "alt": "dm1", "title": "DM Note 1", "description": "", "tags": ["dm"] },
+    { "src": "./dm2.JPG", "alt": "dm2", "title": "DM Note 2", "description": "", "tags": ["dm"] },
+    { "src": "./dm3.JPG", "alt": "dm3", "title": "DM Note 3", "description": "", "tags": ["dm"] },
+    { "src": "./dm4.JPG", "alt": "dm4", "title": "DM Note 4", "description": "", "tags": ["dm"] },
+    { "src": "./dm5.JPG", "alt": "dm5", "title": "DM Note 5", "description": "", "tags": ["dm"] },
+    { "src": "./dm6.JPG", "alt": "dm6", "title": "DM Note 6", "description": "", "tags": ["dm"] },
+    { "src": "./dm7.JPG", "alt": "dm7", "title": "DM Note 7", "description": "", "tags": ["dm"] },
+    { "src": "./dm8.JPG", "alt": "dm8", "title": "DM Note 8", "description": "", "tags": ["dm"] },
+    { "src": "./dm9.JPG", "alt": "dm9", "title": "DM Note 9", "description": "", "tags": ["dm"] },
+    { "src": "./dm10.JPG", "alt": "dm10", "title": "DM Note 10", "description": "", "tags": ["dm"] },
+    { "src": "./dm11.JPG", "alt": "dm11", "title": "DM Note 11", "description": "", "tags": ["dm"] },
+    { "src": "./dm12.JPG", "alt": "dm12", "title": "DM Note 12", "description": "", "tags": ["dm"] },
+    { "src": "./dm13.JPG", "alt": "dm13", "title": "DM Note 13", "description": "", "tags": ["dm"] },
+    { "src": "./dm14.JPG", "alt": "dm14", "title": "DM Note 14", "description": "", "tags": ["dm"] },
+    { "src": "./dm15.JPG", "alt": "dm15", "title": "DM Note 15", "description": "", "tags": ["dm"] },
+    { "src": "./dm16.JPG", "alt": "dm16", "title": "DM Note 16", "description": "", "tags": ["dm"] },
+    { "src": "./dm17.JPG", "alt": "dm17", "title": "DM Note 17", "description": "", "tags": ["dm"] }
+  ],
+  "visible": true
+}

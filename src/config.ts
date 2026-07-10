@@ -38,6 +38,7 @@ const config = yaml.load(rawConfig) as ConfigFile;
 
 const linkPresetNameMap: Record<string, LinkPreset> = {
     Home: LinkPreset.Home,
+    Posts: LinkPreset.Posts, 
     Archive: LinkPreset.Archive,
     Projects: LinkPreset.Projects,
     Skills: LinkPreset.Skills,

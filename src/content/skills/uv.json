@@ -1,0 +1,12 @@
+{
+    "name": "uv",
+    "description": "高性能 Python 包管理工具，用于项目依赖解析、虚拟环境管理与构建发布。",
+    "icon": "logos:python",
+    "category": "tools",
+    "level": "intermediate",
+    "experience": {
+        "years": 1,
+        "months": 0
+    },
+    "color": "#3776AB"
+}

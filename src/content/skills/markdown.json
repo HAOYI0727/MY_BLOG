@@ -1,0 +1,12 @@
+{
+    "name": "Markdown",
+    "description": "轻量级标记语言，用于撰写技术文档、博客笔记及 README 文件。",
+    "icon": "logos:markdown",
+    "category": "tools",
+    "level": "expert",
+    "experience": {
+        "years": 2,
+        "months": 0
+    },
+    "color": "#000000"
+}

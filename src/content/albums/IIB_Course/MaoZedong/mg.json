@@ -1,0 +1,22 @@
+{
+  "title": "Mao Zedong Thought Study Notes",
+  "description": "My notes from Mao Zedong Thought course.",
+  "cover": "./mg1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["Mao Zedong", "Marxism", "study", "general"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./mg1.JPG", "alt": "mg1", "title": "MG Image 1", "description": "", "tags": ["Mao Zedong"] },
+    { "src": "./mg2.JPG", "alt": "mg2", "title": "MG Image 2", "description": "", "tags": ["Mao Zedong"] },
+    { "src": "./mg3.JPG", "alt": "mg3", "title": "MG Image 3", "description": "", "tags": ["Mao Zedong"] },
+    { "src": "./mg4.JPG", "alt": "mg4", "title": "MG Image 4", "description": "", "tags": ["Mao Zedong"] },
+    { "src": "./mg5.JPG", "alt": "mg5", "title": "MG Image 5", "description": "", "tags": ["Mao Zedong"] },
+    { "src": "./mg6.JPG", "alt": "mg6", "title": "MG Image 6", "description": "", "tags": ["Mao Zedong"] },
+    { "src": "./mg7.JPG", "alt": "mg7", "title": "MG Image 7", "description": "", "tags": ["Mao Zedong"] },
+    { "src": "./mg8.JPG", "alt": "mg8", "title": "MG Image 8", "description": "", "tags": ["Mao Zedong"] },
+    { "src": "./mg9.JPG", "alt": "mg9", "title": "MG Image 9", "description": "", "tags": ["Mao Zedong"] }
+  ],
+  "visible": true
+}

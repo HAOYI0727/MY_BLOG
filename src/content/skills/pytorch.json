@@ -1,0 +1,12 @@
+{
+    "name": "PyTorch",
+    "description": "深度学习框架，用于构建、训练和部署 Transformer 及 LLM 相关模型。",
+    "icon": "logos:pytorch-icon",
+    "category": "frameworks",
+    "level": "intermediate",
+    "experience": {
+        "years": 1,
+        "months": 5
+    },
+    "color": "#EE4C2C"
+}

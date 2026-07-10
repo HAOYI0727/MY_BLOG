@@ -3,9 +3,9 @@ site:
     # 站点 URL（以斜杠结尾）
     siteURL: "https://twilight.spr-aachen.com/"
     # 站点标题
-    title: "Twilight"
+    title: "Clear Eyes, Full Heart"
     # 站点副标题
-    subtitle: "Blog Template"
+    subtitle: "There is only one heroism in the world: to see the world as it is and to love it."
     # 语言配置
     lang: "en"
     # 翻译配置
@@ -44,7 +44,7 @@ site:
         # 主题色的默认色相 (范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345)
         hue: 255
     # 默认主题 ("system" 跟随系统 | "light" 浅色 | "dark" 深色)
-    defaultTheme: "dark"
+    defaultTheme: "system"
     # 壁纸配置
     wallpaper:
         # 模式 ("banner" 横幅 | "fullscreen" 全屏 | "none" 纯色)
@@ -67,7 +67,7 @@ site:
             # 为多张图片启用轮播，否则随机显示一张图片
             enable: true
             # 轮播间隔时间 (秒)
-            interval: 3.6
+            interval: 5
             # 启用 Ken Burns 效果
             kenBurns: true
         # Banner 模式专属配置
@@ -76,21 +76,22 @@ site:
             homeText:
                 # 在主页显示文本
                 enable: true
-                # 主标题
-                title: "Twilight"
-                # 副标题，支持单个字符串或字符串数组
-                subtitle:
-                    - "Illuminate Our Paths"
+                # 站点标题
+                title: "Clear Eyes, Full Heart"
+                # 站点副标题
+                subtitle: 
+                    - "There is only one heroism in the world: "
+                    - "to see the world as it is and to love it."
                 # 副标题打字机效果
                 typewriter:
                     # 启用副标题打字机效果
                     enable: true
                     # 打字速度 (毫秒)
-                    speed: 111
+                    speed: 100
                     # 删除速度 (毫秒)
-                    deleteSpeed: 51
+                    deleteSpeed: 50
                     # 完全显示后的暂停时间 (毫秒)
-                    pauseTime: 3000
+                    pauseTime: 300
             # 横幅图片来源文本
             credit:
                 # 显示横幅图片来源文本
@@ -170,6 +171,8 @@ navbar:
     links:
         - # 一级导航链接 - 主页 (预设)
             "Home"
+        - # 一级导航链接 - 文章 (预设)
+            "Posts"
         - # 一级导航链接 - 归档 (预设)
             "Archive"
         - # 一级导航链接 - 展览 (自定义)
@@ -195,10 +198,10 @@ navbar:
                     "Albums"
                 - # 二级导航链接 - 动画 (预设)
                     "Anime"
-        - # 一级导航链接 - 好友 (预设)
-            "Friends"
-        - # 一级导航链接 - 关于 (预设)
-            "About"
+        # - # 一级导航链接 - 好友 (预设)
+        #     "Friends"
+        # - # 一级导航链接 - 关于 (预设)
+        #     "About"
 
 # 侧边栏配置
 sidebar:
@@ -244,17 +247,17 @@ sidebar:
                     mode: "exclude"
                     # 页面路径匹配规则列表 (支持正则字符串)
                     paths: ["^/posts/", "^/archive"]
-            - # 组件 - 公告 (预设)
-                # 类型
-                type: "announcement"
-                # 位置策略 ("top" 顶部固定 | "sticky" 粘性)
-                position: "top"
-                # 页面可见性配置
-                visibility:
-                    # 匹配模式：'include' (包含), 'exclude' (排除)
-                    mode: "exclude"
-                    # 页面路径匹配规则列表 (支持正则字符串)
-                    paths: ["^/posts/", "^/archive"]
+            # - # 组件 - 公告 (预设)
+            #     # 类型
+            #     type: "announcement"
+            #     # 位置策略 ("top" 顶部固定 | "sticky" 粘性)
+            #     position: "top"
+            #     # 页面可见性配置
+            #     visibility:
+            #         # 匹配模式：'include' (包含), 'exclude' (排除)
+            #         mode: "exclude"
+            #         # 页面路径匹配规则列表 (支持正则字符串)
+            #         paths: ["^/posts/", "^/archive"]
             - # 组件 - 文章目录 (预设)
                 # 类型
                 type: "toc"
@@ -277,11 +280,11 @@ sidebar:
 # 资料配置
 profile:
     # 头像配置 (相对于 /public 目录)
-    avatar: "/assets/images/avatar.jpg"
+    avatar: "/assets/images/zhy.png"
     # 信息配置
-    name: "Twilight"
+    name: "Zhang Haoyi"
     # 简介配置
-    bio: "Hi"
+    bio: "Hi, I'm Zhang Haoyi! Welcome to my blog."
     # 链接配置
     links:
         - # 链接示例
@@ -290,7 +293,7 @@ profile:
             # 图标
             icon: "fa6-brands:github"
             # 链接
-            url: "https://github.com/Spr-Aachen/Twilight"
+            url: "https://github.com/HAOYI0727"
 
 # 公告配置
 announcement:
@@ -363,9 +366,9 @@ post:
 # 页脚配置
 footer:
     # 启用 Footer HTML 注入功能
-    enable: false
+    enable: true
     # 自定义 HTML 内容，用于添加备案号等信息
-    customHtml: ""
+    customHtml: "There is only one heroism in the world: to see the world as it is and to love it."
 
 # 粒子特效配置
 particle:
@@ -413,7 +416,7 @@ musicPlayer:
     # 启用音乐播放器功能
     enable: true
     # 默认模式 ("meting" API | "local" 本地)
-    mode: "meting"
+    mode: "local"
     # meting 模式专属配置
     meting:
         # Meting API 地址
@@ -432,17 +435,227 @@ musicPlayer:
                 # 序号
                 id: 1
                 # 标题
-                title: "深海之息"
+                title: "宫崎骏动漫纯音乐"
                 # 作者
-                artist: "Youzee Music"
+                artist: "-"
                 # 封面
-                cover: "https://p1.music.126.net/PhKOqFtljgHDDpKYM2ADUA==/109951169858309716.jpg"
+                cover: "/assets/images/gqj.jpg"
                 # 音乐路径
-                url: "assets/music/深海之息.m4a"
+                url: "assets/music/gqj.m4a"
                 # 歌词路径
-                lrc: "assets/music/深海之息.lrc"
+                lrc: "assets/music/gqj.lrc"
                 # 时长
-                duration: 146
+                duration: 2760
+            - # 列表示例
+                # 序号
+                id: 2
+                # 标题
+                title: "BIRDS OF A FEATHER"
+                # 作者
+                artist: "Billie Eilish"
+                # 封面
+                cover: "/assets/images/HMHAS.jpg"
+                # 音乐路径
+                url: "assets/music/BIRDS_OF_A_FEATHER.m4a"
+                # 歌词路径
+                lrc: "assets/music/BIRDS_OF_A_FEATHER.lrc"
+                # 时长
+                duration: 210
+            - # 列表示例
+                # 序号
+                id: 3
+                # 标题
+                title: "WILDFLOWER"
+                # 作者
+                artist: "Billie Eilish"
+                # 封面
+                cover: "/assets/images/HMHAS.jpg"
+                # 音乐路径
+                url: "assets/music/WILDFLOWER.m4a"
+                # 歌词路径
+                lrc: "assets/music/WILDFLOWER.lrc"
+                # 时长
+                duration: 261
+            - # 列表示例
+                # 序号
+                id: 4
+                # 标题
+                title: "HAPPIER THAN EVER"
+                # 作者
+                artist: "Billie Eilish"
+                # 封面
+                cover: "/assets/images/HAPPIER_THAN_EVER.jpg"
+                # 音乐路径
+                url: "assets/music/HAPPIER_THAN_EVER.m4a"
+                # 歌词路径
+                lrc: "assets/music/HAPPIER_THAN_EVER.lrc"
+                # 时长
+                duration: 298
+            - # 列表示例
+                # 序号
+                id: 5
+                # 标题
+                title: "CARDIGAN"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/FOLKLORE.jpg"
+                # 音乐路径
+                url: "assets/music/CARDIGAN.m4a"
+                # 歌词路径
+                lrc: "assets/music/CARDIGAN.lrc"
+                # 时长
+                duration: 240
+            - # 列表示例
+                # 序号
+                id: 6
+                # 标题
+                title: "AUGUST"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/FOLKLORE.jpg"
+                # 音乐路径
+                url: "assets/music/AUGUST.m4a"
+                # 歌词路径
+                lrc: "assets/music/AUGUST.lrc"
+                # 时长
+                duration: 270
+            - # 列表示例
+                # 序号
+                id: 7
+                # 标题
+                title: "WILLOW"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/EVERMORE.jpg"
+                # 音乐路径
+                url: "assets/music/WILLOW.m4a"
+                # 歌词路径
+                lrc: "assets/music/WILLOW.lrc"
+                # 时长
+                duration: 216
+            - # 列表示例
+                # 序号
+                id: 8
+                # 标题
+                title: "CHAMPAGNE PROBLEM"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/EVERMORE.jpg"
+                # 音乐路径
+                url: "assets/music/CHAMPAGNE_PROBLEM.m4a"
+                # 歌词路径
+                lrc: "assets/music/CHAMPAGNE_PROBLEM.lrc"
+                # 时长
+                duration: 244
+            - # 列表示例
+                # 序号
+                id: 9
+                # 标题
+                title: "FORTNIGHT"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/TTPD.jpg"
+                # 音乐路径
+                url: "assets/music/FORTNIGHT.m4a"
+                # 歌词路径
+                lrc: "assets/music/FORTNIGHT.lrc"
+                # 时长
+                duration: 229
+            - # 列表示例
+                # 序号
+                id: 10
+                # 标题
+                title: "DOWN BAD"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/TTPD.jpg"
+                # 音乐路径
+                url: "assets/music/DOWN_BAD.m4a"
+                # 歌词路径
+                lrc: "assets/music/DOWN_BAD.lrc"
+                # 时长
+                duration: 264
+            - # 列表示例
+                # 序号
+                id: 11
+                # 标题
+                title: "DIE WITH A SMILE"
+                # 作者
+                artist: "Lady Gaga & Bruno Mars"
+                # 封面
+                cover: "/assets/images/DIE_WITH_A_SMILE.jpg"
+                # 音乐路径
+                url: "assets/music/DIE_WITH_A_SMILE.m4a"
+                # 歌词路径
+                lrc: "assets/music/DIE_WITH_A_SMILE.lrc"
+                # 时长
+                duration: 252
+            - # 列表示例
+                # 序号
+                id: 12
+                # 标题
+                title: "HATE THAT I MADE YOUS LOVE ME"
+                # 作者
+                artist: "Ariana Grande"
+                # 封面
+                cover: "/assets/images/HATE_THAT_I_MADE_YOU_LOVE_ME.jpg"
+                # 音乐路径
+                url: "assets/music/HATE_THAT_I_MADE_YOU_LOVE_ME.m4a"
+                # 歌词路径
+                lrc: "assets/music/HATE_THAT_I_MADE_YOU_LOVE_ME.lrc"
+                # 时长
+                duration: 198
+            - # 列表示例
+                # 序号
+                id: 13
+                # 标题
+                title: "ETERNAL SUNSHINE"
+                # 作者
+                artist: "Ariana Grande"
+                # 封面
+                cover: "/assets/images/ETERNAL_SUNSHINE.jpg"
+                # 音乐路径
+                url: "assets/music/ETERNAL_SUNSHINE.m4a"
+                # 歌词路径
+                lrc: "assets/music/ETERNAL_SUNSHINE.lrc"
+                # 时长
+                duration: 253
+            - # 列表示例
+                # 序号
+                id: 14
+                # 标题
+                title: "THANK U NEXT"
+                # 作者
+                artist: "Ariana Grande"
+                # 封面
+                cover: "/assets/images/THANK_U_NEXT.jpg"
+                # 音乐路径
+                url: "assets/music/THANK_U_NEXT.m4a"
+                # 歌词路径
+                lrc: "assets/music/THANK_U_NEXT.lrc"
+                # 时长
+                duration: 209
+            - # 列表示例
+                # 序号
+                id: 15
+                # 标题
+                title: "KILL BILL"
+                # 作者
+                artist: "SZA"
+                # 封面
+                cover: "/assets/images/KILL_BILL.jpg"
+                # 音乐路径
+                url: "assets/music/KILL_BILL.m4a"
+                # 歌词路径
+                lrc: "assets/music/KILL_BILL.lrc"
+                # 时长
+                duration: 157
     # 是否自动播放
     autoplay: true
 

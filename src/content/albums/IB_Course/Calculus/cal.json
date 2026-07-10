@@ -1,0 +1,25 @@
+{
+  "title": "Calculus Study Notes",
+  "description": "My notes from Calculus course.",
+  "cover": "./cal1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["calculus", "study", "general"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./cal1.JPG", "alt": "cal1", "title": "CAL Note 1", "description": "", "tags": ["cal"] },
+    { "src": "./cal2.JPG", "alt": "cal2", "title": "CAL Note 2", "description": "", "tags": ["cal"] },
+    { "src": "./cal3.JPG", "alt": "cal3", "title": "CAL Note 3", "description": "", "tags": ["cal"] },
+    { "src": "./cal4.JPG", "alt": "cal4", "title": "CAL Note 4", "description": "", "tags": ["cal"] },
+    { "src": "./cal5.JPG", "alt": "cal5", "title": "CAL Note 5", "description": "", "tags": ["cal"] },
+    { "src": "./cal6.JPG", "alt": "cal6", "title": "CAL Note 6", "description": "", "tags": ["cal"] },
+    { "src": "./cal7.JPG", "alt": "cal7", "title": "CAL Note 7", "description": "", "tags": ["cal"] },
+    { "src": "./cal8.JPG", "alt": "cal8", "title": "CAL Note 8", "description": "", "tags": ["cal"] },
+    { "src": "./cal9.JPG", "alt": "cal9", "title": "CAL Note 9", "description": "", "tags": ["cal"] },
+    { "src": "./cal10.JPG", "alt": "cal10", "title": "CAL Note 10", "description": "", "tags": ["cal"] },
+    { "src": "./cal11.JPG", "alt": "cal11", "title": "CAL Note 11", "description": "", "tags": ["cal"] },
+    { "src": "./cal12.JPG", "alt": "cal12", "title": "CAL Note 12", "description": "", "tags": ["cal"] }
+  ],
+  "visible": true
+}

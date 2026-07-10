@@ -1,11 +1,11 @@
 {
     "name": "Git",
-    "description": "A distributed version control system.",
+    "description": "分布式版本控制系统，熟练使用分支管理、协作工作流及代码回滚。",
     "icon": "logos:git-icon",
     "category": "tools",
     "level": "advanced",
     "experience": {
-        "years": 3,
+        "years": 2,
         "months": 0
     },
     "color": "#F05032"

@@ -1,0 +1,16 @@
+{
+  "title": "Physics(1) Study Notes",
+  "description": "My notes from Physics(1) course.",
+  "cover": "./phy1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["physics", "study", "general"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./phy1.JPG", "alt": "phy1", "title": "Physics Note 1", "description": "", "tags": ["phy"] },
+    { "src": "./phy2.JPG", "alt": "phy2", "title": "Physics Note 2", "description": "", "tags": ["phy"] },
+    { "src": "./phy3.JPG", "alt": "phy3", "title": "Physics Note 3", "description": "", "tags": ["phy"] }
+  ],
+  "visible": true
+}

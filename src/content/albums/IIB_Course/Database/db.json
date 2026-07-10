@@ -1,0 +1,25 @@
+{
+  "title": "Database Study Notes",
+  "description": "My notes from Database course.",
+  "cover": "./db1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["database", "study", "professional"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./db1.JPG", "alt": "db1", "title": "DB Note 1", "description": "", "tags": ["db"] },
+    { "src": "./db2.JPG", "alt": "db2", "title": "DB Note 2", "description": "", "tags": ["db"] },
+    { "src": "./db3.JPG", "alt": "db3", "title": "DB Note 3", "description": "", "tags": ["db"] },
+    { "src": "./db4.JPG", "alt": "db4", "title": "DB Note 4", "description": "", "tags": ["db"] },
+    { "src": "./db5.JPG", "alt": "db5", "title": "DB Note 5", "description": "", "tags": ["db"] },
+    { "src": "./db6.JPG", "alt": "db6", "title": "DB Note 6", "description": "", "tags": ["db"] },
+    { "src": "./db7.JPG", "alt": "db7", "title": "DB Note 7", "description": "", "tags": ["db"] },
+    { "src": "./db8.JPG", "alt": "db8", "title": "DB Note 8", "description": "", "tags": ["db"] },
+    { "src": "./db9.JPG", "alt": "db9", "title": "DB Note 9", "description": "", "tags": ["db"] },
+    { "src": "./db10.JPG", "alt": "db10", "title": "DB Note 10", "description": "", "tags": ["db"] },
+    { "src": "./db11.JPG", "alt": "db11", "title": "DB Note 11", "description": "", "tags": ["db"] },
+    { "src": "./db12.JPG", "alt": "db12", "title": "DB Note 12", "description": "", "tags": ["db"] }
+  ],
+  "visible": true
+}

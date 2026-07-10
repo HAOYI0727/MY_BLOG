@@ -64,4 +64,10 @@ export const LinkPresets: { [key in LinkPreset]: NavbarLink } = {
         icon: "material-symbols:info",
         description: i18n(I18nKey.about),
     },
+    [LinkPreset.Posts]: {
+        name: i18n(I18nKey.posts),
+        url: "/posts/",
+        icon: "material-symbols:article",
+        description: "A list of all published posts.",
+    },
 };

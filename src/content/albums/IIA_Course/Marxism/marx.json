@@ -1,0 +1,21 @@
+{
+  "title": "Basic Principle of Marxism Study Notes",
+  "description": "My notes from Basic Principle of Marxism course.",
+  "cover": "./marx1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["marxism", "study", "general"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./marx1.JPG", "alt": "marx1", "title": "Marx Note 1", "description": "", "tags": ["marx"] },
+    { "src": "./marx2.JPG", "alt": "marx2", "title": "Marx Note 2", "description": "", "tags": ["marx"] },
+    { "src": "./marx3.JPG", "alt": "marx3", "title": "Marx Note 3", "description": "", "tags": ["marx"] },
+    { "src": "./marx4.JPG", "alt": "marx4", "title": "Marx Note 4", "description": "", "tags": ["marx"] },
+    { "src": "./marx5.JPG", "alt": "marx5", "title": "Marx Note 5", "description": "", "tags": ["marx"] },
+    { "src": "./marx6.JPG", "alt": "marx6", "title": "Marx Note 6", "description": "", "tags": ["marx"] },
+    { "src": "./marx7.JPG", "alt": "marx7", "title": "Marx Note 7", "description": "", "tags": ["marx"] },
+    { "src": "./marx8.JPG", "alt": "marx8", "title": "Marx Note 8", "description": "", "tags": ["marx"] }
+  ],
+  "visible": true
+}

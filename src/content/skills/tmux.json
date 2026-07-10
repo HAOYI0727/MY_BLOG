@@ -1,0 +1,12 @@
+{
+    "name": "Tmux",
+    "description": "终端复用工具，用于会话管理、窗口分割及持久化运行长期任务。熟悉会话创建、分离与恢复、窗口及面板操作。",
+    "icon": "logos:tmux",
+    "category": "tools",
+    "level": "intermediate",
+    "experience": {
+        "years": 1,
+        "months": 0
+    },
+    "color": "#1BB91F"
+}

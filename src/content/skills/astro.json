@@ -1,15 +1,12 @@
 {
     "name": "Astro",
-    "description": "A modern static site generator supporting multi-framework integration.",
+    "description": "现代静态站点生成器，支持多框架集成，用于构建高性能内容驱动网站。",
     "icon": "logos:astro-icon",
     "category": "frontend",
     "level": "beginner",
     "experience": {
         "years": 0,
-        "months": 3
+        "months": 1
     },
-    "projects": [
-        "Twilight"
-    ],
     "color": "#BC52EE"
 }

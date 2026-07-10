@@ -1,0 +1,28 @@
+{
+  "title": "Computer Organization Study Notes",
+  "description": "My notes from Computer Organization course.",
+  "cover": "./co1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["computer organization", "study", "professional"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./co1.JPG", "alt": "co1", "title": "CO Note 1", "description": "", "tags": ["co"] },
+    { "src": "./co2.JPG", "alt": "co2", "title": "CO Note 2", "description": "", "tags": ["co"] },
+    { "src": "./co3.JPG", "alt": "co3", "title": "CO Note 3", "description": "", "tags": ["co"] },
+    { "src": "./co4.JPG", "alt": "co4", "title": "CO Note 4", "description": "", "tags": ["co"] },
+    { "src": "./co5.JPG", "alt": "co5", "title": "CO Note 5", "description": "", "tags": ["co"] },
+    { "src": "./co6.JPG", "alt": "co6", "title": "CO Note 6", "description": "", "tags": ["co"] },
+    { "src": "./co7.JPG", "alt": "co7", "title": "CO Note 7", "description": "", "tags": ["co"] },
+    { "src": "./co8.JPG", "alt": "co8", "title": "CO Note 8", "description": "", "tags": ["co"] },
+    { "src": "./co9.JPG", "alt": "co9", "title": "CO Note 9", "description": "", "tags": ["co"] },
+    { "src": "./co10.JPG", "alt": "co10", "title": "CO Note 10", "description": "", "tags": ["co"] },
+    { "src": "./co11.JPG", "alt": "co11", "title": "CO Note 11", "description": "", "tags": ["co"] },
+    { "src": "./co12.JPG", "alt": "co12", "title": "CO Note 12", "description": "", "tags": ["co"] },
+    { "src": "./co13.JPG", "alt": "co13", "title": "CO Note 13", "description": "", "tags": ["co"] },
+    { "src": "./co14.JPG", "alt": "co14", "title": "CO Note 14", "description": "", "tags": ["co"] },
+    { "src": "./co15.JPG", "alt": "co15", "title": "CO Note 15", "description": "", "tags": ["co"] }
+  ],
+  "visible": true
+}

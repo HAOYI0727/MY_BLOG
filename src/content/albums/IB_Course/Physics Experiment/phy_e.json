@@ -1,0 +1,33 @@
+{
+  "title": "Physics Experiment Study Notes",
+  "description": "My notes from Physics Experiment course.",
+  "cover": "./phy_e1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["physics experiment", "study", "general"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./phy_e1.JPG", "alt": "phy_e1", "title": "PHY_E Note 1", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e2.JPG", "alt": "phy_e2", "title": "PHY_E Note 2", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e3.JPG", "alt": "phy_e3", "title": "PHY_E Note 3", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e4.JPG", "alt": "phy_e4", "title": "PHY_E Note 4", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e5.JPG", "alt": "phy_e5", "title": "PHY_E Note 5", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e6.JPG", "alt": "phy_e6", "title": "PHY_E Note 6", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e7.JPG", "alt": "phy_e7", "title": "PHY_E Note 7", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e8.JPG", "alt": "phy_e8", "title": "PHY_E Note 8", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e9.JPG", "alt": "phy_e9", "title": "PHY_E Note 9", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e10.JPG", "alt": "phy_e10", "title": "PHY_E Note 10", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e11.JPG", "alt": "phy_e11", "title": "PHY_E Note 11", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e12.JPG", "alt": "phy_e12", "title": "PHY_E Note 12", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e13.JPG", "alt": "phy_e13", "title": "PHY_E Note 13", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e14.JPG", "alt": "phy_e14", "title": "PHY_E Note 14", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e15.JPG", "alt": "phy_e15", "title": "PHY_E Note 15", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e16.JPG", "alt": "phy_e16", "title": "PHY_E Note 16", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e17.JPG", "alt": "phy_e17", "title": "PHY_E Note 17", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e18.JPG", "alt": "phy_e18", "title": "PHY_E Note 18", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e19.JPG", "alt": "phy_e19", "title": "PHY_E Note 19", "description": "", "tags": ["phy_e"] },
+    { "src": "./phy_e20.JPG", "alt": "phy_e20", "title": "PHY_E Note 20", "description": "", "tags": ["phy_e"] }
+  ],
+  "visible": true
+}

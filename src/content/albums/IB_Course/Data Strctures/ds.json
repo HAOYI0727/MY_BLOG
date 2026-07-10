@@ -1,0 +1,27 @@
+{
+  "title": "Data Structures Study Notes",
+  "description": "My notes from Data Structures course.",
+  "cover": "./ds1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["data structures", "study", "professional"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./ds1.JPG", "alt": "ds1", "title": "DS Note 1", "description": "", "tags": ["ds"] },
+    { "src": "./ds2.JPG", "alt": "ds2", "title": "DS Note 2", "description": "", "tags": ["ds"] },
+    { "src": "./ds3.JPG", "alt": "ds3", "title": "DS Note 3", "description": "", "tags": ["ds"] },
+    { "src": "./ds4.JPG", "alt": "ds4", "title": "DS Note 4", "description": "", "tags": ["ds"] },
+    { "src": "./ds5.JPG", "alt": "ds5", "title": "DS Note 5", "description": "", "tags": ["ds"] },
+    { "src": "./ds6.JPG", "alt": "ds6", "title": "DS Note 6", "description": "", "tags": ["ds"] },
+    { "src": "./ds7.JPG", "alt": "ds7", "title": "DS Note 7", "description": "", "tags": ["ds"] },
+    { "src": "./ds8.JPG", "alt": "ds8", "title": "DS Note 8", "description": "", "tags": ["ds"] },
+    { "src": "./ds9.JPG", "alt": "ds9", "title": "DS Note 9", "description": "", "tags": ["ds"] },
+    { "src": "./ds10.JPG", "alt": "ds10", "title": "DS Note 10", "description": "", "tags": ["ds"] },
+    { "src": "./ds11.JPG", "alt": "ds11", "title": "DS Note 11", "description": "", "tags": ["ds"] },
+    { "src": "./ds12.JPG", "alt": "ds12", "title": "DS Note 12", "description": "", "tags": ["ds"] },
+    { "src": "./ds13.JPG", "alt": "ds13", "title": "DS Note 13", "description": "", "tags": ["ds"] },
+    { "src": "./ds14.JPG", "alt": "ds14", "title": "DS Note 14", "description": "", "tags": ["ds"] }
+  ],
+  "visible": true
+}

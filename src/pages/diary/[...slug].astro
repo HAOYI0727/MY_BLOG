@@ -1,0 +1,74 @@
+---
+// src/pages/diary/[...slug].astro
+import type { Moment } from "@utils/diary";
+import { sortedMoments } from "@utils/diary";
+import { i18n } from "@i18n/translation";
+import I18nKey from "@i18n/i18nKey";
+import GridLayout from "@layouts/grid.astro";
+import BackwardButton from "@components/backwardButton.astro";
+import ImageWrapper from "@components/common/imageWrapper.astro";
+
+export const getStaticPaths = async () => {
+    return sortedMoments.map((moment) => {
+        // slug 为 "folder/id" 或 "id"
+        const slug = moment.folder ? `${moment.folder}/${moment.id}` : moment.id;
+        return {
+            params: { slug },
+            props: { moment },
+        };
+    });
+};
+
+interface Props {
+    moment: Moment;
+}
+
+const { moment } = Astro.props;
+
+if (!moment) {
+    return Astro.redirect("/404");
+}
+---
+
+<GridLayout title={moment.title || i18n(I18nKey.diaryDefaultTitle)} description={moment.content.slice(0, 120)}>
+    <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-4 py-4 md:px-6 md:py-5 relative w-full">
+            <BackwardButton href="/diary/" text={i18n(I18nKey.diaryBackToList)} />
+
+            <article class="max-w-3xl mx-auto">
+                <!-- 标题 -->
+                {moment.title && (
+                    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-90 mb-4">{moment.title}</h1>
+                )}
+
+                <!-- 日期 -->
+                <div class="text-60 text-sm mb-6">
+                    <time datetime={moment.date}>
+                        {new Date(moment.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </time>
+                </div>
+
+                <!-- 正文（支持换行） -->
+                <div class="moment-content prose prose-neutral dark:prose-invert max-w-none mb-8">
+                    <p class="whitespace-pre-line text-90 leading-relaxed">{moment.content}</p>
+                </div>
+
+                <!-- 图片网格展示 -->
+                {moment.images && moment.images.length > 0 && (
+                    <div class="moment-images grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {moment.images.map((image, index) => (
+                            <div class="image-item rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-700">
+                                <ImageWrapper
+                                    src={image}
+                                    basePath={moment.basePath}
+                                    alt={`${moment.title || i18n(I18nKey.diaryImage)} ${index + 1}`}
+                                    class="w-full h-auto object-contain max-h-[500px]"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </article>
+        </div>
+    </div>
+</GridLayout>

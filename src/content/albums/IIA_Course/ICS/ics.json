@@ -1,0 +1,19 @@
+{
+  "title": "Introduction to Computer Systems Study Notes",
+  "description": "My notes from Introduction to Computer Systems course.",
+  "cover": "./ics1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["ics", "study", "professional"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./ics1.JPG", "alt": "ics1", "title": "ICS Note 1", "description": "", "tags": ["ics"] },
+    { "src": "./ics2.JPG", "alt": "ics2", "title": "ICS Note 2", "description": "", "tags": ["ics"] },
+    { "src": "./ics3.JPG", "alt": "ics3", "title": "ICS Note 3", "description": "", "tags": ["ics"] },
+    { "src": "./ics4.JPG", "alt": "ics4", "title": "ICS Note 4", "description": "", "tags": ["ics"] },
+    { "src": "./ics5.JPG", "alt": "ics5", "title": "ICS Note 5", "description": "", "tags": ["ics"] },
+    { "src": "./ics6.JPG", "alt": "ics6", "title": "ICS Note 6", "description": "", "tags": ["ics"] }
+  ],
+  "visible": true
+}

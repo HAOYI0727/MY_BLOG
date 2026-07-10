@@ -1,0 +1,12 @@
+{
+    "name": "SSH",
+    "description": "安全远程连接协议，用于远程服务器管理、文件传输及端口转发。熟悉 SSH 密钥配置、配置文件及常见连接问题排查。",
+    "icon": "logos:ssh",
+    "category": "tools",
+    "level": "intermediate",
+    "experience": {
+        "years": 1,
+        "months": 0
+    },
+    "color": "#231F20"
+}

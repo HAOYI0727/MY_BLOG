@@ -1,0 +1,21 @@
+{
+  "title": "Signal and Linear Systems Study Notes",
+  "description": "My notes from Signal and Linear Systems course.",
+  "cover": "./signal1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["signal and linear systems", "study", "professional"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./signal1.JPG", "alt": "signal1", "title": "Signal 1", "description": "", "tags": ["signal"] },
+    { "src": "./signal2.JPG", "alt": "signal2", "title": "Signal 2", "description": "", "tags": ["signal"] },
+    { "src": "./signal3.JPG", "alt": "signal3", "title": "Signal 3", "description": "", "tags": ["signal"] },
+    { "src": "./signal4.JPG", "alt": "signal4", "title": "Signal 4", "description": "", "tags": ["signal"] },
+    { "src": "./signal5.JPG", "alt": "signal5", "title": "Signal 5", "description": "", "tags": ["signal"] },
+    { "src": "./signal6.JPG", "alt": "signal6", "title": "Signal 6", "description": "", "tags": ["signal"] },
+    { "src": "./signal7.JPG", "alt": "signal7", "title": "Signal 7", "description": "", "tags": ["signal"] },
+    { "src": "./signal8.JPG", "alt": "signal8", "title": "Signal 8", "description": "", "tags": ["signal"] }
+  ],
+  "visible": true
+}

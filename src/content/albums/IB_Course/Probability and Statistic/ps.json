@@ -1,0 +1,17 @@
+{
+  "title": "Probability and Statistics Study Notes",
+  "description": "My notes from Probability and Statistics course.",
+  "cover": "./ps1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["probability and statistics", "study", "general"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./ps1.JPG", "alt": "ps1", "title": "PS Note 1", "description": "", "tags": ["ps"] },
+    { "src": "./ps2.JPG", "alt": "ps2", "title": "PS Note 2", "description": "", "tags": ["ps"] },
+    { "src": "./ps3.JPG", "alt": "ps3", "title": "PS Note 3", "description": "", "tags": ["ps"] },
+    { "src": "./ps4.JPG", "alt": "ps4", "title": "PS Note 4", "description": "", "tags": ["ps"] }
+  ],
+  "visible": true
+}

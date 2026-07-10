@@ -1,19 +1,21 @@
 ---
+// src/pages/albums.astro
 import { LinkPresets } from "@constants/link-presets";
 import { LinkPreset } from "@/types/config";
-import { sortedAlbums } from "@utils/albums";
+import { sortedAlbums, groupAlbumsByFolder } from "@utils/albums";
 import { i18n } from "@i18n/translation";
 import I18nKey from "@i18n/i18nKey";
 import GridLayout from "@layouts/grid.astro";
 import BackwardButton from "@components/backwardButton.astro";
 import ImageWrapper from "@components/common/imageWrapper.astro";
 
-
 const pageTitle = LinkPresets[LinkPreset.Albums].name;
 const pageDescription = LinkPresets[LinkPreset.Albums].description;
 
-// 获取所有相册
-const albumsData = sortedAlbums.filter(album => album.visible);
+// 获取所有可见相册
+const visibleAlbums = sortedAlbums.filter(album => album.visible);
+// 按文件夹分组
+const groupedAlbums = groupAlbumsByFolder(visibleAlbums);
 ---
 
 <GridLayout title={pageTitle} description={pageDescription}>
@@ -28,70 +30,87 @@ const albumsData = sortedAlbums.filter(album => album.visible);
                 <p class="text-neutral-600 dark:text-neutral-400">
                     {pageDescription}
                 </p>
+                <div class="mt-4 flex items-center gap-4 text-sm text-60">
+                    <span>{visibleAlbums.length} 个相册</span>
+                </div>
             </header>
-            <!-- 相册网格 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {albumsData.map(album => (
-                    <article
-                        class="album-card group bg-white dark:bg-neutral-900 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-neutral-200 dark:border-neutral-800"
-                    >
-                        <a href={`/albums/${album.id}/`} class="block">
-                            <!-- 封面图片 -->
-                            <div class="aspect-4/3 overflow-hidden bg-neutral-100 dark:bg-neutral-700">
-                                <ImageWrapper
-                                    src={album.cover}
-                                    basePath={album.basePath}
-                                    alt={album.title}
-                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                                />
-                            </div>
-                            <!-- 相册信息 -->
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg text-neutral-900 dark:text-neutral-100 mb-2 group-hover:text-(--primary) transition-colors">
-                                    {album.title}
-                                </h3>
-                                {album.description && (
-                                    <p class="text-neutral-600 dark:text-neutral-400 text-sm mb-3 line-clamp-2">
-                                        {album.description}
-                                    </p>
-                                )}
-                                <!-- 元数据 -->
-                                <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-500">
-                                    <div class="flex items-center gap-4">
-                                        <span>{album.photos.length} {album.photos.length > 1 ? i18n(I18nKey.albumsPhotosCount) : i18n(I18nKey.albumsPhotoCount)}</span>
-                                        {album.location && (
-                                            <span class="flex items-center gap-1">
-                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                                                </svg>
-                                                {album.location}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <time>{new Date(album.date).toLocaleDateString('zh-CN')}</time>
-                                </div>
-                                <!-- 标签 -->
-                                {album.tags && album.tags.length > 0 && (
-                                    <div class="flex flex-wrap gap-1 mt-3">
-                                        {album.tags.slice(0, 3).map(tag => (
-                                            <span class="btn-regular h-6 text-xs px-2 rounded-lg">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                        {album.tags.length > 3 && (
-                                            <span class="btn-regular h-6 text-xs px-2 rounded-lg">
-                                                +{album.tags.length - 3}
-                                            </span>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        </a>
-                    </article>
+
+            <!-- 按分组展示 -->
+            <div class="space-y-12">
+                {groupedAlbums.map(group => (
+                    <section class="folder-section">
+                        <h2 class="text-2xl font-bold text-90 mb-6 flex items-center gap-3">
+                            {group.folder}
+                            <span class="text-sm text-60 font-normal">({group.items.length})</span>
+                        </h2>
+                        
+                        <!-- 相册网格 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {group.items.map(album => (
+                                <article
+                                    class="album-card group bg-white dark:bg-neutral-900 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-neutral-200 dark:border-neutral-800"
+                                >
+                                    <a href={`/albums/${album.id}/`} class="block">
+                                        <!-- 封面图片 -->
+                                        <div class="aspect-4/3 overflow-hidden bg-neutral-100 dark:bg-neutral-700">
+                                            <ImageWrapper
+                                                src={album.cover}
+                                                basePath={album.basePath}
+                                                alt={album.title}
+                                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                            />
+                                        </div>
+                                        <!-- 相册信息 -->
+                                        <div class="p-4">
+                                            <h3 class="font-bold text-lg text-neutral-900 dark:text-neutral-100 mb-2 group-hover:text-(--primary) transition-colors">
+                                                {album.title}
+                                            </h3>
+                                            {album.description && (
+                                                <p class="text-neutral-600 dark:text-neutral-400 text-sm mb-3 line-clamp-2">
+                                                    {album.description}
+                                                </p>
+                                            )}
+                                            <!-- 元数据 -->
+                                            <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-500">
+                                                <div class="flex items-center gap-4">
+                                                    <span>{album.photos.length} {album.photos.length > 1 ? i18n(I18nKey.albumsPhotosCount) : i18n(I18nKey.albumsPhotoCount)}</span>
+                                                    {album.location && (
+                                                        <span class="flex items-center gap-1">
+                                                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                            {album.location}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <time>{new Date(album.date).toLocaleDateString('zh-CN')}</time>
+                                            </div>
+                                            <!-- 标签 -->
+                                            {album.tags && album.tags.length > 0 && (
+                                                <div class="flex flex-wrap gap-1 mt-3">
+                                                    {album.tags.slice(0, 3).map(tag => (
+                                                        <span class="btn-regular h-6 text-xs px-2 rounded-lg">
+                                                            {tag}
+                                                        </span>
+                                                    ))}
+                                                    {album.tags.length > 3 && (
+                                                        <span class="btn-regular h-6 text-xs px-2 rounded-lg">
+                                                            +{album.tags.length - 3}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </a>
+                                </article>
+                            ))}
+                        </div>
+                    </section>
                 ))}
             </div>
+
             <!-- 空状态 -->
-            {albumsData.length === 0 && (
+            {visibleAlbums.length === 0 && (
                 <div class="text-center py-12">
                     <div class="text-neutral-400 dark:text-neutral-600 mb-4">
                         <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,7 +133,6 @@ const albumsData = sortedAlbums.filter(album => album.visible);
     .album-card:hover {
         translate: 0 -2px;
     }
-
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -125,7 +143,6 @@ const albumsData = sortedAlbums.filter(album => album.visible);
             translate: 0 0;
         }
     }
-
     .album-card {
         animation: fadeInUp 0.3s ease-out;
     }

@@ -1,0 +1,12 @@
+{
+    "name": "Docker",
+    "description": "容器化开发与部署，熟悉 Dockerfile 编写、镜像构建、容器编排及 Docker Compose 使用。",
+    "icon": "logos:docker-icon",
+    "category": "tools",
+    "level": "intermediate",
+    "experience": {
+        "years": 1,
+        "months": 0
+    },
+    "color": "#2496ED"
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Algorithm Study Notes",
+  "description": "My notes from Algorithm course.",
+  "cover": "./alg1.JPG",
+  "date": "2026-07-10T00:00:00.000Z",
+  "location": "Local",
+  "tags": ["algorithm", "study", "professional"],
+  "layout": "masonry",
+  "columns": 3,
+  "photos": [
+    { "src": "./alg1.JPG", "alt": "alg1", "title": "ALG Note 1", "description": "", "tags": ["alg"] },
+    { "src": "./alg2.JPG", "alt": "alg2", "title": "ALG Note 2", "description": "", "tags": ["alg"] },
+    { "src": "./alg3.JPG", "alt": "alg3", "title": "ALG Note 3", "description": "", "tags": ["alg"] },
+    { "src": "./alg4.JPG", "alt": "alg4", "title": "ALG Note 4", "description": "", "tags": ["alg"] },
+    { "src": "./alg5.JPG", "alt": "alg5", "title": "ALG Note 5", "description": "", "tags": ["alg"] },
+    { "src": "./alg6.JPG", "alt": "alg6", "title": "ALG Note 6", "description": "", "tags": ["alg"] },
+    { "src": "./alg7.JPG", "alt": "alg7", "title": "ALG Note 7", "description": "", "tags": ["alg"] },
+    { "src": "./alg8.JPG", "alt": "alg8", "title": "ALG Note 8", "description": "", "tags": ["alg"] },
+    { "src": "./alg9.JPG", "alt": "alg9", "title": "ALG Note 9", "description": "", "tags": ["alg"] },
+    { "src": "./alg10.JPG", "alt": "alg10", "title": "ALG Note 10", "description": "", "tags": ["alg"] }
+  ],
+  "visible": true
+}
