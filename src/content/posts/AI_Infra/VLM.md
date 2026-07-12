@@ -1,15 +1,21 @@
 ---
 title: VLM视觉语言模型：架构演进、训练流程与Qwen3-VL深度解析
-published: 2026-07-09
+published: 2026-03-08
 description: 系统梳理视觉语言模型（VLM）的通用三段式架构、训练流程与技术演进脉络，深入解析Qwen3-VL的Interleaved-MRoPE、DeepStack集成与文本化时间戳对齐等核心技术创新。
-cover: "./Cover - Advanced Customization.jpg"
+cover: "./VLM.png"
 coverInContent: false
-tags: [VLM, 视觉语言模型, 多模态]
+tags: [VLM, ViT, Qwen, 多模态]
 category: AI_Infra
 draft: false
 ---
 
 # VLM视觉语言模型：架构演进、训练流程与Qwen3-VL深度解析
+
+> [!note]
+> 
+> [github.com/qwenlm/qwen3-vl](https://github.com/qwenlm/qwen3-vl)
+>
+> [Qwen3-VL Technical Report](https://arxiv.org/pdf/2511.21631)
 
 ## 一、VLM是什么？—— 让模型同时“看懂”图像与“读懂”文字
 

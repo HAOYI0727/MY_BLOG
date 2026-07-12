@@ -65,6 +65,7 @@
 		"sanitize-html": "^2.17.3",
 		"satori": "^0.19.3",
 		"sharp": "^0.34.5",
+		"simple-icons": "^16.26.0",
 		"stylus": "^0.64.0",
 		"svelte": "^5.55.5",
 		"tailwindcss": "^4.2.4",

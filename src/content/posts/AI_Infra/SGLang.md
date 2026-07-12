@@ -1,15 +1,24 @@
 ---
 title: SGLang：大模型推理的"结构化程序"革命
-published: 2026-07-09
+published: 2026-03-04
 description: 系统梳理SGLang大模型推理系统的核心技术与设计哲学，解析RadixAttention的基数树KV缓存复用、零开销调度器、前端DSL与结构化输出等创新机制，揭示其如何通过"可编程执行平台"的范式革命实现最高6.4倍的吞吐量提升。
-cover: "./Cover - Advanced Customization.jpg"
+cover: "./SGLang.png"
 coverInContent: false
-tags: [SGLang, 大模型推理, RadixAttention, KV Cache]
+tags: [SGLang, 推理增强, RadixAttention, KV Cache]
 category: AI_Infra
 draft: false
 ---
 
 # SGLang：大模型推理的“结构化程序”革命
+
+> [!note]
+> 
+> [sglang.io](https://docs.sglang.io/)
+>
+> [github.com/sgl-project/sglang](https://github.com/sgl-project/sglang)
+>
+> [SGLang: Efficient Execution of Structured Language Model Programs](https://arxiv.org/pdf/2312.07104)
+
 
 ## 一、背景：vLLM之后，还缺什么？
 

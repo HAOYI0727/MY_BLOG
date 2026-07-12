@@ -1,4 +1,5 @@
 ---
+// 保留所有原有的 imports 和配置
 import { Icon } from "astro-icon/components";
 import { render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
@@ -8,7 +9,7 @@ import utc from "dayjs/plugin/utc";
 import { siteConfig, profileConfig, postConfig } from "@/config";
 import { getSortedPosts } from "@utils/post";
 import { formatDateToYYYYMMDD } from "@utils/date";
-import { getFileDirFromPath, getPostUrl, getPostUrlBySlug, removeFileExtension} from "@utils/url";
+import { getFileDirFromPath, getPostUrl, getPostUrlBySlug, removeFileExtension } from "@utils/url";
 import { SUPPORTED_LANGUAGES, langToTranslateMap } from "@i18n/language";
 import { i18n, getTranslation } from "@i18n/translation";
 import I18nKey from "@i18n/i18nKey";
@@ -20,7 +21,6 @@ import PostMetadata from "@components/post/postMeta.astro";
 import Comment from "@components/comment.astro";
 import GridLayout from "@layouts/grid.astro";
 
-
 export async function getStaticPaths() {
     const blogEntries = await getSortedPosts();
     const paths: {
@@ -29,17 +29,12 @@ export async function getStaticPaths() {
     }[] = [];
 
     for (const entry of blogEntries) {
-        // 将 id 转换为 slug（移除扩展名）以匹配路由参数
         const slug = removeFileExtension(entry.id);
-        // 为每篇文章创建默认的 slug 路径
         paths.push({
             params: { slug },
             props: { entry },
         });
-        // 如果文章有自定义固定链接，也创建对应的路径
         if (entry.data.routeName) {
-            // 移除开头的斜杠和结尾的斜杠
-            // 同时移除可能的 "posts/" 前缀，避免重复
             let routeName = entry.data.routeName
                 .replace(/^\/+/, "")
                 .replace(/\/+$/, "");
@@ -56,11 +51,10 @@ export async function getStaticPaths() {
     return paths;
 }
 
-
 const { entry } = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 
-// 处理加密逻辑
+// 加密逻辑
 let isEncrypted = !!(entry.data.encrypted && entry.data.password);
 
 dayjs.extend(utc);
@@ -103,9 +97,18 @@ const jsonLd = {
     inLanguage: entry.data.lang
         ? entry.data.lang.replace("_", "-")
         : siteConfig.lang.replace("_", "-"),
-    // TODO include cover image here
 };
+
+// 获取当前文章的完整 URL，用于分享
+const postUrl = getPostUrl(entry);
+const fullPostUrl = new URL(postUrl, Astro.site).toString();
+const postTitle = entry.data.title;
+const postDesc = entry.data.description || postTitle;
 ---
+
+<div id="progress-bar-wrapper" class="fixed top-0 left-0 w-full h-1 z-[999] pointer-events-none" style="display: none;">
+    <div id="progress-bar-fill" class="h-full bg-(--primary) transition-all duration-100 ease-out" style="width: 0%;"></div>
+</div>
 
 <GridLayout
     banner={entry.data.cover}
@@ -122,6 +125,7 @@ const jsonLd = {
         type="application/ld+json"
         set:html={JSON.stringify(jsonLd)}
     />
+
     <div
         class="flex w-full rounded-(--radius-large) overflow-hidden relative mb-4"
     >
@@ -132,7 +136,7 @@ const jsonLd = {
                 {},
             ]}
         >
-            <!-- word count and reading time -->
+            <!-- 字数统计 & 阅读时间 -->
             <div
                 class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation-up"
             >
@@ -157,18 +161,18 @@ const jsonLd = {
                     </div>
                     <div class="text-sm">
                         {remarkPluginFrontmatter.minutes}
-                        {
-                            " " +
-                                i18n(
-                                    remarkPluginFrontmatter.minutes === 1
-                                        ? I18nKey.minuteCount
-                                        : I18nKey.minutesCount,
-                                )
+                        {" " +
+                            i18n(
+                                remarkPluginFrontmatter.minutes === 1
+                                    ? I18nKey.minuteCount
+                                    : I18nKey.minutesCount,
+                            )
                         }
                     </div>
                 </div>
             </div>
-            <!-- title -->
+
+            <!-- 标题 -->
             <div class="relative onload-animation-up">
                 <div
                     data-pagefind-body
@@ -183,7 +187,8 @@ const jsonLd = {
                     {entry.data.title}
                 </div>
             </div>
-            <!-- metadata -->
+
+            <!-- 元数据 -->
             <div class="onload-animation-up">
                 <PostMetadata
                     className="mb-5"
@@ -199,7 +204,8 @@ const jsonLd = {
                     )
                 }
             </div>
-            <!-- always show cover as long as it has one -->
+
+            <!-- 封面图 -->
             {
                 entry.data.cover && entry.data.coverInContent && (
                     <>
@@ -214,6 +220,8 @@ const jsonLd = {
                     </>
                 )
             }
+
+            <!-- 正文 -->
             <PasswordProtection
                 isEncrypted={isEncrypted}
                 password={entry.data.password}
@@ -239,8 +247,48 @@ const jsonLd = {
             </PasswordProtection>
         </div>
     </div>
+
+    <!-- 分享按钮组（使用 fa6-brands / fa6-solid 图标） -->
+            <div class="onload-animation-up mb-4">
+                <div class="flex flex-wrap items-center gap-2 text-black/60 dark:text-white/60 text-sm">
+                    <span class="mr-1 select-none">{i18n(I18nKey.share) || "分享："}</span>
+                    <!-- QQ 分享 -->
+                    <button
+                        class="share-btn group flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-(--primary) hover:text-white dark:hover:text-white transition-all duration-200 cursor-pointer border-0 outline-none"
+                        data-share="qq"
+                        aria-label="分享到 QQ"
+                        title="分享到 QQ"
+                    >
+                        <Icon name="fa6-brands:qq" class="text-base" />
+                        <span class="text-xs font-medium hidden sm:inline">QQ</span>
+                    </button>
+                    <!-- 微信分享 -->
+                    <button
+                        class="share-btn group flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-[#07C160] hover:text-white dark:hover:text-white transition-all duration-200 cursor-pointer border-0 outline-none"
+                        data-share="wechat"
+                        aria-label="分享到微信"
+                        title="分享到微信"
+                    >
+                        <Icon name="fa6-brands:weixin" class="text-base" />
+                        <span class="text-xs font-medium hidden sm:inline">微信</span>
+                    </button>
+                    <!-- 复制链接 -->
+                    <button
+                        class="share-btn group flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-(--primary) hover:text-white dark:hover:text-white transition-all duration-200 cursor-pointer border-0 outline-none"
+                        data-share="copy"
+                        aria-label="复制链接"
+                        title="复制链接"
+                    >
+                        <Icon name="fa6-solid:link" class="text-base" />
+                        <span class="text-xs font-medium hidden sm:inline">复制链接</span>
+                    </button>
+                </div>
+            </div>
+
     <!-- 评论 -->
     <Comment post={entry} />
+
+    <!-- 最后修改时间 -->
     {postConfig.showLastModified && (
         <>
             <div
@@ -269,13 +317,10 @@ const jsonLd = {
                         const months = Math.floor((days % 365) / 30);
                         const remainingDays = days % 30;
 
-                        // 获取当前语言翻译数据
                         const translations = JSON.parse(lastModifiedElement.dataset.translations);
                         const defaultLang = lastModifiedElement.dataset.defaultLang;
-                        // translate.js 在 localStorage 中使用 'selected-language' 存储目标语言
                         const currentLang = localStorage.getItem('selected-language') || defaultLang;
-                        
-                        // 获取对应的翻译文本
+
                         const langTranslations = translations[currentLang] || translations[defaultLang] || Object.values(translations)[0];
 
                         const prefix = langTranslations.lastModifiedPrefix;
@@ -330,6 +375,8 @@ const jsonLd = {
             </div>
         </>
     )}
+
+    <!-- 上一篇 / 下一篇 -->
     <div
         class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full"
     >
@@ -381,3 +428,346 @@ const jsonLd = {
         </a>
     </div>
 </GridLayout>
+
+<!-- ===== 新增：微信分享二维码模态框 ===== -->
+<div
+    id="wechat-modal"
+    class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+    style="display: none; opacity: 0;"
+    role="dialog"
+    aria-modal="true"
+    aria-label="微信分享二维码"
+>
+    <div
+        class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl transform transition-all duration-300 scale-95"
+        id="wechat-modal-content"
+    >
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-black/80 dark:text-white/80 flex items-center gap-2">
+                <Icon name="fa6-brands:weixin" class="text-[#07C160] text-2xl" />
+                微信分享
+            </h3>
+            <button
+                id="wechat-modal-close"
+                class="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer border-0 outline-none"
+                aria-label="关闭"
+            >
+                <Icon name="material-symbols:close-rounded" class="text-2xl text-black/50 dark:text-white/50" />
+            </button>
+        </div>
+        <div class="flex flex-col items-center">
+            <div
+                id="wechat-qr-container"
+                class="w-48 h-48 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center mb-3 overflow-hidden"
+            >
+                <img
+                    id="wechat-qr-image"
+                    src=""
+                    alt="微信分享二维码"
+                    class="w-full h-full object-contain"
+                    loading="lazy"
+                />
+            </div>
+            <p class="text-sm text-black/60 dark:text-white/60 text-center">
+                请使用微信扫描二维码分享
+            </p>
+            <button
+                id="wechat-copy-link-btn"
+                class="mt-3 text-sm text-(--primary) hover:underline cursor-pointer border-0 bg-transparent"
+            >
+                或点击复制链接
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 新增：分享 & 进度条客户端逻辑 ===== -->
+<script>
+    (function() {
+        // ---------- 进度条 ----------
+        const progressWrapper = document.getElementById('progress-bar-wrapper');
+        const progressFill = document.getElementById('progress-bar-fill');
+
+        if (progressWrapper && progressFill) {
+            let ticking = false;
+
+            function updateProgress() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                progressFill.style.width = Math.min(progress, 100) + '%';
+
+                // 滚动超过 5% 时显示进度条
+                if (scrollTop > 50) {
+                    progressWrapper.style.display = 'block';
+                } else {
+                    progressWrapper.style.display = 'none';
+                }
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        updateProgress();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // 页面加载完成后初始化
+            window.addEventListener('load', updateProgress);
+            // 窗口大小变化时重新计算
+            window.addEventListener('resize', updateProgress);
+        }
+
+        // ---------- 分享功能 ----------
+        const currentUrl = window.location.href;
+        const currentTitle = document.querySelector('[data-pagefind-meta="title"]')?.textContent?.trim() || document.title;
+        const currentDesc = document.querySelector('meta[name="description"]')?.getAttribute('content') || currentTitle;
+
+        // QQ 分享
+        function shareToQQ() {
+            const qqUrl =
+                `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(currentTitle)}&desc=${encodeURIComponent(currentDesc)}&summary=${encodeURIComponent(currentDesc)}`;
+            window.open(qqUrl, '_blank', 'width=600,height=500');
+        }
+
+        // 微信分享：显示二维码
+        function shareToWechat() {
+            const modal = document.getElementById('wechat-modal');
+            const qrImage = document.getElementById('wechat-qr-image');
+            const modalContent = document.getElementById('wechat-modal-content');
+
+            if (!modal || !qrImage) return;
+
+            // 使用 qrserver API 生成二维码
+            const qrApiUrl =
+                `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentUrl)}`;
+            qrImage.src = qrApiUrl;
+            qrImage.onerror = function() {
+                // 如果 API 加载失败，使用备用方案
+                this.alt = '二维码加载失败，请复制链接';
+                this.src = '';
+            };
+
+            modal.style.display = 'flex';
+            // 触发过渡动画
+            requestAnimationFrame(() => {
+                modal.style.opacity = '1';
+                if (modalContent) {
+                    modalContent.style.transform = 'scale(1)';
+                }
+            });
+
+            // 阻止背景滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 复制链接
+        function copyLink() {
+            const url = currentUrl;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('链接已复制到剪贴板 🎉');
+                }).catch(() => {
+                    fallbackCopy(url);
+                });
+            } else {
+                fallbackCopy(url);
+            }
+        }
+
+        // 备用复制方案
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            textarea.style.top = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('链接已复制到剪贴板 🎉');
+            } catch (err) {
+                showToast('复制失败，请手动复制链接');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Toast 提示
+        function showToast(message) {
+            const existing = document.getElementById('share-toast');
+            if (existing) {
+                existing.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.id = 'share-toast';
+            toast.textContent = message;
+            toast.style.cssText = `
+                        position: fixed;
+                        bottom: 30px;
+                        left: 50%;
+                        transform: translateX(-50%) translateY(20px);
+                        background: rgba(0, 0, 0, 0.8);
+                        color: #fff;
+                        padding: 12px 24px;
+                        border-radius: 12px;
+                        font-size: 14px;
+                        z-index: 99999;
+                        opacity: 0;
+                        transition: all 0.3s ease;
+                        backdrop-filter: blur(8px);
+                        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+                        pointer-events: none;
+                        font-weight: 500;
+                    `;
+            document.body.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateX(-50%) translateY(0)';
+            });
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 2500);
+        }
+
+        // ---------- 绑定分享按钮事件 ----------
+        document.querySelectorAll('.share-btn').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const type = btn.dataset.share;
+                switch (type) {
+                    case 'qq':
+                        shareToQQ();
+                        break;
+                    case 'wechat':
+                        shareToWechat();
+                        break;
+                    case 'copy':
+                        copyLink();
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
+
+        // ---------- 微信模态框控制 ----------
+        const wechatModal = document.getElementById('wechat-modal');
+        const wechatClose = document.getElementById('wechat-modal-close');
+        const wechatCopyLinkBtn = document.getElementById('wechat-copy-link-btn');
+
+        function closeWechatModal() {
+            if (!wechatModal) return;
+            const modalContent = document.getElementById('wechat-modal-content');
+            wechatModal.style.opacity = '0';
+            if (modalContent) {
+                modalContent.style.transform = 'scale(0.95)';
+            }
+            setTimeout(() => {
+                wechatModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        if (wechatClose) {
+            wechatClose.addEventListener('click', closeWechatModal);
+        }
+
+        if (wechatModal) {
+            wechatModal.addEventListener('click', (e) => {
+                if (e.target === wechatModal) {
+                    closeWechatModal();
+                }
+            });
+
+            // ESC 键关闭
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && wechatModal.style.display === 'flex') {
+                    closeWechatModal();
+                }
+            });
+        }
+
+        if (wechatCopyLinkBtn) {
+            wechatCopyLinkBtn.addEventListener('click', () => {
+                copyLink();
+                // 延迟关闭模态框
+                setTimeout(closeWechatModal, 500);
+            });
+        }
+
+        // ---------- 页面加载完成后，确保进度条状态正确 ----------
+        window.addEventListener('load', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            if (progressFill) {
+                progressFill.style.width = Math.min(progress, 100) + '%';
+            }
+            if (progressWrapper) {
+                progressWrapper.style.display = scrollTop > 50 ? 'block' : 'none';
+            }
+        });
+    })();
+</script>
+
+<style is:global>
+    /* 分享按钮悬停效果增强 */
+    .share-btn {
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .share-btn:active {
+        transform: scale(0.92);
+    }
+
+    /* 进度条过渡优化 */
+    #progress-bar-fill {
+        will-change: width;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+
+    /* 微信模态框动画 */
+    #wechat-modal {
+        transition: opacity 0.3s ease;
+    }
+
+    #wechat-modal-content {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Toast 提示动画 */
+    #share-toast {
+        will-change: transform, opacity;
+    }
+
+    /* 暗色模式下二维码容器适配 */
+    @media (prefers-color-scheme: dark) {
+        #wechat-qr-container {
+            background: #1f2937;
+        }
+    }
+
+    /* 移动端适配：小屏幕下分享按钮文字隐藏 */
+    @media (max-width: 480px) {
+        .share-btn {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .share-btn span {
+            display: none !important;
+        }
+    }
+</style>

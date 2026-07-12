@@ -3,7 +3,7 @@
     "description": "Linux 操作系统日常开发与运维，熟练使用 Shell 脚本、系统管理及性能调优。",
     "icon": "logos:linux-tux",
     "category": "tools",
-    "level": "advanced",
+    "level": "intermediate",
     "experience": {
         "years": 2,
         "months": 0

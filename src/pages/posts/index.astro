@@ -12,98 +12,101 @@ import BackwardButton from "@components/backwardButton.astro";
 const pageTitle = LinkPresets[LinkPreset.Posts].name;
 const pageDescription = LinkPresets[LinkPreset.Posts].description;
 
-// 获取所有文章和分类列表
 const allPosts = await getSortedPostsList();
 const categories = await getCategoryList();
 ---
 
 <GridLayout title={pageTitle} description={pageDescription}>
-    <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
-        <div class="card-base z-10 px-9 py-6 relative w-full">
-            <BackwardButton currentPath={Astro.url.pathname} />
-            <!-- 标题 -->
-            <header class="mb-6">
-                <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-3">
-                    {pageTitle}
-                </h1>
-                {pageDescription && (
-                    <p class="text-neutral-600 dark:text-neutral-400">
-                        {pageDescription}
-                    </p>
-                )}
-            </header>
+  <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
+    <div class="card-base z-10 px-9 py-6 relative w-full">
+      <BackwardButton currentPath={Astro.url.pathname} />
 
-            <!-- 分类标签栏：链接到独立的分类页面 -->
-            {categories.length > 0 && (
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <a
-                        href="/posts/"
-                        class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--primary) text-white"
-                    >
-                        {i18n(I18nKey.postsAll) || "全部"}
-                    </a>
-                    {categories.map(cat => (
-                        <a
-                            href={`/category/${encodeURIComponent(cat.name)}/`}
-                            class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--card-bg) hover:bg-(--primary)/10"
-                        >
-                            {cat.name}
-                            <span class="ml-1 text-xs opacity-60">({cat.count})</span>
-                        </a>
-                    ))}
-                </div>
-            )}
+      <!-- 标题 -->
+      <header class="mb-6">
+        <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-3">
+          {pageTitle}
+        </h1>
+        {pageDescription && (
+          <p class="text-neutral-600 dark:text-neutral-400">
+            {pageDescription}
+          </p>
+        )}
+      </header>
 
-            <!-- 文章列表（显示全部文章） -->
-            <div class="space-y-6">
-                {allPosts.length === 0 ? (
-                    <p class="text-center text-60 py-12">暂无文章</p>
-                ) : (
-                    allPosts.map((post) => (
-                        <article class="group bg-(--card-bg) rounded-xl p-6 border border-(--line-divider) hover:border-(--primary) transition-all duration-300 hover:shadow-lg">
-                            <a href={`/posts/${post.id}/`} class="block">
-                                <h2 class="text-xl font-semibold text-90 group-hover:text-(--primary) transition-colors mb-2">
-                                    {post.data.title}
-                                </h2>
-                                {post.data.description && (
-                                    <p class="text-75 mb-3 line-clamp-2">
-                                        {post.data.description}
-                                    </p>
-                                )}
-                                <div class="flex flex-wrap items-center gap-4 text-sm text-60">
-                                    <time datetime={post.data.published.toISOString()} class="text-75">
-                                        {formatDateToYYYYMMDD(post.data.published)}
-                                    </time>
-                                    <!-- 显示分类（若有） -->
-                                    {post.data.category && (
-                                        <span class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full text-xs">
-                                            {Array.isArray(post.data.category) ? post.data.category[0] : post.data.category}
-                                        </span>
-                                    )}
-                                    <!-- 显示标签（最多2个） -->
-                                    {post.data.tags && post.data.tags.length > 0 && (
-                                        <div class="flex flex-wrap gap-1">
-                                            {post.data.tags.slice(0, 2).map((tag) => (
-                                                <span class="px-2 py-0.5 bg-black/5 dark:bg-white/5 text-60 rounded-full text-xs">
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                            {post.data.tags.length > 2 && (
-                                                <span class="text-60 text-xs">+{post.data.tags.length - 2}</span>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            </a>
-                        </article>
-                    ))
-                )}
-            </div>
-
-            <!-- 文章总数 -->
-            <div class="mt-8 text-center text-60 text-sm">
-                {i18n(I18nKey.postsCount)}：{allPosts.length}
-            </div>
+      <!-- 分类标签栏 -->
+      {categories.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-6">
+          <a
+            href="/posts/"
+            class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--primary) text-white"
+          >
+            {i18n(I18nKey.postsAll) || "全部"}
+          </a>
+          {categories.map((cat) => (
+            <a
+              href={"/category/" + encodeURIComponent(cat.name) + "/"}
+              class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--card-bg) hover:bg-(--primary)/10 border border-(--line-divider)"
+            >
+              {cat.name}
+              <span class="ml-1 text-xs opacity-60">({cat.count})</span>
+            </a>
+          ))}
         </div>
+      )}
+
+      <!-- 文章列表 -->
+      <div class="space-y-6">
+        {allPosts.length === 0 ? (
+          <p class="text-center text-60 py-12">暂无文章</p>
+        ) : (
+          allPosts.map((post) => (
+            <article class="group bg-(--card-bg) rounded-xl p-6 border border-(--line-divider) hover:border-(--primary) transition-all duration-300 hover:shadow-lg">
+              <a href={`/posts/${post.id}/`} class="block">
+                <h2 class="text-xl font-semibold text-90 group-hover:text-(--primary) transition-colors mb-2">
+                  {post.data.title}
+                </h2>
+                {post.data.description && (
+                  <p class="text-75 mb-3 line-clamp-2">
+                    {post.data.description}
+                  </p>
+                )}
+                <div class="flex flex-wrap items-center gap-4 text-sm text-60">
+                  <time datetime={post.data.published.toISOString()} class="text-75">
+                    {formatDateToYYYYMMDD(post.data.published)}
+                  </time>
+                  <!-- 分类标签（可点击） -->
+                  {post.data.category && (
+                    <a
+                      href={"/category/" + encodeURIComponent(Array.isArray(post.data.category) ? post.data.category[0] : post.data.category) + "/"}
+                      class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full text-xs hover:bg-(--primary) hover:text-white transition-colors"
+                    >
+                      {Array.isArray(post.data.category) ? post.data.category[0] : post.data.category}
+                    </a>
+                  )}
+                  <!-- 标签 -->
+                  {post.data.tags && post.data.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-1">
+                      {post.data.tags.slice(0, 2).map((tag) => (
+                        <span class="px-2 py-0.5 bg-black/5 dark:bg-white/5 text-60 rounded-full text-xs">
+                          {tag}
+                        </span>
+                      ))}
+                      {post.data.tags.length > 2 && (
+                        <span class="text-60 text-xs">+{post.data.tags.length - 2}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </a>
+            </article>
+          ))
+        )}
+      </div>
+
+      <!-- 文章总数 -->
+      <div class="mt-8 text-center text-60 text-sm">
+        {i18n(I18nKey.postsCount)}：{allPosts.length}
+      </div>
     </div>
+  </div>
 </GridLayout>

@@ -1,10 +1,10 @@
 ---
 title: vLLM与SGLang：大模型推理框架的全面对比
-published: 2026-07-09
+published: 2026-03-06
 description: 全面对比vLLM与SGLang两大主流大模型推理框架的设计哲学与核心技术，从PagedAttention到RadixAttention，从连续批处理到零开销调度，剖析各自的适用场景与性能差异，并提供从零到一的快速上手指南。
-cover: "./Cover - Advanced Customization.jpg"
+cover: "./Comparison.png"
 coverInContent: false
-tags: [vLLM, SGLang, 大模型推理, 对比学习]
+tags: [vLLM, SGLang, 推理增强, 对比学习]
 category: AI_Infra
 draft: false
 ---

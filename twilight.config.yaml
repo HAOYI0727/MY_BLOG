@@ -186,18 +186,18 @@ navbar:
             description: "A collection of my creative works and experiences"
             # 子链接
             children:
+                - # 二级导航链接 - 相册 (预设)
+                    "Albums"
+                - # 二级导航链接 - 日记 (预设)
+                    "Diary"
                 - # 二级导航链接 - 项目 (预设)
                     "Projects"
                 - # 二级导航链接 - 技能 (预设)
                     "Skills"
                 - # 二级导航链接 - 历程 (预设)
-                    "Timeline"
-                - # 二级导航链接 - 日记 (预设)
-                    "Diary"
-                - # 二级导航链接 - 相册 (预设)
-                    "Albums"
-                - # 二级导航链接 - 动画 (预设)
-                    "Anime"
+                    "Timeline"                
+                # - # 二级导航链接 - 动画 (预设)
+                #     "Anime"
         # - # 一级导航链接 - 好友 (预设)
         #     "Friends"
         # - # 一级导航链接 - 关于 (预设)
@@ -296,23 +296,23 @@ profile:
             url: "https://github.com/HAOYI0727"
 
 # 公告配置
-announcement:
-    # 公告标题
-    title: "Announcement"
-    # 公告内容
-    content: "Welcome to my blog!"
-    # 允许用户关闭公告
-    closable: true
-    # 链接配置
-    link:
-        # 启用链接
-        enable: true
-        # 链接文本
-        text: "Learn More"
-        # 链接 URL
-        url: "/about/"
-        # 是否外部链接
-        external: false
+# announcement:
+#     # 公告标题
+#     title: "Announcement"
+#     # 公告内容
+#     content: "Welcome to my blog!"
+#     # 允许用户关闭公告
+#     closable: true
+#     # 链接配置
+#     link:
+#         # 启用链接
+#         enable: true
+#         # 链接文本
+#         text: "Learn More"
+#         # 链接 URL
+#         url: "/about/"
+#         # 是否外部链接
+#         external: false
 
 # 文章配置
 post:
@@ -347,22 +347,16 @@ post:
     # 评论配置
     comment:
         # 启用评论功能
-        enable: false
+        enable: true
         # 评论服务提供商（可选，不填则自动检测已配置的服务）
-        provider:
+        provider: waline
         # Waline 评论系统配置
         waline:
             # 服务端地址
-            serverURL: ""
+            serverURL: "https://zhy-blog.vercel.app/"
             # 语言
-            lang: ""
-        # Twikoo 评论系统配置
-        twikoo:
-            # 环境 ID
-            envId: ""
-            # 语言
-            lang: ""
-
+            lang: "zh-CN"
+    
 # 页脚配置
 footer:
     # 启用 Footer HTML 注入功能
@@ -525,6 +519,21 @@ musicPlayer:
                 # 序号
                 id: 7
                 # 标题
+                title: "BETTY"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/FOLKLORE.jpg"
+                # 音乐路径
+                url: "assets/music/BETTY.m4a"
+                # 歌词路径
+                lrc: "assets/music/BETTY.lrc"
+                # 时长
+                duration: 295
+            - # 列表示例
+                # 序号
+                id: 8
+                # 标题
                 title: "WILLOW"
                 # 作者
                 artist: "Taylor Swift"
@@ -538,7 +547,7 @@ musicPlayer:
                 duration: 216
             - # 列表示例
                 # 序号
-                id: 8
+                id: 9
                 # 标题
                 title: "CHAMPAGNE PROBLEM"
                 # 作者
@@ -553,7 +562,22 @@ musicPlayer:
                 duration: 244
             - # 列表示例
                 # 序号
-                id: 9
+                id: 10
+                # 标题
+                title: "NO BODY NO CRIME"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/EVERMORE.jpg"
+                # 音乐路径
+                url: "assets/music/NO_BODY_NO_CRIME.m4a"
+                # 歌词路径
+                lrc: "assets/music/NO_BODY_NO_CRIME.lrc"
+                # 时长
+                duration: 218
+            - # 列表示例
+                # 序号
+                id: 11
                 # 标题
                 title: "FORTNIGHT"
                 # 作者
@@ -568,7 +592,7 @@ musicPlayer:
                 duration: 229
             - # 列表示例
                 # 序号
-                id: 10
+                id: 12
                 # 标题
                 title: "DOWN BAD"
                 # 作者
@@ -583,7 +607,22 @@ musicPlayer:
                 duration: 264
             - # 列表示例
                 # 序号
-                id: 11
+                id: 13
+                # 标题
+                title: "ANTI_HERO"
+                # 作者
+                artist: "Taylor Swift"
+                # 封面
+                cover: "/assets/images/MIDNIGHTS.jpg"
+                # 音乐路径
+                url: "assets/music/ANTI_HERO.m4a"
+                # 歌词路径
+                lrc: "assets/music/ANTI_HERO.lrc"
+                # 时长
+                duration: 202
+            - # 列表示例
+                # 序号
+                id: 14
                 # 标题
                 title: "DIE WITH A SMILE"
                 # 作者
@@ -598,7 +637,7 @@ musicPlayer:
                 duration: 252
             - # 列表示例
                 # 序号
-                id: 12
+                id: 15
                 # 标题
                 title: "HATE THAT I MADE YOUS LOVE ME"
                 # 作者
@@ -613,7 +652,7 @@ musicPlayer:
                 duration: 198
             - # 列表示例
                 # 序号
-                id: 13
+                id: 16
                 # 标题
                 title: "ETERNAL SUNSHINE"
                 # 作者
@@ -628,7 +667,7 @@ musicPlayer:
                 duration: 253
             - # 列表示例
                 # 序号
-                id: 14
+                id: 17
                 # 标题
                 title: "THANK U NEXT"
                 # 作者
@@ -643,7 +682,7 @@ musicPlayer:
                 duration: 209
             - # 列表示例
                 # 序号
-                id: 15
+                id: 18
                 # 标题
                 title: "KILL BILL"
                 # 作者

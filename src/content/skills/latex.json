@@ -1,9 +1,9 @@
 {
     "name": "LaTeX",
     "description": "高质量排版系统，用于学术论文、技术文档及演示文稿撰写。熟悉基本语法、数学公式、图表插入及参考文献管理。",
-    "icon": "logos:linux-tux",
-    "category": "tools",
-    "level": "intermediate",
+    "icon": "devicon:latex",
+    "category": "others",
+    "level": "advanced",
     "experience": {
         "years": 2,
         "months": 0

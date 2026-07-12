@@ -1,6 +1,6 @@
 ---
 title: 加密文档测试
-published: 2026-07-10
+published: 2026-01-01
 description: '加密文档测试'
 encrypted: true
 pinned: false
@@ -65,4 +65,4 @@ category:
 
 ---
 
-*本笔记仅供学习参考，密码为 `dl2026`。*
+*本笔记仅供学习参考，密码为 `test`。*

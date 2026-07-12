@@ -1,0 +1,579 @@
+.
+├── components/
+│   ├── comment/
+│   │   ├── twikoo.astro
+│   │   ├── waline.astro
+│   ├── common/
+│   │   ├── DropdownItem.svelte
+│   │   ├── DropdownPanel.svelte
+│   │   ├── buttonLink.astro
+│   │   ├── buttonTag.astro
+│   │   ├── icon.astro
+│   │   ├── icon.svelte
+│   │   ├── iconifyLoader.astro
+│   │   ├── imageWrapper.astro
+│   │   ├── markdown.astro
+│   │   ├── passwordProtection.astro
+│   │   ├── typewriterText.astro
+│   ├── data/
+│   │   ├── projectCard.astro
+│   │   ├── skillCard.astro
+│   │   ├── timelineItem.astro
+│   ├── navbar/
+│   │   ├── displaySettings.svelte
+│   │   ├── lightDarkSwitch.svelte
+│   │   ├── navLinks.astro
+│   │   ├── navMenu.svelte
+│   │   ├── search.svelte
+│   │   ├── translator.svelte
+│   │   ├── wallpaperSwitch.svelte
+│   ├── post/
+│   │   ├── license.astro
+│   │   ├── postCard.astro
+│   │   ├── postMeta.astro
+│   ├── sidebar/
+│   │   ├── announcement.astro
+│   │   ├── categories.astro
+│   │   ├── categoryItem.astro
+│   │   ├── directory.astro
+│   │   ├── directoryTree.svelte
+│   │   ├── profile.astro
+│   │   ├── statistics.astro
+│   │   ├── statistics.svelte
+│   │   ├── tags.astro
+│   │   ├── toc.astro
+│   │   ├── toc.ts
+│   │   ├── widgetLayout.astro
+│   ├── .DS_Store
+│   ├── archivePanel.svelte
+│   ├── back2TopButton.astro
+│   ├── backwardButton.astro
+│   ├── banner.astro
+│   ├── comment.astro
+│   ├── configCarrier.astro
+│   ├── fontLoader.astro
+│   ├── footer.astro
+│   ├── fullscreenWallpaper.astro
+│   ├── loadingOverlay.astro
+│   ├── musicPlayer.svelte
+│   ├── navbar.astro
+│   ├── pagination.astro
+│   ├── pio.svelte
+│   ├── postPage.astro
+│   ├── sidebar.astro
+│   ├── tocButton.astro
+├── constants/
+│   ├── breakpoints.ts
+│   ├── constants.ts
+│   ├── icon.ts
+│   ├── link-presets.ts
+├── content/
+│   ├── albums/
+│   │   ├── IB_Course/
+│   │   │   ├── Calculus/
+│   │   │   │   ├── cal.json
+│   │   │   │   ├── cal1.JPG
+│   │   │   │   ├── cal10.JPG
+│   │   │   │   ├── cal11.JPG
+│   │   │   │   ├── cal12.JPG
+│   │   │   │   ├── cal2.JPG
+│   │   │   │   ├── cal3.JPG
+│   │   │   │   ├── cal4.JPG
+│   │   │   │   ├── cal5.JPG
+│   │   │   │   ├── cal6.JPG
+│   │   │   │   ├── cal7.JPG
+│   │   │   │   ├── cal8.JPG
+│   │   │   │   ├── cal9.JPG
+│   │   │   ├── Data Strctures/
+│   │   │   │   ├── ds.json
+│   │   │   │   ├── ds1.JPG
+│   │   │   │   ├── ds10.JPG
+│   │   │   │   ├── ds11.JPG
+│   │   │   │   ├── ds12.JPG
+│   │   │   │   ├── ds13.JPG
+│   │   │   │   ├── ds14.JPG
+│   │   │   │   ├── ds2.JPG
+│   │   │   │   ├── ds3.JPG
+│   │   │   │   ├── ds4.JPG
+│   │   │   │   ├── ds5.JPG
+│   │   │   │   ├── ds6.JPG
+│   │   │   │   ├── ds7.JPG
+│   │   │   │   ├── ds8.JPG
+│   │   │   │   ├── ds9.JPG
+│   │   │   ├── Discrete Mathematics/
+│   │   │   │   ├── dm.json
+│   │   │   │   ├── dm1.JPG
+│   │   │   │   ├── dm10.JPG
+│   │   │   │   ├── dm11.JPG
+│   │   │   │   ├── dm12.JPG
+│   │   │   │   ├── dm13.JPG
+│   │   │   │   ├── dm14.JPG
+│   │   │   │   ├── dm15.JPG
+│   │   │   │   ├── dm16.JPG
+│   │   │   │   ├── dm17.JPG
+│   │   │   │   ├── dm2.JPG
+│   │   │   │   ├── dm3.JPG
+│   │   │   │   ├── dm4.JPG
+│   │   │   │   ├── dm5.JPG
+│   │   │   │   ├── dm6.JPG
+│   │   │   │   ├── dm7.JPG
+│   │   │   │   ├── dm8.JPG
+│   │   │   │   ├── dm9.JPG
+│   │   │   ├── Physics Experiment/
+│   │   │   │   ├── phy_e.json
+│   │   │   │   ├── phy_e1.JPG
+│   │   │   │   ├── phy_e10.JPG
+│   │   │   │   ├── phy_e11.JPG
+│   │   │   │   ├── phy_e12.JPG
+│   │   │   │   ├── phy_e13.JPG
+│   │   │   │   ├── phy_e14.JPG
+│   │   │   │   ├── phy_e15.JPG
+│   │   │   │   ├── phy_e16.JPG
+│   │   │   │   ├── phy_e17.JPG
+│   │   │   │   ├── phy_e18.JPG
+│   │   │   │   ├── phy_e19.JPG
+│   │   │   │   ├── phy_e2.JPG
+│   │   │   │   ├── phy_e20.JPG
+│   │   │   │   ├── phy_e3.JPG
+│   │   │   │   ├── phy_e4.JPG
+│   │   │   │   ├── phy_e5.JPG
+│   │   │   │   ├── phy_e6.JPG
+│   │   │   │   ├── phy_e7.JPG
+│   │   │   │   ├── phy_e8.JPG
+│   │   │   │   ├── phy_e9.JPG
+│   │   │   ├── Physics(1)/
+│   │   │   │   ├── .DS_Store
+│   │   │   │   ├── phy.json
+│   │   │   │   ├── phy1.JPG
+│   │   │   │   ├── phy2.JPG
+│   │   │   │   ├── phy3.JPG
+│   │   │   ├── Probability and Statistic/
+│   │   │   │   ├── ps.json
+│   │   │   │   ├── ps1.JPG
+│   │   │   │   ├── ps2.JPG
+│   │   │   │   ├── ps3.JPG
+│   │   │   │   ├── ps4.JPG
+│   │   │   ├── .DS_Store
+│   │   ├── IIA_Course/
+│   │   │   ├── Algorithm/
+│   │   │   │   ├── alg.json
+│   │   │   │   ├── alg1.JPG
+│   │   │   │   ├── alg10.JPG
+│   │   │   │   ├── alg11.JPG
+│   │   │   │   ├── alg12.JPG
+│   │   │   │   ├── alg2.JPG
+│   │   │   │   ├── alg3.JPG
+│   │   │   │   ├── alg4.JPG
+│   │   │   │   ├── alg5.JPG
+│   │   │   │   ├── alg6.JPG
+│   │   │   │   ├── alg7.JPG
+│   │   │   │   ├── alg8.JPG
+│   │   │   │   ├── alg9.JPG
+│   │   │   ├── Digital Circuits/
+│   │   │   │   ├── dc.json
+│   │   │   │   ├── dc1.JPG
+│   │   │   │   ├── dc10.JPG
+│   │   │   │   ├── dc2.JPG
+│   │   │   │   ├── dc3.JPG
+│   │   │   │   ├── dc4.JPG
+│   │   │   │   ├── dc5.JPG
+│   │   │   │   ├── dc6.JPG
+│   │   │   │   ├── dc7.JPG
+│   │   │   │   ├── dc8.JPG
+│   │   │   │   ├── dc9.JPG
+│   │   │   ├── ICS/
+│   │   │   │   ├── ics.json
+│   │   │   │   ├── ics1.JPG
+│   │   │   │   ├── ics2.JPG
+│   │   │   │   ├── ics3.JPG
+│   │   │   │   ├── ics4.JPG
+│   │   │   │   ├── ics5.JPG
+│   │   │   │   ├── ics6.JPG
+│   │   │   ├── Marxism/
+│   │   │   │   ├── marx.json
+│   │   │   │   ├── marx1.JPG
+│   │   │   │   ├── marx2.JPG
+│   │   │   │   ├── marx3.JPG
+│   │   │   │   ├── marx4.JPG
+│   │   │   │   ├── marx5.JPG
+│   │   │   │   ├── marx6.JPG
+│   │   │   │   ├── marx7.JPG
+│   │   │   │   ├── marx8.JPG
+│   │   │   ├── Physics(2)/
+│   │   │   │   ├── phy.json
+│   │   │   │   ├── phy10.JPG
+│   │   │   │   ├── phy11.JPG
+│   │   │   │   ├── phy4.JPG
+│   │   │   │   ├── phy5.JPG
+│   │   │   │   ├── phy6.JPG
+│   │   │   │   ├── phy7.JPG
+│   │   │   │   ├── phy8.JPG
+│   │   │   │   ├── phy9.JPG
+│   │   │   ├── .DS_Store
+│   │   ├── IIB_Course/
+│   │   │   ├── Computer Organization/
+│   │   │   │   ├── .DS_Store
+│   │   │   │   ├── co.json
+│   │   │   │   ├── co1.JPG
+│   │   │   │   ├── co10.JPG
+│   │   │   │   ├── co11.JPG
+│   │   │   │   ├── co12.JPG
+│   │   │   │   ├── co13.JPG
+│   │   │   │   ├── co14.JPG
+│   │   │   │   ├── co15.JPG
+│   │   │   │   ├── co2.JPG
+│   │   │   │   ├── co3.JPG
+│   │   │   │   ├── co4.JPG
+│   │   │   │   ├── co5.JPG
+│   │   │   │   ├── co6.JPG
+│   │   │   │   ├── co7.JPG
+│   │   │   │   ├── co8.JPG
+│   │   │   │   ├── co9.JPG
+│   │   │   ├── Database/
+│   │   │   │   ├── db.json
+│   │   │   │   ├── db1.JPG
+│   │   │   │   ├── db10.JPG
+│   │   │   │   ├── db11.JPG
+│   │   │   │   ├── db12.JPG
+│   │   │   │   ├── db2.JPG
+│   │   │   │   ├── db3.JPG
+│   │   │   │   ├── db4.JPG
+│   │   │   │   ├── db5.JPG
+│   │   │   │   ├── db6.JPG
+│   │   │   │   ├── db7.JPG
+│   │   │   │   ├── db8.JPG
+│   │   │   │   ├── db9.JPG
+│   │   │   ├── MaoZedong/
+│   │   │   │   ├── mg.json
+│   │   │   │   ├── mg1.JPG
+│   │   │   │   ├── mg2.JPG
+│   │   │   │   ├── mg3.JPG
+│   │   │   │   ├── mg4.JPG
+│   │   │   │   ├── mg5.JPG
+│   │   │   │   ├── mg6.JPG
+│   │   │   │   ├── mg7.JPG
+│   │   │   │   ├── mg8.JPG
+│   │   │   │   ├── mg9.JPG
+│   │   │   ├── Signal and Linear Systems/
+│   │   │   │   ├── signal.json
+│   │   │   │   ├── signal1.JPG
+│   │   │   │   ├── signal2.JPG
+│   │   │   │   ├── signal3.JPG
+│   │   │   │   ├── signal4.JPG
+│   │   │   │   ├── signal5.JPG
+│   │   │   │   ├── signal6.JPG
+│   │   │   │   ├── signal7.JPG
+│   │   │   │   ├── signal8.JPG
+│   │   │   ├── .DS_Store
+│   │   ├── Scenery/
+│   │   │   ├── .DS_Store
+│   │   │   ├── s1.JPG
+│   │   │   ├── s10.JPG
+│   │   │   ├── s11.JPG
+│   │   │   ├── s2.JPG
+│   │   │   ├── s3.JPG
+│   │   │   ├── s4.JPG
+│   │   │   ├── s5.JPG
+│   │   │   ├── s6.JPG
+│   │   │   ├── s7.JPG
+│   │   │   ├── s8.JPG
+│   │   │   ├── s9.JPG
+│   │   │   ├── scenery.json
+│   │   ├── .DS_Store
+│   ├── diary/
+│   │   ├── Feelings/
+│   │   │   ├── 1.jpeg
+│   │   │   ├── 1.json
+│   │   ├── Films/
+│   │   │   ├── 1.jpeg
+│   │   │   ├── 1.json
+│   │   │   ├── 2.jpeg
+│   │   │   ├── 2.json
+│   │   │   ├── 3.jpeg
+│   │   │   ├── 3.json
+│   │   ├── .DS_Store
+│   ├── friends/
+│   │   ├── astro.json
+│   │   ├── spraachen.json
+│   │   ├── twilight-docs.json
+│   ├── posts/
+│   │   ├── AI_Alignment/
+│   │   │   ├── Basic_Knowledge.md
+│   │   │   ├── Basic_Knowledge.png
+│   │   │   ├── Comparison.md
+│   │   │   ├── Comparison.png
+│   │   │   ├── DAPO.md
+│   │   │   ├── DAPO.png
+│   │   │   ├── DAPO1.png
+│   │   │   ├── DAPO2.png
+│   │   │   ├── DAPO3.png
+│   │   │   ├── DAPO4.png
+│   │   │   ├── DPO.md
+│   │   │   ├── DPO.png
+│   │   │   ├── DPO_vs_RLHF.png
+│   │   │   ├── GRPO.md
+│   │   │   ├── GRPO.png
+│   │   │   ├── GRPO_deep.png
+│   │   │   ├── GRPO_vs_PPO1.png
+│   │   │   ├── GRPO_vs_PPO2.png
+│   │   │   ├── GSPO.md
+│   │   │   ├── GSPO.png
+│   │   │   ├── PPO.md
+│   │   │   ├── PPO.png
+│   │   │   ├── PPO_Clipping.png
+│   │   │   ├── PPO_KLdiv.png
+│   │   │   ├── PPO_RM.png
+│   │   ├── AI_BasicKnowledge/
+│   │   │   ├── images/
+│   │   │   │   ├── 1-1.RNN.png
+│   │   │   │   ├── 1-2.LSTM.png
+│   │   │   │   ├── 1-3.QKV.png
+│   │   │   │   ├── 1-4.MHA.png
+│   │   │   │   ├── 1-5.Transformer.png
+│   │   │   │   ├── 2-1.HardcodedPE.png
+│   │   │   │   ├── 2-2.RoPE.png
+│   │   │   │   ├── 2-3.Post-Norm.png
+│   │   │   │   ├── 2-4.Pre-Norm.png
+│   │   │   │   ├── 2-5.MQA+GQA.png
+│   │   │   │   ├── 2-6.BERT.png
+│   │   │   │   ├── 3-1.MoE_FFNN.png
+│   │   │   │   ├── 3-2.MoE_Code.png
+│   │   │   │   ├── 3-3.T_Impact.png
+│   │   │   │   ├── 3-4.CoT.png
+│   │   │   │   ├── 3-5.SC.png
+│   │   │   │   ├── 3-6.MQA+GQA.png
+│   │   │   │   ├── 3-7.PageAttention.png
+│   │   │   │   ├── 3-8.Spe_Decoding.png
+│   │   │   │   ├── 3-9.MTP.png
+│   │   │   │   ├── 4-1.MPT.png
+│   │   │   │   ├── 4-2.Alignment.png
+│   │   │   │   ├── 5-1.BaseType.png
+│   │   │   │   ├── 5-2.RLHF_Loss.png
+│   │   │   │   ├── 5-3.PPO_Clip_L.png
+│   │   │   │   ├── 5-4.BoN.png
+│   │   │   │   ├── 6-1.Reasoning_Model.png
+│   │   │   │   ├── 6-10.Template.png
+│   │   │   │   ├── 6-11.Results.png
+│   │   │   │   ├── 6-12.Distillation.png
+│   │   │   │   ├── 6-2.PassK.png
+│   │   │   │   ├── 6-3.R_CoT.png
+│   │   │   │   ├── 6-4.R_Acc.png
+│   │   │   │   ├── 6-5.Rewards.png
+│   │   │   │   ├── 6-6.GRPOvsPPO.png
+│   │   │   │   ├── 6-7.Problem.png
+│   │   │   │   ├── 6-8.Deepseek.png
+│   │   │   │   ├── 6-9.V3-Base.png
+│   │   │   │   ├── 7-1.Needle.png
+│   │   │   │   ├── 7-2.RAG.png
+│   │   │   │   ├── 7-3.Prerequisite.png
+│   │   │   │   ├── 7-4.Quantify.png
+│   │   │   │   ├── 7-5.Work.png
+│   │   │   │   ├── 7-6.MCP.png
+│   │   │   │   ├── 7-7.MCP_example.png
+│   │   │   │   ├── 7-8.Compare.png
+│   │   │   │   ├── 7-9.A2A.png
+│   │   │   │   ├── 8-1.Metrics.png
+│   │   │   │   ├── 8-2.LaaJ.png
+│   │   │   │   ├── 8-3.Workflow.png
+│   │   │   │   ├── 8-4.Factuality.png
+│   │   │   │   ├── 8-5.Agentbench.png
+│   │   │   │   ├── 8-6.Pareto.png
+│   │   │   │   ├── 9-1.ViT.png
+│   │   │   │   ├── 9-2.Recycle.png
+│   │   │   │   ├── 9-3.CrossAttention.png
+│   │   │   │   ├── 9-4.Images.png
+│   │   │   │   ├── 9-5.Tokens.png
+│   │   │   │   ├── 9-6.DiT.png
+│   │   │   │   ├── 9-7.MSRoPE.png
+│   │   │   │   ├── 9-8.Pareto.png
+│   │   │   │   ├── 9-9.HardWare.png
+│   │   │   │   ├── Benchmark.gif
+│   │   │   │   ├── Candidate_Retrieval.gif
+│   │   │   │   ├── Error.gif
+│   │   │   │   ├── Example.gif
+│   │   │   │   ├── Finetuning.gif
+│   │   │   │   ├── FlashAttention.gif
+│   │   │   │   ├── GRPO.gif
+│   │   │   │   ├── KV_cache.gif
+│   │   │   │   ├── LLM_Training.gif
+│   │   │   │   ├── LatentAttention.gif
+│   │   │   │   ├── LoRA.gif
+│   │   │   │   ├── PNT.gif
+│   │   │   │   ├── QLoRA.gif
+│   │   │   │   ├── RL.gif
+│   │   │   │   ├── RL_LLM.gif
+│   │   │   │   ├── Ranking.gif
+│   │   │   │   ├── ReAct.gif
+│   │   │   │   ├── Teach_Model.gif
+│   │   │   │   ├── ViT_Example.gif
+│   │   │   │   ├── ZeRO.gif
+│   │   │   ├── .DS_Store
+│   │   │   ├── L1.png
+│   │   │   ├── L1_Transformer_background_and_architecture.md
+│   │   │   ├── L2.png
+│   │   │   ├── L2_Transformer-based_models_and_tricks.md
+│   │   │   ├── L3.png
+│   │   │   ├── L3_LLM_core_techniques.md
+│   │   │   ├── L4.png
+│   │   │   ├── L4_LLM_training.md
+│   │   │   ├── L5.png
+│   │   │   ├── L5_LLM_preference_tuning.md
+│   │   │   ├── L6.png
+│   │   │   ├── L6_LLM_reasoning.md
+│   │   │   ├── L7.png
+│   │   │   ├── L7_Agentic_LLM.md
+│   │   │   ├── L8.png
+│   │   │   ├── L8_LLM_evaluation.md
+│   │   │   ├── L9.png
+│   │   │   ├── L9_LLM_development.md
+│   │   ├── AI_Infra/
+│   │   │   ├── .DS_Store
+│   │   │   ├── Comparison.md
+│   │   │   ├── Comparison.png
+│   │   │   ├── SGLang.md
+│   │   │   ├── SGLang.png
+│   │   │   ├── VLM.md
+│   │   │   ├── VLM.png
+│   │   │   ├── vLLM.md
+│   │   │   ├── vLLM.png
+│   │   ├── Basic_Knowledge/
+│   │   │   ├── Basic_Instructions.md
+│   │   │   ├── Basic_Instructions.png
+│   │   │   ├── Basic_Tools.md
+│   │   │   ├── Basic_Tools.png
+│   │   │   ├── Docker.md
+│   │   │   ├── Docker.png
+│   │   ├── .DS_Store
+│   │   ├── entryption.md
+│   ├── projects/
+│   │   ├── CME295/
+│   │   │   ├── intro.json
+│   │   ├── CS336/
+│   │   │   ├── intro.json
+│   ├── skills/
+│   │   ├── astro.json
+│   │   ├── docker.json
+│   │   ├── git.json
+│   │   ├── latex.json
+│   │   ├── linux.json
+│   │   ├── markdown.json
+│   │   ├── python.json
+│   │   ├── pytorch.json
+│   │   ├── ssh.json
+│   │   ├── tmux.json
+│   │   ├── uv.json
+│   ├── timeline/
+│   │   ├── first-project.json
+│   ├── .DS_Store
+│   ├── about.md
+│   ├── friends.md
+├── i18n/
+│   ├── languages/
+│   │   ├── en.ts
+│   │   ├── ja.ts
+│   │   ├── zh_hans.ts
+│   │   ├── zh_hant.ts
+│   ├── .DS_Store
+│   ├── i18nKey.ts
+│   ├── language.ts
+│   ├── translation.ts
+├── layouts/
+│   ├── base.astro
+│   ├── grid.astro
+├── pages/
+│   ├── albums/
+│   │   ├── [id]/
+│   │   │   ├── index.astro
+│   ├── category/
+│   │   ├── [...slug].astro
+│   ├── diary/
+│   │   ├── [...slug].astro
+│   ├── og/
+│   │   ├── [...slug].png.ts
+│   ├── posts/
+│   │   ├── [...slug].astro
+│   │   ├── index.astro
+│   ├── .DS_Store
+│   ├── 404.astro
+│   ├── [...menu].astro
+│   ├── [...page].astro
+│   ├── about.astro
+│   ├── albums.astro
+│   ├── anime.astro
+│   ├── archive.astro
+│   ├── atom.astro
+│   ├── atom.xml.ts
+│   ├── diary.astro
+│   ├── friends.astro
+│   ├── projects.astro
+│   ├── robots.txt.ts
+│   ├── rss.astro
+│   ├── rss.xml.ts
+│   ├── skills.astro
+│   ├── timeline.astro
+├── plugins/
+│   ├── expressive-code/
+│   │   ├── collapse-button.ts
+│   │   ├── copy-button.ts
+│   │   ├── language-badge.ts
+│   ├── mermaid-render-script.js
+│   ├── rehype-admonitions.mjs
+│   ├── rehype-component-github-card.mjs
+│   ├── rehype-component-music-card.mjs
+│   ├── rehype-lazy-load-media.mjs
+│   ├── rehype-mermaid.mjs
+│   ├── remark-directive-rehype.js
+│   ├── remark-excerpt.js
+│   ├── remark-mermaid.js
+│   ├── remark-reading-time.mjs
+│   ├── translate.js
+│   ├── umami-share.js
+├── styles/
+│   ├── albums.css
+│   ├── anime.css
+│   ├── banner.css
+│   ├── expressive-code.css
+│   ├── fancybox.css
+│   ├── grid.css
+│   ├── main.css
+│   ├── markdown-extend.styl
+│   ├── markdown.css
+│   ├── musicplayer.css
+│   ├── navbar.css
+│   ├── transition.css
+│   ├── variables.styl
+├── types/
+│   ├── config.ts
+│   ├── translate.d.ts
+├── utils/
+│   ├── albums.ts
+│   ├── analytics.ts
+│   ├── category.ts
+│   ├── date.ts
+│   ├── diary.ts
+│   ├── directory.ts
+│   ├── fancybox.ts
+│   ├── friends.ts
+│   ├── hue.ts
+│   ├── icons.ts
+│   ├── language.ts
+│   ├── markdown.ts
+│   ├── music.ts
+│   ├── navigation.ts
+│   ├── particle.ts
+│   ├── post.ts
+│   ├── projects.ts
+│   ├── skills.ts
+│   ├── tag.ts
+│   ├── theme.ts
+│   ├── timeline.ts
+│   ├── url.ts
+│   ├── wallpaper.ts
+│   ├── widget.ts
+├── .DS_Store
+├── config.ts
+├── content.config.ts
+├── env.d.ts
+├── file_structure.txt
+├── global.d.ts
+├── tmp.py

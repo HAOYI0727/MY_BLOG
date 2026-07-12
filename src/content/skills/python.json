@@ -2,8 +2,8 @@
     "name": "Python",
     "description": "主要编程语言，擅长数据处理、深度学习模型开发及自动化脚本编写。",
     "icon": "logos:python",
-    "category": "languages",
-    "level": "expert",
+    "category": "ai",
+    "level": "advanced",
     "experience": {
         "years": 2,
         "months": 0
