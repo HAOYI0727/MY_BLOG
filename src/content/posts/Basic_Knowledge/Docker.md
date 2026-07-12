@@ -1,6 +1,6 @@
 ---
 title: Docker 快速配置深度学习环境 + 基础命令 + 常见报错
-published: 2026-01-06
+published: 2025-07-06
 description: 从零搭建深度学习 Docker 环境，涵盖镜像拉取、容器运行、GPU 支持配置、基础命令速查及常见报错（权限、网络超时、磁盘不足）解决方案，助你快速上手容器化 AI 开发。
 cover: "./Docker.png"
 coverInContent: false

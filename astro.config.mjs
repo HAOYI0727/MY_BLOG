@@ -56,6 +56,14 @@ export default defineConfig({
     base: "/",
     trailingSlash: "always",
     adapter: adapter,
+    image: {
+        service: {
+            entrypoint: 'astro/assets/services/sharp',
+            config: {
+                limitInputPixels: false,
+            },
+        },
+    },
     integrations: [
         decapCmsOauth({
             configPath: "./.decap.yml", // Path to the Decap CMS configuration file

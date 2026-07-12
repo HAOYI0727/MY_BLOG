@@ -1,6 +1,6 @@
 ---
 title: 命令行基础指令 —— Linux Shell 与 APT 包管理速查
-published: 2026-01-02
+published: 2025-07-02
 description: 全面梳理命令行常用操作，涵盖导航、文件管理、权限设置、进程控制、网络工具及 APT 包管理（更新、安装、清理），助你高效驾驭 Linux 终端环境。
 cover: "./Basic_Instructions.png"
 coverInContent: false

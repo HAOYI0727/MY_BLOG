@@ -284,7 +284,7 @@ profile:
     # 信息配置
     name: "Zhang Haoyi"
     # 简介配置
-    bio: "Hi, I'm Zhang Haoyi! Welcome to my blog."
+    bio: "Hello, I'm Zhang Haoyi, a passionate developer and blogger. Welcome to my personal space where I share my thoughts, projects, and experiences."
     # 链接配置
     links:
         - # 链接示例
