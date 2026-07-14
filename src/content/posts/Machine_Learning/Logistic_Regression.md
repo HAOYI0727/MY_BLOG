@@ -4,7 +4,7 @@ published: 2025-07-04
 description: 系统讲解逻辑回归与Softmax多分类的核心原理与完整数学推导。涵盖Sigmoid函数的概率映射与导数特性、对数几率与线性决策边界、最大似然估计推导二分类交叉熵损失及梯度下降求解、Softmax回归从二分类到多分类的自然推广、Log-Sum-Exp数值稳定性技巧，以及宏平均与微平均F1-Score在多分类评价中的适用场景与代码实现。
 cover: "/assets/images/posts/logistic_regression.png"
 coverInContent: false
-tags: [逻辑回归, Softmax, 交叉熵损失, 梯度下降]
+tags: [逻辑回归, Softmax, 交叉熵损失, 梯度下降, 机器学习]
 category: Machine_Learning
 draft: false
 ---

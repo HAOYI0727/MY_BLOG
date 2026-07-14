@@ -5,7 +5,7 @@ description: 系统梳理Transformer的诞生背景与核心架构，涵盖分�
 cover: "/assets/images/posts/L1.png"
 coverInContent: false
 tags: [Transformer, Attention, 基础知识]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

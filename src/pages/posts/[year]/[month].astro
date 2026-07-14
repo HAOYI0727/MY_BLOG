@@ -1,0 +1,175 @@
+---
+// src/pages/posts/[year]/[month].astro
+export const prerender = true;
+
+import { getCollection } from "astro:content";
+import GridLayout from "@layouts/grid.astro";
+import BackwardButton from "@components/backwardButton.astro";
+import { formatDateToYYYYMMDD } from "@utils/date";
+
+// 生成所有月份路径
+export async function getStaticPaths() {
+  const allPosts = await getCollection("posts", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  const monthSet = new Set<string>();
+  for (const post of allPosts) {
+    const date = post.data.published;
+    if (!date) continue;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    monthSet.add(`${year}-${month}`);
+  }
+
+  return Array.from(monthSet).map((ym) => {
+    const [year, month] = ym.split("-");
+    return { params: { year, month } };
+  });
+}
+
+// 当前年月参数
+const { year, month } = Astro.params;
+const yearNum = Number(year);
+const monthNum = Number(month);
+
+// 获取所有文章并筛选出属于该年月的
+const allPosts = await getCollection("posts", ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const monthPosts = allPosts
+  .filter((post) => {
+    const date = post.data.published;
+    if (!date) return false;
+    return date.getFullYear() === yearNum && date.getMonth() + 1 === monthNum;
+  })
+  .sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
+
+const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+const title = `${year}年${monthNames[monthNum-1]}文章`;
+const description = `${year}年${monthNum}月的所有文章`;
+
+const currentPath = Astro.url.pathname;
+---
+
+<GridLayout title={title} description={description}>
+  <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
+    <div class="card-base z-10 px-9 py-6 relative w-full">
+      
+      <!-- 返回按钮和标题 -->
+      <div class="flex items-center gap-4 mb-6">
+        <BackwardButton currentPath={currentPath} />
+        <h1 class="text-2xl font-bold text-90">
+          {title}
+          <span class="ml-3 text-sm font-normal text-60 bg-(--card-bg) px-3 py-1 rounded-full">
+            {monthPosts.length} 篇
+          </span>
+        </h1>
+      </div>
+
+      <!-- 文章列表 -->
+      {monthPosts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {monthPosts.map((post) => {
+            const postUrl = `/posts/${post.id}/`;
+            return (
+              <a
+                href={postUrl}
+                class="group block rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-400 ease-out 
+                       border border-white/30 dark:border-white/10 hover:border-(--primary)/50
+                       transform hover:-translate-y-2 card-glass cursor-pointer"
+              >
+                <!-- 封面图 -->
+                {post.data.cover && (
+                  <div class="relative h-44 overflow-hidden bg-(--card-bg)">
+                    <img
+                      src={post.data.cover}
+                      alt={post.data.title}
+                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                  </div>
+                )}
+
+                <div class="p-5 flex-1 flex flex-col">
+                  <h3 class="text-lg font-semibold leading-snug mb-2 text-90 group-hover:text-(--primary) transition-colors duration-200">
+                    {post.data.title}
+                  </h3>
+
+                  {post.data.description && (
+                    <p class="text-sm text-75 mb-3 line-clamp-3 flex-1">
+                      {post.data.description}
+                    </p>
+                  )}
+
+                  <!-- 元数据 -->
+                  <div class="mt-auto flex flex-wrap items-center justify-between gap-2 text-xs text-60">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <time datetime={post.data.published.toISOString()}>
+                        {formatDateToYYYYMMDD(post.data.published)}
+                      </time>
+                      {post.data.category && (
+                        <span
+                          class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full"
+                          onclick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.location.href = "/category/" + encodeURIComponent(
+                              Array.isArray(post.data.category) ? post.data.category[0] : post.data.category
+                            ) + "/";
+                          }}
+                        >
+                          {Array.isArray(post.data.category) ? post.data.category[0] : post.data.category}
+                        </span>
+                      )}
+                    </div>
+                    <span class="flex items-center gap-1">
+                      <span class="i-ic:round-access-time w-3.5 h-3.5"></span>
+                      {Math.ceil((post.body?.length || 0) / 500) || 1} min
+                    </span>
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="text-center py-12 text-60">
+          <span class="i-ic:round-inbox text-4xl block mb-2"></span>
+          该月暂无文章
+        </div>
+      )}
+    </div>
+  </div>
+</GridLayout>
+
+<!-- 全局样式 -->
+<style is:global>
+  .card-glass {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .dark .card-glass {
+    background: rgba(30, 30, 30, 0.7);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+  }
+</style>

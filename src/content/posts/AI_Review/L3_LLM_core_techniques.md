@@ -5,7 +5,7 @@ description: 系统梳理大语言模型（LLM）的核心技术全景，涵盖L
 cover: "/assets/images/posts/L3.png"
 coverInContent: false
 tags: [LLM, MoE, Prompt Engineering, CoT, KV Cache, 推理优化]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

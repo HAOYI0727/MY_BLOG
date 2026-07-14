@@ -4,7 +4,7 @@ published: 2025-07-16
 description: 系统讲解集成学习的核心思想，从Bootstrap自助采样的数学原理出发，深入剖析Bagging的方差降低机制、随机森林的双重随机性（行采样+列采样）、OOB误差的理论基础与实用价值，并对比基尼重要性与排列重要性两种特征重要性计算方法。
 cover: "/assets/images/posts/random_forest.png"
 coverInContent: false
-tags: [Bagging, 随机森林, Bootstrap, 集成学习]
+tags: [Bagging, 随机森林, Bootstrap, 集成学习, 机器学习]
 category: Machine_Learning
 draft: false
 ---

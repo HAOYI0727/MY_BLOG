@@ -2,49 +2,69 @@
 // src/pages/posts/index.astro
 import { LinkPresets } from "@constants/link-presets";
 import { LinkPreset } from "@/types/config";
-import { getSortedPostsList, getCategoryList } from "@utils/post";
-import { formatDateToYYYYMMDD } from "@utils/date";
-import { i18n } from "@i18n/translation";
-import I18nKey from "@i18n/i18nKey";
+import { getSortedPostsList } from "@utils/post";
 import GridLayout from "@layouts/grid.astro";
-import BackwardButton from "@components/backwardButton.astro";
 
 const pageTitle = LinkPresets[LinkPreset.Posts].name;
 const pageDescription = LinkPresets[LinkPreset.Posts].description;
 
 const allPosts = await getSortedPostsList();
-const categories = await getCategoryList();
 
-// ---------- 按 年-月 分组 ----------
-const groupedPosts: Record<string, typeof allPosts> = {};
-const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+// 按年月分组，记录最早文章的封面
+type MonthGroup = {
+  year: number;
+  month: number;
+  count: number;
+  earliestCover: string | null; // 最早文章的封面
+  earliestDate: Date | null;    // 辅助比较
+};
+const monthMap = new Map<string, MonthGroup>();
 
-allPosts.forEach((post) => {
+for (const post of allPosts) {
   const date = post.data.published;
+  if (!date) continue;
   const year = date.getFullYear();
-  const month = date.getMonth(); // 0-11
-  const key = `${year}-${String(month + 1).padStart(2, '0')}`; // "2026-07"
-  if (!groupedPosts[key]) groupedPosts[key] = [];
-  groupedPosts[key].push(post);
+  const month = date.getMonth() + 1;
+  const key = `${year}-${String(month).padStart(2, "0")}`;
+  if (!monthMap.has(key)) {
+    monthMap.set(key, {
+      year,
+      month,
+      count: 0,
+      earliestCover: null,
+      earliestDate: null,
+    });
+  }
+  const group = monthMap.get(key)!;
+  group.count += 1;
+  // 如果该月还没有记录日期，或当前日期更早，则更新为最早文章的封面
+  if (!group.earliestDate || date < group.earliestDate) {
+    group.earliestDate = date;
+    // 只保存有效的封面
+    const cover = post.data.cover;
+    if (cover && typeof cover === 'string' && cover.trim() !== '') {
+      group.earliestCover = cover;
+    } else {
+      group.earliestCover = null;
+    }
+  }
+}
+
+// 按年份降序，月份降序排列（最新在前）
+const monthGroups = Array.from(monthMap.values()).sort((a, b) => {
+  if (a.year !== b.year) return b.year - a.year;
+  return b.month - a.month;
 });
 
-// 按年月降序（最新在前）
-const sortedKeys = Object.keys(groupedPosts).sort((a, b) => b.localeCompare(a));
-
-// 辅助：从 key 中提取年月显示文本
-function getYearMonthLabel(key: string): string {
-  const [year, month] = key.split('-').map(Number);
-  return `${year}年${monthNames[month - 1]}`;
-}
+const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 ---
 
 <GridLayout title={pageTitle} description={pageDescription}>
   <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
     <div class="card-base z-10 px-9 py-6 relative w-full">
-      <BackwardButton currentPath={Astro.url.pathname} />
-
+      
       <!-- 标题区 -->
-      <header class="mb-8 flex items-center justify-between">
+      <header class="mb-10 flex items-center justify-between">
         <div>
           <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
             {pageTitle}
@@ -61,179 +81,85 @@ function getYearMonthLabel(key: string): string {
         </span>
       </header>
 
-      <!-- 分类标签栏 -->
-      {categories.length > 0 && (
-        <div class="flex flex-wrap gap-2 mb-8">
-          <a
-            href="/posts/"
-            class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--primary) text-white"
-          >
-            {i18n(I18nKey.postsAll) || "全部"}
-          </a>
-          {categories.map((cat) => (
-            <a
-              href={"/category/" + encodeURIComponent(cat.name) + "/"}
-              class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--card-bg) hover:bg-(--primary)/10 border border-(--line-divider)"
-            >
-              {cat.name}
-              <span class="ml-1 text-xs opacity-60">({cat.count})</span>
-            </a>
-          ))}
-        </div>
-      )}
-
-      <!-- 文章列表 - 按年月分组 + 时间线 -->
-      <div class="relative">
-        <!-- 纵向时间线（贯穿所有年月组） -->
-        <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-(--primary)/20 hidden md:block"></div>
-
-        {sortedKeys.map((key, index) => {
-          const postsInGroup = groupedPosts[key];
+      <!-- 月份卡片网格：每行3个，1:1方形 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {monthGroups.map(({ year, month, count, earliestCover }) => {
+          // 构建月份链接
+          const monthLink = `/posts/${year}/${String(month).padStart(2, "0")}/`;
+          // 如果没有封面，生成渐变色背景
+          const hue = (year * 31 + month * 7) % 360;
+          const bgGradient = `linear-gradient(135deg, hsl(${hue}, 70%, 60%), hsl(${(hue + 40) % 360}, 70%, 50%))`;
+          
           return (
-            <section key={key} class="relative mb-12 md:pl-8">
-              <!-- 时间线节点（圆点） -->
-              <div class="absolute left-[-6px] top-0 w-3 h-3 rounded-full bg-(--primary) border-2 border-white dark:border-gray-800 hidden md:block"></div>
-
-              <!-- 年月标题 -->
-              <h2 class="text-2xl font-bold text-(--primary) mb-5 flex items-center gap-3">
-                <span>{getYearMonthLabel(key)}</span>
-                <span class="text-sm font-normal text-60 bg-(--card-bg) px-2 py-0.5 rounded-full">
-                  {postsInGroup.length}
-                </span>
-              </h2>
-
-              <!-- 该月下的文章卡片网格 -->
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {postsInGroup.map((post, idx) => {
-                  // 计算全局索引用于延迟动画（可选）
-                  const globalIndex = allPosts.indexOf(post);
-                  return (
-                    <article
-                      class="group card-glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-400 ease-out flex flex-col 
-                             border border-white/30 dark:border-white/10 hover:border-(--primary)/50
-                             transform hover:-translate-y-2"
-                      style={`animation-delay: ${globalIndex * 60}ms`}
-                    >
-                      <!-- 封面图（若有） -->
-                      {post.data.cover && (
-                        <div class="relative h-44 overflow-hidden bg-(--card-bg)">
-                          <img
-                            src={post.data.cover}
-                            alt=""
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            loading="lazy"
-                          />
-                          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-                        </div>
-                      )}
-
-                      <div class="p-5 flex-1 flex flex-col">
-                        <h3 class="text-lg font-semibold leading-snug mb-2">
-                          <a
-                            href={`/posts/${post.id}/`}
-                            class="text-90 hover:text-(--primary) transition-colors duration-200"
-                          >
-                            {post.data.title}
-                          </a>
-                        </h3>
-
-                        {post.data.description && (
-                          <p class="text-sm text-75 mb-3 line-clamp-3 flex-1">
-                            {post.data.description}
-                          </p>
-                        )}
-
-                        <!-- 元数据行 -->
-                        <div class="mt-auto flex flex-wrap items-center justify-between gap-2 text-xs text-60">
-                          <div class="flex items-center gap-2 flex-wrap">
-                            <time datetime={post.data.published.toISOString()}>
-                              {formatDateToYYYYMMDD(post.data.published)}
-                            </time>
-                            {post.data.category && (
-                              <a
-                                href={"/category/" + encodeURIComponent(
-                                  Array.isArray(post.data.category) ? post.data.category[0] : post.data.category
-                                ) + "/"}
-                                class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full hover:bg-(--primary) hover:text-white transition-colors"
-                              >
-                                {Array.isArray(post.data.category) ? post.data.category[0] : post.data.category}
-                              </a>
-                            )}
-                          </div>
-                          <span class="flex items-center gap-1">
-                            <span class="i-ic:round-access-time w-3.5 h-3.5"></span>
-                            {Math.ceil((post.body?.length || 0) / 500) || 1} min
-                          </span>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
+            <a
+              href={monthLink}
+              class="group relative block rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-400 hover:-translate-y-2 bg-white dark:bg-gray-800"
+              style="aspect-ratio: 1/1;"
+            >
+              <!-- 背景图片或渐变 -->
+              <div class="absolute inset-0 overflow-hidden">
+                {earliestCover ? (
+                  <img
+                    src={earliestCover}
+                    alt=""
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                    onerror="this.style.display='none'"
+                  />
+                ) : (
+                  // 无封面：渐变背景 + 装饰
+                  <div class="absolute inset-0" style={`background: ${bgGradient};`}>
+                    <div class="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_30%_30%,white,transparent)]"></div>
+                    <div class="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-white/10 blur-2xl"></div>
+                  </div>
+                )}
+                {/* 深色渐变遮罩，确保底部文字可读 */}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               </div>
-            </section>
+
+              {/* 底部信息区域 */}
+              <div class="absolute bottom-0 left-0 right-0 p-5 text-white z-10">
+                <div class="text-xl font-bold drop-shadow-lg leading-tight">
+                  {year}年{monthNames[month-1]}
+                </div>
+                <div class="flex items-center gap-2 text-sm opacity-90 drop-shadow-md mt-1">
+                  <span class="i-ic:round-article w-4 h-4"></span>
+                  <span>{count} 篇文章</span>
+                  {earliestCover && (
+                    <span class="text-xs opacity-70 ml-1">· 封面图</span>
+                  )}
+                </div>
+              </div>
+
+              {/* 悬停光晕效果 */}
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent"></div>
+              </div>
+            </a>
           );
         })}
       </div>
 
-      <!-- 底部计数 -->
-      <div class="mt-10 text-center text-60 text-sm">
-        {i18n(I18nKey.postsCount)}：{allPosts.length}
+      <!-- 底部统计 -->
+      <div class="mt-12 text-center text-60 text-sm">
+        共 {monthGroups.length} 个月份归档
       </div>
     </div>
   </div>
 </GridLayout>
 
 <style is:global>
-  /* 毛玻璃卡片样式（保持不变） */
-  .card-glass {
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    opacity: 0;
-    animation: fadeSlideUp 0.6s ease forwards;
+  /* 保证卡片是1:1正方形 */
+  .aspect-\[1\/1\] {
+    aspect-ratio: 1 / 1;
   }
-
-  .dark .card-glass {
-    background: rgba(30, 30, 30, 0.7);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  /* 图片加载失败时隐藏 */
+  .absolute.inset-0 > img[style*="display: none"] {
+    display: none !important;
   }
-
-  @keyframes fadeSlideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .dark .absolute.left-\[-6px\] {
-    border-color: #1f1f1f;
-  }
-
-  @media (max-width: 768px) {
-    .md\:pl-8 {
-      padding-left: 0;
-    }
-    .md\:block {
-      display: none !important;
-    }
-  }
-
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 10px;
+  /* 暗色模式下卡片背景 */
+  .dark .group.bg-white {
+    background-color: #1f1f1f;
   }
 </style>

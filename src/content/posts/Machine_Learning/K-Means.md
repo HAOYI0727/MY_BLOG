@@ -4,7 +4,7 @@ published: 2025-07-22
 description: 系统讲解K-Means聚类的核心原理与算法细节，涵盖Lloyd交替优化算法的收敛性分析、K-Means作为EM算法特例的理论联系（硬分配 vs 软分配）、K-Means++初始化策略的D²采样机制与O(log K)近似保证，以及肘部法则与轮廓系数的选择K值方法及其局限。
 cover: "/assets/images/posts/k-means.png"
 coverInContent: false
-tags: [K-Means, Lloyd算法, EM算法, 聚类]
+tags: [K-Means, Lloyd算法, EM算法, 聚类, 机器学习]
 category: Machine_Learning
 draft: false
 ---

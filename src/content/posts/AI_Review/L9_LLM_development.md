@@ -5,7 +5,7 @@ description: 系统梳理大语言模型在跨模态与前沿技术方向的核�
 cover: "/assets/images/posts/L9.png"
 coverInContent: false
 tags: [Transformer, VLM, ViT, Diffusion, 多模态]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

@@ -4,7 +4,7 @@ published: 2025-07-14
 description: 系统讲解决策树家族的三大经典算法（ID3、C4.5、CART）及其分裂准则的数学原理（信息增益、信息增益率、基尼指数、MSE），深入剖析预剪枝与后剪枝（CCP成本复杂度剪枝）的策略与权衡，并解释决策树对特征尺度不敏感的深层原因。
 cover: "/assets/images/posts/decision_tree.png"
 coverInContent: false
-tags: [决策树, 信息增益, 基尼指数]
+tags: [决策树, 信息增益, 基尼指数, 机器学习]
 category: Machine_Learning
 draft: false
 ---

@@ -5,7 +5,7 @@ description: 系统梳理大语言模型推理能力的核心技术路径，涵�
 cover: "/assets/images/posts/L6.png"
 coverInContent: false
 tags: [LLM, CoT, RLHF, GRPO, DAPO, DeepSeek, 模型对齐, 推理增强]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

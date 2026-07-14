@@ -4,7 +4,7 @@ published: 2025-07-12
 description: 系统讲解朴素贝叶斯的数学原理与三种分布假设（高斯、多项式、伯努利）的适用场景，深入剖析条件独立假设与拉普拉斯平滑的数学动机，对比生成式模型与判别式模型的本质差异，并揭示朴素贝叶斯在文本分类中表现出色的深层原因。
 cover: "/assets/images/posts/naive_bayes.png"
 coverInContent: false
-tags: [朴素贝叶斯, 生成式模型, 拉普拉斯平滑]
+tags: [朴素贝叶斯, 生成式模型, 拉普拉斯平滑, 机器学习]
 category: Machine_Learning
 draft: false
 ---

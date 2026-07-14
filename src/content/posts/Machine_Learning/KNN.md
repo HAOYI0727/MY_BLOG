@@ -4,7 +4,7 @@ published: 2025-07-10
 description: 全面剖析 KNN 算法的核心机制、KD-Tree 与 Ball-Tree 的加速原理与适用场景，深入揭示维度灾难导致高维欧氏距离失效的数学根源，并强调特征标准化对 KNN 的必要性。
 cover: "/assets/images/posts/knn.png"
 coverInContent: false
-tags: [KNN, KD-Tree, Ball-Tree]
+tags: [KNN, KD-Tree, Ball-Tree, 机器学习]
 category: Machine_Learning
 draft: false
 ---

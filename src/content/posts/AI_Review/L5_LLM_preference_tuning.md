@@ -5,7 +5,7 @@ description: 系统梳理大语言模型偏好调优（Preference Tuning）的�
 cover: "/assets/images/posts/L5.png"
 coverInContent: false
 tags: [LLM, RLHF, DPO, PPO, 模型对齐]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

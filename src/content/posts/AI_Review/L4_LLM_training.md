@@ -5,7 +5,7 @@ description: 系统梳理大语言模型（LLM）训练的全生命周期，涵�
 cover: "/assets/images/posts/L4.png"
 coverInContent: false
 tags: [LLM, Attention, SFT, LoRA, 模型对齐]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

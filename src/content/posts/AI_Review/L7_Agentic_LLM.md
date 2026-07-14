@@ -5,7 +5,7 @@ description: 系统梳理大语言模型智能体（Agentic LLMs）的三大核�
 cover: "/assets/images/posts/L7.png"
 coverInContent: false
 tags: [智能体, Agent, RAG, Tool Calling, MCP, ReAct]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

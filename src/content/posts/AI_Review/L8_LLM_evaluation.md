@@ -5,7 +5,7 @@ description: 系统梳理大语言模型评估的完整方法论体系，涵盖�
 cover: "/assets/images/posts/L8.png"
 coverInContent: false
 tags: [LLM-as-a-Judge, benchmark]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

@@ -4,7 +4,7 @@ published: 2025-07-18
 description: 系统推导梯度提升机（GBM）的数学原理，从加法模型与前向分步算法出发，深入剖析“拟合负梯度”在函数空间梯度下降中的核心地位，通过偏差-方差分解对比GBM与随机森林的本质差异，并分析GBM对异常值敏感的根本原因及缓解策略（鲁棒损失函数、学习率、子采样）。
 cover: "/assets/images/posts/gbm.png"
 coverInContent: false
-tags: [梯度提升机, GBM, 加法模型]
+tags: [梯度提升机, GBM, 加法模型, 机器学习]
 category: Machine_Learning
 draft: false
 ---

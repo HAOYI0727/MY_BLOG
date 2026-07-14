@@ -4,7 +4,7 @@ published: 2025-07-20
 description: 系统解析XGBoost与LightGBM两大梯度提升框架的核心工程优化技术。涵盖XGBoost的二阶泰勒展开与正则化项的数学推导、预排序与Block并行架构；LightGBM的直方图算法、GOSS梯度采样、EFB互斥特征捆绑三大加速技术，以及Level-wise与Leaf-wise树生长策略的对比。
 cover: "/assets/images/posts/xgboost_lightgbm.png"
 coverInContent: false
-tags: [XGBoost, LightGBM]
+tags: [XGBoost, LightGBM, 机器学习]
 category: Machine_Learning
 draft: false
 ---

@@ -4,7 +4,7 @@ published: 2025-07-06
 description: 系统讲解支持向量机的完整数学推导与核心原理。涵盖函数间隔与几何间隔的定义及差异、硬间隔SVM的原始问题、拉格朗日对偶推导与KKT条件、软间隔SVM通过松弛变量与惩罚参数C处理线性不可分数据、Hinge Loss作为SVM损失函数的等价视角，以及SVM与逻辑回归在离群点鲁棒性上的本质差异。
 cover: "/assets/images/posts/svm.png"
 coverInContent: false
-tags: [SVM, KKT条件, 核方法]
+tags: [SVM, KKT条件, 核方法, 机器学习]
 category: Machine_Learning
 draft: false
 ---

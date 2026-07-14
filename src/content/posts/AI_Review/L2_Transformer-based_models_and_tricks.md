@@ -5,7 +5,7 @@ description: 系统梳理Transformer进阶核心模块，涵盖缩放点积与�
 cover: "/assets/images/posts/L2.png"
 coverInContent: false
 tags: [Transformer, Attention, 基础知识]
-category: Deep_Learning
+category: CME295
 draft: false
 ---
 

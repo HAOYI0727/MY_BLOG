@@ -4,7 +4,7 @@ published: 2025-07-08
 description: 系统讲解核方法的数学原理与常用核函数的映射本质。涵盖核函数的定义、Mercer定理作为核方法的理论基石、核技巧将线性SVM对偶问题中的内积替换为核函数从而优雅处理非线性问题、多项式核的有限维映射与RBF（高斯）核的无穷维映射，以及RBF核中gamma参数对过拟合与欠拟合的影响与调优策略。
 cover: "/assets/images/posts/kernel_trick.png"
 coverInContent: false
-tags: [核方法, 核函数, SVM]
+tags: [核方法, 核函数, SVM, 机器学习]
 category: Machine_Learning
 draft: false
 ---

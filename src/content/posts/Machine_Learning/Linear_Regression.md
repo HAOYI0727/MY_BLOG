@@ -4,7 +4,7 @@ published: 2025-07-02
 description: 系统讲解线性回归模型的核心原理与演进路径，涵盖最小二乘法（OLS）的矩阵推导与正规方程、Ridge（L2）正则化的闭式解与收缩特性、Lasso（L1）正则化的稀疏性来源、ElasticNet 的组合优势，以及 MSE/RMSE/MAE 评价指标的适用场景与异常值敏感性对比。
 cover: "/assets/images/posts/linear_regression.png"
 coverInContent: false
-tags: [线性回归, 最小二乘法, 正则化]
+tags: [线性回归, 最小二乘法, 正则化, 机器学习]
 category: Machine_Learning
 draft: false
 ---
