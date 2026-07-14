@@ -1,8 +1,8 @@
 ---
 title: 开发基础工具 —— Conda、Pip/UV 与 Git 实战手册
-published: 2025-07-04
+published: 2025-06-28
 description: 系统梳理 Python 开发中的环境管理（Conda）、包管理（Pip & UV）与版本控制（Git）核心命令与最佳实践，涵盖从虚拟环境配置到项目依赖锁定、从日常提交到分支管理的全流程操作指南。
-cover: "./Basic_Tools.png"
+cover: "/assets/images/posts/Basic_Tools.png"
 coverInContent: false
 tags: [开发工具, 基础知识, git, pip, uv, conda]
 category: DevTools

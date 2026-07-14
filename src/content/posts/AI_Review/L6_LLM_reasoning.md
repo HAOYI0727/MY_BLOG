@@ -2,7 +2,7 @@
 title: Lecture 6 —— LLM推理能力深度解析：从思维链（CoT）到GRPO强化学习与DeepSeek R1训练范式
 published: 2026-02-12
 description: 系统梳理大语言模型推理能力的核心技术路径，涵盖推理与非推理的本质区分、思维链（CoT）范式变革、推理评估体系（Pass@k/Cons@k）、GRPO群体相对策略优化算法的数学原理与改进（DAPO/Dr.GRPO）、DeepSeek R1/R1-Zero的多阶段训练流程，以及推理链蒸馏的工程化实践。
-cover: "./L6.png"
+cover: "/assets/images/posts/L6.png"
 coverInContent: false
 tags: [LLM, CoT, RLHF, GRPO, DAPO, DeepSeek, 模型对齐, 推理增强]
 category: Deep_Learning

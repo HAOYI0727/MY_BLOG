@@ -128,27 +128,34 @@ const pageDescription = i18n(I18nKey.postsCount) + `：${filteredPosts.length}`;
         </div>
       )}
 
-      <!-- 文章列表 -->
-      <div class="space-y-6">
+      <!-- ========== 文章列表：时间线 + 卡片样式 ========== -->
+      <div class="relative space-y-6 pl-6 before:absolute before:left-1 before:top-2 before:bottom-2 before:w-0.5 before:bg-(--primary)/20 before:rounded-full">
         {filteredPosts.length === 0 ? (
           <p class="text-center text-60 py-12">该分类下暂无文章</p>
         ) : (
           filteredPosts.map((post) => (
-            <article class="group bg-(--card-bg) rounded-xl p-6 border border-(--line-divider) hover:border-(--primary) transition-all duration-300 hover:shadow-lg">
+            <article class="group relative bg-(--card-bg) rounded-xl p-6 border border-(--line-divider) hover:border-(--primary) transition-all duration-300 hover:shadow-lg">
+              <!-- 时间线圆点（位于卡片左侧） -->
+              <div class="absolute -left-[1.65rem] top-6 w-3 h-3 rounded-full bg-(--primary) border-2 border-white dark:border-neutral-900 shadow-md group-hover:scale-125 transition-transform"></div>
+
               <a href={`/posts/${post.id}/`} class="block">
+                <!-- 日期显示在卡片顶部 -->
+                <time datetime={post.data.published.toISOString()} class="text-sm text-60 font-mono block mb-2">
+                  {formatDateToYYYYMMDD(post.data.published)}
+                </time>
+
                 <h2 class="text-xl font-semibold text-90 group-hover:text-(--primary) transition-colors mb-2">
                   {post.data.title}
                 </h2>
+
                 {post.data.description && (
                   <p class="text-75 mb-3 line-clamp-2">
                     {post.data.description}
                   </p>
                 )}
+
                 <div class="flex flex-wrap items-center gap-4 text-sm text-60">
-                  <time datetime={post.data.published.toISOString()} class="text-75">
-                    {formatDateToYYYYMMDD(post.data.published)}
-                  </time>
-                  <!-- 分类标签（可点击） -->
+                  <!-- 分类标签（只显示第一级，可点击） -->
                   {post.data.category && (
                     <a
                       href={"/category/" + encodeURIComponent(Array.isArray(post.data.category) ? post.data.category[0] : post.data.category) + "/"}

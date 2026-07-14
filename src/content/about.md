@@ -1,29 +1,31 @@
 ---
-title: About
+title: 关于我
 ---
 
-# About This Site
+## 👋 你好，我是张昊轶
 
-Twilight is a CMS integrated static blog template built with [Astro](https://astro.build) framework.
+**华中科技大学** 计算机科学与技术学院 2024 级本科生，对人工智能领域充满热情，喜欢钻研底层原理与前沿技术。
 
-::github{repo="Spr-Aachen/Twilight"}
+### 🧠 当前兴趣方向
 
+- **大语言模型（LLM）**：从 Transformer 到 RLHF，关注模型对齐与推理优化。
+- **AI Infra**：模型训练、推理框架（vLLM、SGLang）及分布式系统。
+- **多模态感知**：VLM、视觉-语言联合理解。
+- **基础技术栈**：Python / PyTorch / Linux / Docker / Git。
 
-## Milestones
+### 🛠️ 个人技能
 
-- Integrated content management system in [#1](https://github.com/Spr-Aachen/Twilight/pull/1)
-- Seamless wallpaper mode switching in [#2](https://github.com/Spr-Aachen/Twilight/pull/2)
-- Dynamic content container response in [#47](https://github.com/Spr-Aachen/Twilight/pull/47)
-- Seamless page component loading in [#48](https://github.com/Spr-Aachen/Twilight/pull/48)
-- Smart music playback handling in [#49](https://github.com/Spr-Aachen/Twilight/pull/49)
-- Infinite-level navigation system in [#50](https://github.com/Spr-Aachen/Twilight/pull/50)
-- Comprehensive statistics dashboard in [#51](https://github.com/Spr-Aachen/Twilight/pull/51)
-- Low-barrier configuration scheme in [#58](https://github.com/Spr-Aachen/Twilight/pull/58)
-- Dynamic breakpoint handling in [#68](https://github.com/Spr-Aachen/Twilight/pull/68)
-- Advanced content management in [#73](https://github.com/Spr-Aachen/Twilight/pull/73)
-- Nested category support in [#74](https://github.com/Spr-Aachen/Twilight/pull/74)
-- Comprehensive music card plugin in [#81](https://github.com/Spr-Aachen/Twilight/pull/81)
-- Refactored DecapCMS OAuth integration in [#107](https://github.com/Spr-Aachen/Twilight/pull/107)
-- Non-breaking PagesCMS support in [#114](https://github.com/Spr-Aachen/Twilight/pull/114)
-- Directory tree view component in [#117](https://github.com/Spr-Aachen/Twilight/pull/117)
-- Enhanced post card cover handler in [#141](https://github.com/Spr-Aachen/Twilight/pull/141)
+| 类别       | 熟练度                          |
+|------------|---------------------------------|
+| 编程语言   | Python, C++, Java, TypeScript  |
+| 机器学习   | PyTorch, Transformers, LoRA    |
+| 系统工具   | Linux, Docker, Git, SSH, Tmux |
+| Web 开发   | Astro, React, Tailwind CSS     |
+
+---
+
+### 📫 联系我
+
+- GitHub: [HAOYI0727](https://github.com/HAOYI0727)
+- Email: [hust.edu.cn](mailto:u202412291@hust.edu.cn)
+- 博客: [zhy-blog](https://zhy-blog.vercel.app/)

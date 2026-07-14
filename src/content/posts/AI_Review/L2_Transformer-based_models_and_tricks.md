@@ -2,7 +2,7 @@
 title: Lecture 2 —— Transformer进阶：位置编码演进、注意力优化技巧与BERT预训练微调全解
 published: 2026-02-04
 description: 系统梳理Transformer进阶核心模块，涵盖缩放点积与多头注意力回顾、位置编码从绝对到相对（RoPE）的演进、层归一化（Pre-Norm/RMSNorm）优化、注意力近似方法（稀疏注意力/MQA/GQA）、三大衍生架构对比，以及BERT的预训练（MLM/NSP）、微调流程与经典变体（DistilBERT/RoBERTa）。
-cover: "./L2.png"
+cover: "/assets/images/posts/L2.png"
 coverInContent: false
 tags: [Transformer, Attention, 基础知识]
 category: Deep_Learning

@@ -2,7 +2,7 @@
 title: Lecture 9 —— LLM多模态泛化与前沿探索：从ViT/VLM跨模态适配到扩散LLMs与未来发展趋势
 published: 2026-02-18
 description: 系统梳理大语言模型在跨模态与前沿技术方向的核心进展，涵盖Transformer多模态泛化本质、ViT与VLM的视觉适配方案、扩散LLMs（MDM）的并行生成突破、跨模态技术交叉融合（扩散架构/Transformer/MSRoPE/DeepSeek-OCR）、LLM基础研究趋势（帕累托优化/类存内计算）及应用场景与未来展望，最后提供学术与工程跟进渠道。
-cover: "./L9.png"
+cover: "/assets/images/posts/L9.png"
 coverInContent: false
 tags: [Transformer, VLM, ViT, Diffusion, 多模态]
 category: Deep_Learning

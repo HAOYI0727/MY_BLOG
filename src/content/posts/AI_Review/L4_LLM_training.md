@@ -2,7 +2,7 @@
 title: Lecture 4 —— LLM训练全流程解析：从预训练缩放规律到参数高效微调与模型对齐
 published: 2026-02-08
 description: 系统梳理大语言模型（LLM）训练的全生命周期，涵盖训练范式演变（传统→迁移→预训练+微调）、预训练目标与缩放规律（含Chinchilla定律）、训练四阶段流程（初始化→前向→反向→Adam更新）、核心内存优化（ZeRO并行/Flash Attention/混合精度）、有监督微调（SFT/指令调优），以及参数高效微调（LoRA/QLoRA）原理与模型对齐目标。
-cover: "./L4.png"
+cover: "/assets/images/posts/L4.png"
 coverInContent: false
 tags: [LLM, Attention, SFT, LoRA, 模型对齐]
 category: Deep_Learning

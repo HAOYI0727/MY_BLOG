@@ -2,7 +2,7 @@
 title: 强化学习基础 -- 策略梯度、优势函数、重要性采样与KL散度惩罚
 published: 2026-07-02
 description: 系统梳理策略梯度、优势函数、重要性采样与KL散度惩罚的核心概念，串联从VPG到PPO的技术演进逻辑，并探讨On-Policy与Off-Policy的权衡及数据漂移问题。
-cover: "./Basic_Knowledge.png"
+cover: "/assets/images/posts/Basic_Knowledge.png"
 coverInContent: false
 tags: [强化学习, 基础知识]
 category: AI_Alignment

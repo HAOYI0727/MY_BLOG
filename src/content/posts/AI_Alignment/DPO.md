@@ -2,7 +2,7 @@
 title: DPO (Direct Preference Optimization) -- 直接偏好优化
 published: 2026-07-06
 description: 系统梳理DPO直接偏好优化的核心原理、数学推导与实现机制，解析其如何将RLHF的多阶段流程简化为单阶段监督学习，并对比DPO与PPO的差异及各自适用场景。
-cover: "./DPO.png"
+cover: "/assets/images/posts/DPO.png"
 coverInContent: false
 tags: [DPO, RLHF, 监督学习]
 category: AI_Alignment

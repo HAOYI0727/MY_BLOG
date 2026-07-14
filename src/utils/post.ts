@@ -224,3 +224,52 @@ export async function getCategoryTree(): Promise<CategoryTreeItem[]> {
 
     return buildTree(root);
 }
+
+export type CategoryTagGroup = {
+    category: string;
+    tags: string[];
+};
+
+/**
+ * 获取所有标签，按顶级分类分组。
+ * 每个标签可能出现在多个分类中（如果文章跨分类），这里会分别归入每个分类。
+ */
+export async function getTagsGroupedByCategory(): Promise<CategoryTagGroup[]> {
+    const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
+        return import.meta.env.PROD ? data.draft !== true : true;
+    });
+
+    // 建立分类 -> 标签集合的映射
+    const map = new Map<string, Set<string>>();
+
+    for (const post of allBlogPosts) {
+        // 获取分类路径
+        const rawParts = getCategoryPathParts(post.data.category);
+        const categoryParts = rawParts && rawParts.length > 0 ? rawParts : [i18n(I18nKey.uncategorized)];
+        // 取顶级分类（第一个部分）作为分组键
+        const topCategory = categoryParts[0];
+
+        // 解析标签
+        const tags = parseTags(post.data.tags);
+        if (tags.length === 0) continue;
+
+        // 获取或创建 Set
+        if (!map.has(topCategory)) {
+            map.set(topCategory, new Set());
+        }
+        const tagSet = map.get(topCategory)!;
+        for (const tag of tags) {
+            tagSet.add(tag);
+        }
+    }
+
+    // 转换为数组并排序
+    const result: CategoryTagGroup[] = [];
+    for (const [category, tagSet] of map.entries()) {
+        const tags = Array.from(tagSet).sort((a, b) => a.localeCompare(b));
+        result.push({ category, tags });
+    }
+    // 按分类名称排序
+    result.sort((a, b) => a.category.localeCompare(b.category));
+    return result;
+}

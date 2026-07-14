@@ -2,7 +2,7 @@
 title: Lecture 7 —— Agentic LLMs全解析：从RAG检索增强、工具调用（Tool Calling）到多智能体（Agent）协作
 published: 2026-02-14
 description: 系统梳理大语言模型智能体（Agentic LLMs）的三大核心技术：检索增强生成（RAG）的构建流程、检索评估指标与优化技巧；工具调用（Tool Calling）的标准化实现（MCP协议）与训练/提示词两种调用方式；智能体（Agent）的ReAct推理-行动框架、多智能体协作协议A2A，以及LLM应用的核心挑战与工程实践原则。
-cover: "./L7.png"
+cover: "/assets/images/posts/L7.png"
 coverInContent: false
 tags: [智能体, Agent, RAG, Tool Calling, MCP, ReAct]
 category: Deep_Learning

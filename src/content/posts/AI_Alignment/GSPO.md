@@ -2,7 +2,7 @@
 title: GSPO (Group Sequence Policy Optimization) -- 群组序列策略优化
 published: 2026-07-12
 description: 系统梳理GSPO群组序列策略优化的核心原理，解析其如何通过序列级重要性比率与长度归一化从根本上修复GRPO的token级采样缺陷，解决MoE专家震荡与长序列方差累积问题，并探讨GSPO的局限与后续演进。
-cover: "./GSPO.png"
+cover: "/assets/images/posts/GSPO.png"
 coverInContent: false
 tags: [GSPO, GRPO, RLHF, 强化学习, 推理增强, Qwen]
 category: AI_Alignment

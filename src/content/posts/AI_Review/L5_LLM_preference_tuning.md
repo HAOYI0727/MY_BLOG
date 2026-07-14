@@ -2,7 +2,7 @@
 title: Lecture 5 —— LLM偏好调优全解：从RLHF人类反馈强化学习到DPO直接偏好优化
 published: 2026-02-10
 description: 系统梳理大语言模型偏好调优（Preference Tuning）的核心技术与方法，涵盖偏好数据的三大类型（点态/成对/列表型）与获取流程、RLHF两阶段架构（奖励建模+PPO强化学习）、BoN替代方案，以及DPO的数学原理与优势，最后对比RLHF与DPO的实现难度与性能差异。
-cover: "./L5.png"
+cover: "/assets/images/posts/L5.png"
 coverInContent: false
 tags: [LLM, RLHF, DPO, PPO, 模型对齐]
 category: Deep_Learning

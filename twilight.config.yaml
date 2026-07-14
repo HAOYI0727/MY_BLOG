@@ -433,7 +433,7 @@ musicPlayer:
                 # 作者
                 artist: "-"
                 # 封面
-                cover: "/assets/images/gqj.jpg"
+                cover: "/assets/images/musics/GQJ.jpg"
                 # 音乐路径
                 url: "assets/music/gqj.m4a"
                 # 歌词路径
@@ -448,7 +448,7 @@ musicPlayer:
                 # 作者
                 artist: "Billie Eilish"
                 # 封面
-                cover: "/assets/images/HMHAS.jpg"
+                cover: "/assets/images/musics/HMHAS.jpg"
                 # 音乐路径
                 url: "assets/music/BIRDS_OF_A_FEATHER.m4a"
                 # 歌词路径
@@ -463,7 +463,7 @@ musicPlayer:
                 # 作者
                 artist: "Billie Eilish"
                 # 封面
-                cover: "/assets/images/HMHAS.jpg"
+                cover: "/assets/images/musics/HMHAS.jpg"
                 # 音乐路径
                 url: "assets/music/WILDFLOWER.m4a"
                 # 歌词路径
@@ -478,7 +478,7 @@ musicPlayer:
                 # 作者
                 artist: "Billie Eilish"
                 # 封面
-                cover: "/assets/images/HAPPIER_THAN_EVER.jpg"
+                cover: "/assets/images/musics/HAPPIER_THAN_EVER.jpg"
                 # 音乐路径
                 url: "assets/music/HAPPIER_THAN_EVER.m4a"
                 # 歌词路径
@@ -493,7 +493,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/FOLKLORE.jpg"
+                cover: "/assets/images/musics/FOLKLORE.jpg"
                 # 音乐路径
                 url: "assets/music/CARDIGAN.m4a"
                 # 歌词路径
@@ -508,7 +508,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/FOLKLORE.jpg"
+                cover: "/assets/images/musics/FOLKLORE.jpg"
                 # 音乐路径
                 url: "assets/music/AUGUST.m4a"
                 # 歌词路径
@@ -523,7 +523,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/FOLKLORE.jpg"
+                cover: "/assets/images/musics/FOLKLORE.jpg"
                 # 音乐路径
                 url: "assets/music/BETTY.m4a"
                 # 歌词路径
@@ -538,7 +538,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/EVERMORE.jpg"
+                cover: "/assets/images/musics/EVERMORE.jpg"
                 # 音乐路径
                 url: "assets/music/WILLOW.m4a"
                 # 歌词路径
@@ -553,7 +553,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/EVERMORE.jpg"
+                cover: "/assets/images/musics/EVERMORE.jpg"
                 # 音乐路径
                 url: "assets/music/CHAMPAGNE_PROBLEM.m4a"
                 # 歌词路径
@@ -568,7 +568,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/EVERMORE.jpg"
+                cover: "/assets/images/musics/EVERMORE.jpg"
                 # 音乐路径
                 url: "assets/music/NO_BODY_NO_CRIME.m4a"
                 # 歌词路径
@@ -583,7 +583,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/TTPD.jpg"
+                cover: "/assets/images/musics/TTPD.jpg"
                 # 音乐路径
                 url: "assets/music/FORTNIGHT.m4a"
                 # 歌词路径
@@ -598,7 +598,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/TTPD.jpg"
+                cover: "/assets/images/musics/TTPD.jpg"
                 # 音乐路径
                 url: "assets/music/DOWN_BAD.m4a"
                 # 歌词路径
@@ -613,7 +613,7 @@ musicPlayer:
                 # 作者
                 artist: "Taylor Swift"
                 # 封面
-                cover: "/assets/images/MIDNIGHTS.jpg"
+                cover: "/assets/images/musics/MIDNIGHTS.jpg"
                 # 音乐路径
                 url: "assets/music/ANTI_HERO.m4a"
                 # 歌词路径
@@ -628,7 +628,7 @@ musicPlayer:
                 # 作者
                 artist: "Lady Gaga & Bruno Mars"
                 # 封面
-                cover: "/assets/images/DIE_WITH_A_SMILE.jpg"
+                cover: "/assets/images/musics/DIE_WITH_A_SMILE.jpg"
                 # 音乐路径
                 url: "assets/music/DIE_WITH_A_SMILE.m4a"
                 # 歌词路径
@@ -643,7 +643,7 @@ musicPlayer:
                 # 作者
                 artist: "Ariana Grande"
                 # 封面
-                cover: "/assets/images/HATE_THAT_I_MADE_YOU_LOVE_ME.jpg"
+                cover: "/assets/images/musics/HATE_THAT_I_MADE_YOU_LOVE_ME.jpg"
                 # 音乐路径
                 url: "assets/music/HATE_THAT_I_MADE_YOU_LOVE_ME.m4a"
                 # 歌词路径
@@ -658,7 +658,7 @@ musicPlayer:
                 # 作者
                 artist: "Ariana Grande"
                 # 封面
-                cover: "/assets/images/ETERNAL_SUNSHINE.jpg"
+                cover: "/assets/images/musics/ETERNAL_SUNSHINE.jpg"
                 # 音乐路径
                 url: "assets/music/ETERNAL_SUNSHINE.m4a"
                 # 歌词路径
@@ -673,7 +673,7 @@ musicPlayer:
                 # 作者
                 artist: "Ariana Grande"
                 # 封面
-                cover: "/assets/images/THANK_U_NEXT.jpg"
+                cover: "/assets/images/musics/THANK_U_NEXT.jpg"
                 # 音乐路径
                 url: "assets/music/THANK_U_NEXT.m4a"
                 # 歌词路径
@@ -688,7 +688,7 @@ musicPlayer:
                 # 作者
                 artist: "SZA"
                 # 封面
-                cover: "/assets/images/KILL_BILL.jpg"
+                cover: "/assets/images/musics/KILL_BILL.jpg"
                 # 音乐路径
                 url: "assets/music/KILL_BILL.m4a"
                 # 歌词路径

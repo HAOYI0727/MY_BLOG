@@ -2,7 +2,7 @@
 title: vLLM：大模型推理系统的分页内存革命
 published: 2026-03-02
 description: 系统梳理vLLM大模型推理系统的核心技术原理，解析PagedAttention的分页内存管理、连续批处理与分块预填充等创新机制，揭示其如何通过系统架构革新实现2-24倍的吞吐量提升。
-cover: "./vLLM.png"
+cover: "/assets/images/posts/vLLM.png"
 coverInContent: false
 tags: [vLLM, 推理增强, PagedAttention, KV Cache]
 category: AI_Infra

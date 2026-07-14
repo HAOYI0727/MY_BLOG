@@ -2,7 +2,7 @@
 title: Lecture 8 —— LLM评估全解：从人工评分、LLM-as-a-Judge到基准测试与工具调用故障排查
 published: 2026-02-16
 description: 系统梳理大语言模型评估的完整方法论体系，涵盖人工评分的黄金标准与卡帕系数一致性量化、规则化指标（METEOR/BLEU/ROUGE）的算法原理与局限、LLM-as-a-Judge（LaaJ）的核心流程与偏置缓解、事实性量化方法（Fact Decomposition）、智能体工具调用全流程故障模式与排查，以及主流基准测试（MMLU/AIME/SWE-bench/HarmBench/τ-bench）与Pass^k/帕累托前沿/数据污染等核心概念。
-cover: "./L8.png"
+cover: "/assets/images/posts/L8.png"
 coverInContent: false
 tags: [LLM-as-a-Judge, benchmark]
 category: Deep_Learning

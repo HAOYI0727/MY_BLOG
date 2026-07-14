@@ -1,0 +1,156 @@
+---
+// src/components/SidebarTimeline.astro
+import { formatDateToYYYYMMDD } from "@utils/date";
+
+export interface Props {
+  posts: any[];
+  limit?: number;
+}
+
+const { posts, limit = posts.length } = Astro.props;
+const sorted = [...posts].sort((a, b) => a.data.published.getTime() - b.data.published.getTime());
+const displayed = sorted.slice(0, limit);
+---
+
+{
+  displayed.length > 0 && (
+    <aside class="sidebar-timeline">
+      <h3 class="text-sm font-semibold text-60 uppercase tracking-wider mb-4 flex items-center gap-2">
+        <span>📅 学习时间线</span>
+        <span class="text-xs font-normal opacity-60">（{displayed.length} 篇）</span>
+      </h3>
+      <div class="timeline">
+        {displayed.map((post, index) => (
+          <div class="timeline-item" key={post.id}>
+            <div class="timeline-marker"></div>
+            {index < displayed.length - 1 && <div class="timeline-line"></div>}
+            <div class="timeline-content">
+              <time class="timeline-date text-xs text-60">
+                {formatDateToYYYYMMDD(post.data.published)}
+              </time>
+              <a href={`/posts/${post.id}/`} class="timeline-title text-sm font-medium hover:text-(--primary) transition-colors line-clamp-2">
+                {post.data.title}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </aside>
+  )
+}
+
+<style>
+  .sidebar-timeline {
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    width: 100%;
+  }
+  .sidebar-timeline::-webkit-scrollbar {
+    width: 4px;
+  }
+  .sidebar-timeline::-webkit-scrollbar-thumb {
+    background: var(--line-divider);
+    border-radius: 9999px;
+  }
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--line-divider);
+  }
+  .timeline-item {
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  .timeline-marker {
+    position: absolute;
+    left: -1.15rem;
+    top: 0.15rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 9999px;
+    background: var(--primary);
+    border: 2px solid var(--card-bg);
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+  .timeline-line {
+    position: absolute;
+    left: -0.85rem;
+    top: 0.8rem;
+    width: 2px;
+    height: calc(100% - 0.5rem);
+    background: var(--line-divider);
+  }
+  .timeline-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .timeline-date {
+    color: var(--text-60);
+    font-size: 0.7rem;
+  }
+  .timeline-title {
+    color: var(--text-90);
+    text-decoration: none;
+    word-break: break-word;
+    line-height: 1.3;
+  }
+  .timeline-title:hover {
+    color: var(--primary);
+  }
+
+  /* 暗色适配 */
+  :global(.dark) .timeline-marker {
+    border-color: var(--card-bg);
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+  :global(.dark) .timeline-line {
+    background: var(--line-divider);
+  }
+
+  /* 移动端自适应：侧边栏变为顶部折叠（或直接隐藏） */
+  @media (max-width: 768px) {
+    .sidebar-timeline {
+      position: static;
+      max-height: none;
+      overflow-y: visible;
+      padding-right: 0;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--line-divider);
+      padding-bottom: 1rem;
+    }
+    .timeline {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 1rem;
+      padding-left: 0;
+      border-left: none;
+      padding-bottom: 0.5rem;
+    }
+    .timeline-item {
+      flex: 0 0 auto;
+      width: 200px;
+      padding-bottom: 0;
+      border-left: 2px solid var(--line-divider);
+      padding-left: 0.75rem;
+    }
+    .timeline-marker {
+      left: -0.5rem;
+      top: 0.2rem;
+      width: 0.5rem;
+      height: 0.5rem;
+    }
+    .timeline-line {
+      display: none;
+    }
+    .timeline-content {
+      flex-direction: column;
+    }
+  }
+</style>

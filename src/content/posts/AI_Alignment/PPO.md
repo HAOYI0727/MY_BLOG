@@ -2,7 +2,7 @@
 title: PPO(Proximal Policy Optimization) -- 近端策略优化
 published: 2026-07-04
 description: 系统梳理PPO近端策略优化的核心思想、目标函数、训练流程与优缺点，解析其在LLM强化学习对齐中的应用，并探讨PPO的局限与后续演进方向。
-cover: "./PPO.png"
+cover: "/assets/images/posts/PPO.png"
 coverInContent: false
 tags: [PPO, RLHF, 强化学习]
 category: AI_Alignment

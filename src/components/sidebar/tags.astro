@@ -1,20 +1,18 @@
 ---
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
-import { getTagList } from "@utils/post";
+import { getTagList, getTagsGroupedByCategory } from "@utils/post";
 import { getTagUrl } from "@utils/url";
-import { widgetManager, getComponentConfig } from "@utils/widget";
 import ButtonTag from "@/components/common/buttonTag.astro";
 import WidgetLayout from "./widgetLayout.astro";
-
+import TagGroupModal from "./TagGroupModal.astro";
 
 const tags = await getTagList();
+const groupedTags = await getTagsGroupedByCategory();
 
-const COLLAPSED_HEIGHT = "7.5rem";
-
-// 使用统一的组件管理器检查是否应该折叠
-const tagsComponent = getComponentConfig("tags");
-const isCollapsed = tagsComponent ? widgetManager.isCollapsed(tagsComponent, tags.length) : false;
+const DEFAULT_SHOW = 10;
+const displayTags = tags.slice(0, DEFAULT_SHOW);
+const hasMore = tags.length > DEFAULT_SHOW;
 
 interface Props {
     class?: string;
@@ -24,12 +22,40 @@ interface Props {
 const { class: className, style, side = "default" } = Astro.props;
 ---
 
-<WidgetLayout name={i18n(I18nKey.tags)} id={`tags-${side}`} isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT} class={className} style={style}>
+<WidgetLayout 
+    name={i18n(I18nKey.tags)} 
+    id={`tags-${side}`} 
+    isCollapsed={false}
+    class={className} 
+    style={style}
+>
     <div class="flex gap-2 flex-wrap">
-        {tags.map(t => (
-            <ButtonTag href={getTagUrl(t.name)} label={`View all posts with the ${t.name.trim()} tag`}>
+        {displayTags.map(t => (
+            <ButtonTag href={getTagUrl(t.name)} label={`查看所有标签为 ${t.name.trim()} 的文章`}>
                 {t.name.trim()}
             </ButtonTag>
         ))}
+        {hasMore && (
+            <button 
+                id="tags-more-btn" 
+                class="btn-plain rounded-lg px-3 py-1 text-(--primary) border border-(--primary) text-sm hover:bg-(--primary)/10 transition-colors"
+                aria-haspopup="dialog"
+                aria-controls="tag-group-modal"
+            >
+                {i18n(I18nKey.more)}...
+            </button>
+        )}
     </div>
 </WidgetLayout>
+
+<!-- 模态框组件 -->
+<TagGroupModal groups={groupedTags} id="tag-group-modal" />
+
+<script>
+    document.getElementById('tags-more-btn')?.addEventListener('click', () => {
+        const modal = document.getElementById('tag-group-modal');
+        if (modal && !modal.open) {
+            modal.showModal();
+        }
+    });
+</script>

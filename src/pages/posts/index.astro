@@ -14,6 +14,28 @@ const pageDescription = LinkPresets[LinkPreset.Posts].description;
 
 const allPosts = await getSortedPostsList();
 const categories = await getCategoryList();
+
+// ---------- 按 年-月 分组 ----------
+const groupedPosts: Record<string, typeof allPosts> = {};
+const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+
+allPosts.forEach((post) => {
+  const date = post.data.published;
+  const year = date.getFullYear();
+  const month = date.getMonth(); // 0-11
+  const key = `${year}-${String(month + 1).padStart(2, '0')}`; // "2026-07"
+  if (!groupedPosts[key]) groupedPosts[key] = [];
+  groupedPosts[key].push(post);
+});
+
+// 按年月降序（最新在前）
+const sortedKeys = Object.keys(groupedPosts).sort((a, b) => b.localeCompare(a));
+
+// 辅助：从 key 中提取年月显示文本
+function getYearMonthLabel(key: string): string {
+  const [year, month] = key.split('-').map(Number);
+  return `${year}年${monthNames[month - 1]}`;
+}
 ---
 
 <GridLayout title={pageTitle} description={pageDescription}>
@@ -21,21 +43,27 @@ const categories = await getCategoryList();
     <div class="card-base z-10 px-9 py-6 relative w-full">
       <BackwardButton currentPath={Astro.url.pathname} />
 
-      <!-- 标题 -->
-      <header class="mb-6">
-        <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-3">
-          {pageTitle}
-        </h1>
-        {pageDescription && (
-          <p class="text-neutral-600 dark:text-neutral-400">
-            {pageDescription}
-          </p>
-        )}
+      <!-- 标题区 -->
+      <header class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+            {pageTitle}
+          </h1>
+          {pageDescription && (
+            <p class="text-neutral-600 dark:text-neutral-400">
+              {pageDescription}
+            </p>
+          )}
+        </div>
+        <span class="inline-flex items-center gap-1 px-3 py-1 bg-(--primary)/10 text-(--primary) text-sm rounded-full font-medium">
+          <span class="i-ic:round-article w-4 h-4"></span>
+          {allPosts.length} 篇
+        </span>
       </header>
 
       <!-- 分类标签栏 -->
       {categories.length > 0 && (
-        <div class="flex flex-wrap gap-2 mb-6">
+        <div class="flex flex-wrap gap-2 mb-8">
           <a
             href="/posts/"
             class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--primary) text-white"
@@ -54,59 +82,158 @@ const categories = await getCategoryList();
         </div>
       )}
 
-      <!-- 文章列表 -->
-      <div class="space-y-6">
-        {allPosts.length === 0 ? (
-          <p class="text-center text-60 py-12">暂无文章</p>
-        ) : (
-          allPosts.map((post) => (
-            <article class="group bg-(--card-bg) rounded-xl p-6 border border-(--line-divider) hover:border-(--primary) transition-all duration-300 hover:shadow-lg">
-              <a href={`/posts/${post.id}/`} class="block">
-                <h2 class="text-xl font-semibold text-90 group-hover:text-(--primary) transition-colors mb-2">
-                  {post.data.title}
-                </h2>
-                {post.data.description && (
-                  <p class="text-75 mb-3 line-clamp-2">
-                    {post.data.description}
-                  </p>
-                )}
-                <div class="flex flex-wrap items-center gap-4 text-sm text-60">
-                  <time datetime={post.data.published.toISOString()} class="text-75">
-                    {formatDateToYYYYMMDD(post.data.published)}
-                  </time>
-                  <!-- 分类标签（可点击） -->
-                  {post.data.category && (
-                    <a
-                      href={"/category/" + encodeURIComponent(Array.isArray(post.data.category) ? post.data.category[0] : post.data.category) + "/"}
-                      class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full text-xs hover:bg-(--primary) hover:text-white transition-colors"
+      <!-- 文章列表 - 按年月分组 + 时间线 -->
+      <div class="relative">
+        <!-- 纵向时间线（贯穿所有年月组） -->
+        <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-(--primary)/20 hidden md:block"></div>
+
+        {sortedKeys.map((key, index) => {
+          const postsInGroup = groupedPosts[key];
+          return (
+            <section key={key} class="relative mb-12 md:pl-8">
+              <!-- 时间线节点（圆点） -->
+              <div class="absolute left-[-6px] top-0 w-3 h-3 rounded-full bg-(--primary) border-2 border-white dark:border-gray-800 hidden md:block"></div>
+
+              <!-- 年月标题 -->
+              <h2 class="text-2xl font-bold text-(--primary) mb-5 flex items-center gap-3">
+                <span>{getYearMonthLabel(key)}</span>
+                <span class="text-sm font-normal text-60 bg-(--card-bg) px-2 py-0.5 rounded-full">
+                  {postsInGroup.length}
+                </span>
+              </h2>
+
+              <!-- 该月下的文章卡片网格 -->
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {postsInGroup.map((post, idx) => {
+                  // 计算全局索引用于延迟动画（可选）
+                  const globalIndex = allPosts.indexOf(post);
+                  return (
+                    <article
+                      class="group card-glass rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-400 ease-out flex flex-col 
+                             border border-white/30 dark:border-white/10 hover:border-(--primary)/50
+                             transform hover:-translate-y-2"
+                      style={`animation-delay: ${globalIndex * 60}ms`}
                     >
-                      {Array.isArray(post.data.category) ? post.data.category[0] : post.data.category}
-                    </a>
-                  )}
-                  <!-- 标签 -->
-                  {post.data.tags && post.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-1">
-                      {post.data.tags.slice(0, 2).map((tag) => (
-                        <span class="px-2 py-0.5 bg-black/5 dark:bg-white/5 text-60 rounded-full text-xs">
-                          {tag}
-                        </span>
-                      ))}
-                      {post.data.tags.length > 2 && (
-                        <span class="text-60 text-xs">+{post.data.tags.length - 2}</span>
+                      <!-- 封面图（若有） -->
+                      {post.data.cover && (
+                        <div class="relative h-44 overflow-hidden bg-(--card-bg)">
+                          <img
+                            src={post.data.cover}
+                            alt=""
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                          <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                        </div>
                       )}
-                    </div>
-                  )}
-                </div>
-              </a>
-            </article>
-          ))
-        )}
+
+                      <div class="p-5 flex-1 flex flex-col">
+                        <h3 class="text-lg font-semibold leading-snug mb-2">
+                          <a
+                            href={`/posts/${post.id}/`}
+                            class="text-90 hover:text-(--primary) transition-colors duration-200"
+                          >
+                            {post.data.title}
+                          </a>
+                        </h3>
+
+                        {post.data.description && (
+                          <p class="text-sm text-75 mb-3 line-clamp-3 flex-1">
+                            {post.data.description}
+                          </p>
+                        )}
+
+                        <!-- 元数据行 -->
+                        <div class="mt-auto flex flex-wrap items-center justify-between gap-2 text-xs text-60">
+                          <div class="flex items-center gap-2 flex-wrap">
+                            <time datetime={post.data.published.toISOString()}>
+                              {formatDateToYYYYMMDD(post.data.published)}
+                            </time>
+                            {post.data.category && (
+                              <a
+                                href={"/category/" + encodeURIComponent(
+                                  Array.isArray(post.data.category) ? post.data.category[0] : post.data.category
+                                ) + "/"}
+                                class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full hover:bg-(--primary) hover:text-white transition-colors"
+                              >
+                                {Array.isArray(post.data.category) ? post.data.category[0] : post.data.category}
+                              </a>
+                            )}
+                          </div>
+                          <span class="flex items-center gap-1">
+                            <span class="i-ic:round-access-time w-3.5 h-3.5"></span>
+                            {Math.ceil((post.body?.length || 0) / 500) || 1} min
+                          </span>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
       </div>
 
-      <!-- 文章总数 -->
-      <div class="mt-8 text-center text-60 text-sm">
+      <!-- 底部计数 -->
+      <div class="mt-10 text-center text-60 text-sm">
         {i18n(I18nKey.postsCount)}：{allPosts.length}
       </div>
     </div>
   </div>
 </GridLayout>
+
+<style is:global>
+  /* 毛玻璃卡片样式（保持不变） */
+  .card-glass {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+    animation: fadeSlideUp 0.6s ease forwards;
+  }
+
+  .dark .card-glass {
+    background: rgba(30, 30, 30, 0.7);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  @keyframes fadeSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .dark .absolute.left-\[-6px\] {
+    border-color: #1f1f1f;
+  }
+
+  @media (max-width: 768px) {
+    .md\:pl-8 {
+      padding-left: 0;
+    }
+    .md\:block {
+      display: none !important;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+  }
+</style>

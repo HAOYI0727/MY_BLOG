@@ -2,7 +2,7 @@
 title: Lecture 1 —— 从RNN到Transformer：NLP序列建模演进与编码器-解码器架构全解
 published: 2026-02-02
 description: 系统梳理Transformer的诞生背景与核心架构，涵盖分词策略、词表示演进、RNN/LSTM的痛点、自注意力与多头注意力机制、位置编码、编码器-解码器设计，并通过机器翻译端到端案例串联NLP完整技术栈。
-cover: "./L1.png"
+cover: "/assets/images/posts/L1.png"
 coverInContent: false
 tags: [Transformer, Attention, 基础知识]
 category: Deep_Learning

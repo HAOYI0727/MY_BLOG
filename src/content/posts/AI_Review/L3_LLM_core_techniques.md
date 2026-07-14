@@ -2,7 +2,7 @@
 title: Lecture 3 —— 大语言模型（LLM）核心技术与推理优化全解：从MoE架构到高效解码
 published: 2026-02-06
 description: 系统梳理大语言模型（LLM）的核心技术全景，涵盖LLM定义与特征、混合专家模型（MoE）架构与路由坍缩解决方案、自回归解码策略（贪心/束搜索/采样/温度系数/引导解码）、提示工程（ICL/CoT/自一致性），以及推理优化技巧（KV缓存/GQA/PagedAttention/潜在注意力/推测解码/MTP）。
-cover: "./L3.png"
+cover: "/assets/images/posts/L3.png"
 coverInContent: false
 tags: [LLM, MoE, Prompt Engineering, CoT, KV Cache, 推理优化]
 category: Deep_Learning

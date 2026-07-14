@@ -2,7 +2,7 @@
 title: 大模型强化学习对齐方案：PPO、GRPO、DPO、DAPO与GSPO技术详解与对比
 published: 2026-07-14
 description: 从12个核心维度系统对比PPO、GRPO、DPO、DAPO与GSPO五种大模型强化学习对齐算法，剖析其技术演进脉络、核心机制与适用场景，揭示从"通用重器"到"专属利刃"的进化逻辑。
-cover: "./Comparison.png"
+cover: "/assets/images/posts/RL_Comparison.png"
 coverInContent: false
 tags: [PPO, GRPO, DPO, DAPO, GSPO, RLHF, 强化学习, 对比学习]
 category: AI_Alignment
