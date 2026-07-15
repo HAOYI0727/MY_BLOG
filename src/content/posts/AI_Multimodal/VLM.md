@@ -1,15 +1,15 @@
 ---
-title: VLM视觉语言模型：架构演进、训练流程与Qwen3-VL深度解析
-published: 2026-08-02
-description: 系统梳理视觉语言模型（VLM）的通用三段式架构、训练流程与技术演进脉络，深入解析Qwen3-VL的Interleaved-MRoPE、DeepStack集成与文本化时间戳对齐等核心技术创新。
-cover: "/assets/images/posts/VLM.png"
+title: Vision-Language Model —— VLM视觉语言模型
+published: 2026-08-06
+description: 系统讲解视觉语言模型（VLM）的通用架构，深入对比三种主流连接器方案的设计权衡；详细剖析两阶段训练流程及其目标差异；梳理从双塔架构到原生多模态的三代演进路径；最后深度解析Qwen3-VL的三项核心创新——Interleaved-MRoPE、DeepStack集成、文本化时间戳对齐，及其2B/4B/8B/32B稠密和MoE架构的模型系列与256K超长上下文特性。
+cover: "/assets/images/posts/vlm.png"
 coverInContent: false
-tags: [VLM, ViT, Qwen, 多模态]
-category: AI_Infra
+tags: [VLM, 视觉语言模型, CLIP, Qwen3-VL, 多模态]
+category: AI_Multimodal
 draft: false
 ---
 
-# VLM视觉语言模型：架构演进、训练流程与Qwen3-VL深度解析
+# Vision-Language Model —— VLM视觉语言模型
 
 > [!note]
 > 

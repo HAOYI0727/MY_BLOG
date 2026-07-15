@@ -5,8 +5,8 @@ description: '加密文档测试'
 encrypted: true
 pinned: false
 password: "test"
-tags: []
-category: 
+tags: [加密]
+category: Deep_Learning
 ---
 
 
