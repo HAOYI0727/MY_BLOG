@@ -1,10 +1,10 @@
 ---
 title: Function Calling —— 工具调用
-published: 2026-03-06
+published: 2026-04-06
 description: 系统讲解AI Agent工具调用的核心技术原理与工程实践：从JSON Schema的结构化约束机制出发，剖析Structured Outputs如何动态屏蔽非法token以保证输出匹配Schema；分析并行工具调用的延迟优势；深入解读tools与tool_choice的设计哲学；揭示工具描述撰写的核心技巧。
 cover: "/assets/images/posts/function_calling.png"
 coverInContent: false
-tags: [AI Agent, 工具调用, Function Calling, 并行调用, MCP]
+tags: [AI Agent, 工具调用, 并行调用, MCP]
 category: AI_Agent
 draft: false
 ---

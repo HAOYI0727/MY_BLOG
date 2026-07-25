@@ -1,10 +1,10 @@
 ---
 title: Agent Engineering —— Prompt & Context & Harness & Loop
-published: 2026-03-12
+published: 2026-04-12
 description: 系统剖析AI Agent工程从Prompt Engineering到Context Engineering再到Harness Engineering的三层演进路径：以数学公式形式化Prompt如何塑造条件概率分布、Context如何通过装配方程治理信息环境、Harness如何通过七层架构构建执行控制框架，并探讨Loop Engineering作为第四层延伸的嵌套关系。
 cover: "/assets/images/posts/agent_engineering.png"
 coverInContent: false
-tags: [Prompt Engineering, Context Engineering, Harness Engineering, Loop Engineering, AI Agent, 沙箱, 可观测性]
+tags: [Prompt Engineering, Context Engineering, Harness Engineering, Loop Engineering, AI Agent, 沙箱]
 category: AI_Agent
 draft: false
 ---

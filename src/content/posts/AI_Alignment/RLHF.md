@@ -4,7 +4,7 @@ published: 2026-06-30
 description: 系统拆解RLHF的三步流程、核心算法原理、代码实现细节以及面临的挑战，涵盖SFT、奖励模型训练、PPO优化、奖励黑客等核心议题，并探讨DPO、RLAIF等演进方向。
 cover: "/assets/images/posts/RLHF.png"
 coverInContent: false
-tags: [RLHF, 强化学习, 后训练, 奖励模型]
+tags: [RLHF, 强化学习, 后训练, 奖励模型, 模型对齐]
 category: AI_Alignment
 draft: false
 ---

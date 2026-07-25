@@ -4,7 +4,7 @@ published: 2026-07-10
 description: 系统梳理DAPO解耦裁剪与动态采样策略优化的核心技术原理，解析Clip-Higher、Dynamic Sampling、Token-Level Loss与Overlong Reward Shaping四项创新如何解决GRPO在长CoT场景下的熵崩塌与训练不稳定问题，将GRPO从实验室算法打磨为工业级系统。
 cover: "/assets/images/posts/DAPO.png"
 coverInContent: false
-tags: [DAPO, GRPO, RLHF, 强化学习, 推理增强]
+tags: [DAPO, GRPO, RLHF, 强化学习, 推理增强, 模型对齐]
 category: AI_Alignment
 draft: false
 ---

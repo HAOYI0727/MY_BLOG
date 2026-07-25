@@ -2,7 +2,7 @@
     "title": "CS336-LAB1-BASICS",
     "description": "斯坦福大学 CS336 课程（Language Models from Scratch）第一次作业实现，从零构建大语言模型基础组件。包含 BPE 分词器、Transformer 模型训练、核心模块消融实验及文本生成全流程代码，基于 TinyStories 数据集完成实验验证。",
     "image": "",
-    "category": "machine-learning",
+    "category": "Deep_Learning",
     "techStack": [
         "PyTorch",
         "Python",
@@ -11,8 +11,8 @@
     "status": "completed",
     "liveDemo": "",
     "sourceCode": "https://github.com/HAOYI0727/CS336-LAB1-BASICS",
-    "startDate": "2025-10-01",
-    "endDate": "",
+    "startDate": "2026-03-02",
+    "endDate": "2026-03-14",
     "featured": false,
     "tags": [
         "Academic Project",

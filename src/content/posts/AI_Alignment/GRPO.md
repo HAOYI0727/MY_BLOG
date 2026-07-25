@@ -4,7 +4,7 @@ published: 2026-07-08
 description: 系统梳理GRPO群体相对策略优化的核心原理、组内相对优势估计机制与训练流程，解析其如何通过移除价值网络实现显存占用降低40%以上，并对比GRPO与PPO、DPO的差异及各自适用场景。
 cover: "/assets/images/posts/GRPO.png"
 coverInContent: false
-tags: [GRPO, RLHF, 强化学习, 推理增强, DeepSeek]
+tags: [GRPO, RLHF, 强化学习, 推理增强, DeepSeek, 模型对齐]
 category: AI_Alignment
 draft: false
 ---

@@ -1,6 +1,6 @@
 ---
 title: Retrieval-Augmented Generation —— 检索增强生成
-published: 2026-03-08
+published: 2026-04-08
 description: 系统讲解检索增强生成（RAG）的核心技术原理与工程实践：从文档分块的三种策略及其适用场景，到向量检索中ANN算法的数学原理与选型指南，再到重排序阶段Bi-Encoder与Cross-Encoder的架构差异及其对MRR/NDCG的量化提升，最后介绍HyDE如何通过“假设性文档”将检索从关键词匹配升级为意图理解。
 cover: "/assets/images/posts/rag.png"
 coverInContent: false

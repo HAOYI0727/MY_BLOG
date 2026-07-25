@@ -1,10 +1,10 @@
 ---
 title: Agent Communication Protocols —— MCP & A2A
-published: 2026-03-14
+published: 2026-04-14
 description: 系统讲解AI Agent通信协议MCP（模型上下文协议）与A2A（Agent2Agent协议）的定位差异、技术架构与协同方式。从MCP的客户端-服务器架构及其Tools/Resources/Prompts三种能力出发，到A2A的AgentCard发现机制与任务生命周期管理，通过六维对比分析揭示两者在连接对象、通信模式、扩展方式上的本质区别，并论证“MCP给Agent装备工具，A2A让Agent组网协作”的互补关系。
 cover: "/assets/images/posts/agent_communication_protocols.png"
 coverInContent: false
-tags: [AI Agent, MCP, A2A, 通信协议, 多智能体协作]
+tags: [AI Agent, MCP, A2A, 通信协议, 多智能体]
 category: AI_Agent
 draft: false
 ---

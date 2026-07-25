@@ -4,7 +4,7 @@ published: 2026-06-26
 description: 系统解析PEFT技术体系，涵盖Adapter Tuning、Prefix Tuning、Prompt Tuning、LoRA、QLoRA、AdaLoRA、IA3等核心方法的数学原理、代码实现与选型指南，探讨低秩假设、矩阵分解、参数重参数化等深刻思想，以及前沿进展与未来方向。
 cover: "/assets/images/posts/PEFT.png"
 coverInContent: false
-tags: [PEFT, LoRA, 参数高效微调, 后训练]
+tags: [PEFT, LoRA, 后训练, 模型微调]
 category: AI_Alignment
 draft: false
 ---

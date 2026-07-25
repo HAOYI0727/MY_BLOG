@@ -4,7 +4,7 @@ published: 2026-07-16
 description: 系统梳理RLVR（Reinforcement Learning with Verifiable Rewards）的核心思想、数学形式化、主流算法（PPO、GRPO、PACS、ROVER）及训练流程，对比RLHF与RLVR的本质差异，并探讨验证器可靠性、奖励稀疏等核心挑战与前沿解决方案。
 cover: "/assets/images/posts/RLVR.png"
 coverInContent: false
-tags: [RLVR, 强化学习, 后训练, GRPO]
+tags: [RLVR, 强化学习, 后训练, GRPO, 模型对齐]
 category: AI_Alignment
 draft: false
 ---

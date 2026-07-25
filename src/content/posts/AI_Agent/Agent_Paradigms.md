@@ -1,6 +1,6 @@
 ---
 title: Agent Paradigms —— ReAct & Plan-and-Solve & Reflection
-published: 2026-03-04
+published: 2026-04-04
 description: 系统剖析AI Agent的三大核心范式：ReAct（推理与行动交替的Thought-Action-Observation三拍循环）、Plan-and-Solve（先分解规划后逐步执行的两阶段架构）与Reflection（生成-批评-修正的自我优化机制）。从数学建模角度揭示ReAct如何通过外部观察修正条件概率分布、Plan-and-Solve如何将任务分解为子目标序列、Reflexion如何以“语义梯度”替代参数梯度实现零样本学习，并通过实验数据对比三种范式的适用场景与成本特征。
 cover: "/assets/images/posts/agent_paradigms.png"
 coverInContent: false

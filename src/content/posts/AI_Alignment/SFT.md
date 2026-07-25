@@ -4,7 +4,7 @@ published: 2026-06-28
 description: 深入剖析监督微调（SFT）的核心原理，涵盖最大似然估计与交叉熵损失的数学推导、Loss Masking 代码实现、灾难性遗忘与不完全学习现象（ILP）等系统挑战，以及数据质量、分层学习率等最佳实践。全面理解 SFT 作为 LLM 后训练基石的定位、优势与演进方向。
 cover: "/assets/images/posts/SFT.png"
 coverInContent: false
-tags: [SFT, 微调, 后训练]
+tags: [SFT, 模型微调, 后训练]
 category: AI_Alignment
 draft: false
 ---

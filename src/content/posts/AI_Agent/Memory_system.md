@@ -1,6 +1,6 @@
 ---
 title: Memory System —— Agent记忆系统
-published: 2026-03-10
+published: 2026-04-10
 description: 系统讲解AI Agent记忆系统的架构设计与工程实践：从向量数据库作为记忆存储底座出发，剖析记忆生命周期的写入、检索、更新与遗忘策略，深入解读MemGPT如何借鉴操作系统分层内存管理思想将LLM上下文窗口视为“物理内存”、外部向量库视为“磁盘”以实现无限上下文幻觉，并介绍记忆压缩在有限空间中高效存活的机制。
 cover: "/assets/images/posts/memory_system.png"
 coverInContent: false

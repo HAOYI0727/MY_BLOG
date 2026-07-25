@@ -154,7 +154,7 @@ export const en: Translation = {
 
     // Diary Page
     [Key.diary]: "Diary",
-    [Key.diarySubtitle]: "Share life anytime, anywhere",
+    [Key.diarySubtitle]: "Reflections and Thoughts on books and movies",
     [Key.diaryCount]: "diary entries",
     [Key.diaryImage]: "Image",
     [Key.diaryReply]: "Reply",
@@ -165,7 +165,7 @@ export const en: Translation = {
 
     // Albums Page
     [Key.albums]: "Albums",
-    [Key.albumsSubtitle]: "Record beautiful moments in life",
+    [Key.albumsSubtitle]: "Study notes and beautiful moments in life",
     [Key.albumsEmpty]: "No content",
     [Key.albumsEmptyDesc]: "No albums have been created yet. Go add some beautiful memories!",
     [Key.albumsBackToList]: "Back to Albums",

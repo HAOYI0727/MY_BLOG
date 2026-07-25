@@ -1,15 +1,15 @@
 ---
-title: 强化学习基础 -- 策略梯度、优势函数、重要性采样与KL散度惩罚
+title: Reinforcement Learning -- 策略梯度、优势函数、重要性采样与KL散度惩罚
 published: 2026-07-02
 description: 系统梳理策略梯度、优势函数、重要性采样与KL散度惩罚的核心概念，串联从VPG到PPO的技术演进逻辑，并探讨On-Policy与Off-Policy的权衡及数据漂移问题。
 cover: "/assets/images/posts/Basic_Knowledge.png"
 coverInContent: false
-tags: [强化学习, 基础知识]
+tags: [强化学习, 基础知识, 模型对齐]
 category: AI_Alignment
 draft: false
 ---
 
-# 强化学习基础 -- 策略梯度、优势函数、重要性采样与KL散度惩罚
+# Reinforcement Learning -- 策略梯度、优势函数、重要性采样与KL散度惩罚
 
 > "理解PPO等强化学习算法之前，必须先理解它试图解决什么问题，以及它站在了哪些巨人的肩膀上。"
 

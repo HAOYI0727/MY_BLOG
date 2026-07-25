@@ -1,10 +1,10 @@
 ---
 title: Multi-Agent System—— 多智能体系统
-published: 2026-03-16
+published: 2026-04-16
 description: 系统讲解多Agent协作的架构模式与决策协议：从单Agent的指令迷雾与工具过载问题出发，剖析顺序流水线、层级委托与对等协商三种协作模式的数学建模与适用场景；深入评估投票、共识与法官裁决三种决策协议的任务适配性；分析MAD多智能体辩论中多数投票的核心贡献与辩论本身的局限性，以及MoA混合智能体通过模型多样性实现性能提升的集成范式。
 cover: "/assets/images/posts/multi_agent_system.png"
 coverInContent: false
-tags: [AI Agent, 多智能体系统, 协作模式]
+tags: [AI Agent, 多智能体, 协作模式]
 category: AI_Agent
 draft: false
 ---

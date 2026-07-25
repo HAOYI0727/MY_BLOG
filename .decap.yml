@@ -1,7 +1,7 @@
 # 后台系统配置
 backend:
     name: github
-    repo: Spr-Aachen/Twilight # 请替换为您的 GitHub 仓库
+    repo: HAOYI0727/MY_BLOG # 请替换为您的 GitHub 仓库
     branch: main # 请替换为您的分支名称
     site_domain: twilight.spr-aachen.com # 请替换为您的域名
     base_url: https://twilight.spr-aachen.com  # 请替换为您的 URL

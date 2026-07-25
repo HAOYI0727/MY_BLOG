@@ -1,15 +1,15 @@
 ---
-title: 大模型强化学习对齐方案：PPO、GRPO、DPO、DAPO与GSPO技术详解与对比
+title: Comparison of RL Algorithm —— PPO、GRPO、DPO、DAPO、GSPO技术详解与对比
 published: 2026-07-14
 description: 从12个核心维度系统对比PPO、GRPO、DPO、DAPO与GSPO五种大模型强化学习对齐算法，剖析其技术演进脉络、核心机制与适用场景，揭示从"通用重器"到"专属利刃"的进化逻辑。
 cover: "/assets/images/posts/RL_Comparison.png"
 coverInContent: false
-tags: [PPO, GRPO, DPO, DAPO, GSPO, RLHF, 强化学习, 对比学习]
+tags: [PPO, GRPO, DPO, DAPO, GSPO, RLHF, 强化学习, 对比学习, 模型对齐]
 category: AI_Alignment
 draft: false
 ---
 
-# 大模型强化学习对齐方案：PPO、GRPO、DPO、DAPO与GSPO技术详解与对比
+# Comparison of RL Algorithm —— PPO、GRPO、DPO、DAPO、GSPO技术详解与对比
 
 > **大模型强化学习对齐**（RLHF）通过构建**奖励模型与策略优化机制**，将**人类偏好**转化为**可量化的优化目标**，解决生成式模型输出不可控、价值观偏差等问题。在这一领域，PPO、GRPO、DPO、DAPO与GSPO构成了从经典到前沿的完整技术谱系。
 

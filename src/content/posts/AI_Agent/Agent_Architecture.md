@@ -1,10 +1,10 @@
 ---
 title: Agent Architecture —— LLM & Planning & Tool & Memory
-published: 2026-03-02
+published: 2026-04-02
 description: 系统讲解AI Agent的核心架构——LLM（推理引擎）、规划（Planning）、工具（Tools）与记忆（Memory）四大模块的设计原理与协同机制。从感知-规划-行动闭环出发，剖析LLM作为“中央推理引擎”的多重角色、规划的数学建模与两种范式、工具调用的标准化接口与MCP协议演进，以及短期记忆与长期记忆的二分法设计。
 cover: "/assets/images/posts/agent_architecture.png"
 coverInContent: false
-tags: [AI Agent, LLM, 规划, 工具调用, Function Calling, MCP, 记忆, RAG]
+tags: [AI Agent, LLM, 规划, 工具调用, MCP, 记忆, RAG]
 category: AI_Agent
 draft: false
 ---
