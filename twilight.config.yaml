@@ -609,41 +609,11 @@ musicPlayer:
                 # 序号
                 id: 13
                 # 标题
-                title: "ANTI_HERO"
-                # 作者
-                artist: "Taylor Swift"
-                # 封面
-                cover: "/assets/images/musics/MIDNIGHTS.jpg"
-                # 音乐路径
-                url: "assets/music/ANTI_HERO.m4a"
-                # 歌词路径
-                lrc: "assets/music/ANTI_HERO.lrc"
-                # 时长
-                duration: 202
-            - # 列表示例
-                # 序号
-                id: 14
-                # 标题
-                title: "DIE WITH A SMILE"
-                # 作者
-                artist: "Lady Gaga & Bruno Mars"
-                # 封面
-                cover: "/assets/images/musics/DIE_WITH_A_SMILE.jpg"
-                # 音乐路径
-                url: "assets/music/DIE_WITH_A_SMILE.m4a"
-                # 歌词路径
-                lrc: "assets/music/DIE_WITH_A_SMILE.lrc"
-                # 时长
-                duration: 252
-            - # 列表示例
-                # 序号
-                id: 15
-                # 标题
-                title: "HATE THAT I MADE YOUS LOVE ME"
+                title: "HATE THAT I MADE YOU LOVE ME"
                 # 作者
                 artist: "Ariana Grande"
                 # 封面
-                cover: "/assets/images/musics/HATE_THAT_I_MADE_YOU_LOVE_ME.jpg"
+                cover: "/assets/images/musics/PETAL.jpg"
                 # 音乐路径
                 url: "assets/music/HATE_THAT_I_MADE_YOU_LOVE_ME.m4a"
                 # 歌词路径
@@ -652,7 +622,7 @@ musicPlayer:
                 duration: 198
             - # 列表示例
                 # 序号
-                id: 16
+                id: 14
                 # 标题
                 title: "ETERNAL SUNSHINE"
                 # 作者
@@ -667,7 +637,22 @@ musicPlayer:
                 duration: 253
             - # 列表示例
                 # 序号
-                id: 17
+                id: 15
+                # 标题
+                title: "INTRO & TWILIGHT_ZONE"
+                # 作者
+                artist: "Ariana Grande"
+                # 封面
+                cover: "/assets/images/musics/ETERNAL_SUNSHINE.jpg"
+                # 音乐路径
+                url: "assets/music/INTRO&TWILIGHT_ZONE.m4a"
+                # 歌词路径
+                lrc: "assets/music/INTRO&TWILIGHT_ZONE.lrc"
+                # 时长
+                duration: 353
+            - # 列表示例
+                # 序号
+                id: 16
                 # 标题
                 title: "THANK U NEXT"
                 # 作者
@@ -682,7 +667,52 @@ musicPlayer:
                 duration: 209
             - # 列表示例
                 # 序号
+                id: 17
+                # 标题
+                title: "ONE LAST TIME"
+                # 作者
+                artist: "Ariana Grande"
+                # 封面
+                cover: "/assets/images/musics/MY_EVERYTHING.jpg"
+                # 音乐路径
+                url: "assets/music/ONE_LAST_TIME.m4a"
+                # 歌词路径
+                lrc: "assets/music/ONE_LAST_TIME.lrc"
+                # 时长
+                duration: 198
+            - # 列表示例
+                # 序号
                 id: 18
+                # 标题
+                title: "DIE WITH A SMILE"
+                # 作者
+                artist: "Lady Gaga & Bruno Mars"
+                # 封面
+                cover: "/assets/images/musics/DIE_WITH_A_SMILE.jpg"
+                # 音乐路径
+                url: "assets/music/DIE_WITH_A_SMILE.m4a"
+                # 歌词路径
+                lrc: "assets/music/DIE_WITH_A_SMILE.lrc"
+                # 时长
+                duration: 252
+            - # 列表示例
+                # 序号
+                id: 19
+                # 标题
+                title: "TALKING TO THE MOON"
+                # 作者
+                artist: "Bruno Mars"
+                # 封面
+                cover: "/assets/images/musics/TALKING_TO_THE_MOON.jpg"
+                # 音乐路径
+                url: "assets/music/TALKING_TO_THE_MOON.m4a"
+                # 歌词路径
+                lrc: "assets/music/TALKING_TO_THE_MOON.lrc"
+                # 时长
+                duration: 221
+            - # 列表示例
+                # 序号
+                id: 20
                 # 标题
                 title: "KILL BILL"
                 # 作者
