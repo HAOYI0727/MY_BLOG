@@ -2,7 +2,7 @@
 title: Principal Component Analysis (PCA) —— 主成分分析
 published: 2025-07-24
 description: 系统讲解主成分分析（PCA）的完整数学原理：从方差最大化与最小化重构误差两个等价视角出发，通过拉格朗日乘子法推导出协方差矩阵的特征方程，揭示特征向量即主成分方向、特征值即主成分方差的本质联系；深入对比EVD与SVD两种实现方式的优劣与适用场景；详细介绍三种主成分数量选择方法；讨论PCA的假设和局限。
-cover: "/assets/images/posts/pca_derivation.png"
+cover: "/assets/images/posts/pca.png"
 coverInContent: false
 tags: [主成分分析, PCA, 特征值分解, SVD, 降维, 协方差矩阵, 机器学习]
 category: Machine_Learning

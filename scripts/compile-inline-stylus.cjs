@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const stylus = require('stylus');
 
 // Recursively list files under a directory
 function walk(dir) {
@@ -25,20 +25,14 @@ if (!fs.existsSync(srcDir)) {
 const files = walk(srcDir);
 
 const styleBlockRe = /<style[^>]*lang=["']stylus["'][^>]*>([\s\S]*?)<\/style>/ig;
-const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-const outNull = process.platform === 'win32' ? 'nul' : '/dev/null';
-
 let failed = false;
 
-function compileStylusContent(content, tmpPath) {
-  fs.writeFileSync(tmpPath, content, 'utf8');
+function compileStylusContent(content, filename) {
   try {
-    execSync(`${npxCmd} stylus "${tmpPath}" -o ${outNull}`, { stdio: 'pipe' });
-    fs.unlinkSync(tmpPath);
+    stylus(content).set('filename', filename).render();
     return { ok: true };
   } catch (err) {
-    const msg = err.stderr ? err.stderr.toString() : err.message;
-    // keep temp file for debugging
+    const msg = err.message;
     return { ok: false, error: msg };
   }
 }
@@ -47,8 +41,7 @@ function compileStylusContent(content, tmpPath) {
 const stylFiles = files.filter(f => f.endsWith('.styl'));
 for (const f of stylFiles) {
   const content = fs.readFileSync(f, 'utf8');
-  const tmp = f + '.tmp.styl';
-  const r = compileStylusContent(content, tmp);
+  const r = compileStylusContent(content, f);
   if (r.ok) console.log(`${f}: OK`);
   else {
     failed = true;
@@ -67,8 +60,7 @@ for (const f of files) {
   while ((m = styleBlockRe.exec(text)) !== null) {
     idx += 1;
     const content = m[1].trim();
-    const tmp = `${f}.style.${idx}.tmp.styl`;
-    const r = compileStylusContent(content, tmp);
+    const r = compileStylusContent(content, f);
     if (r.ok) console.log(`${f} [style #${idx}]: OK`);
     else {
       failed = true;

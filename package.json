@@ -4,9 +4,10 @@
 	"version": "1.0.0",
 	"description": "A blog template",
 	"scripts": {
-		"type-check": "tsc --noEmit --isolatedDeclarations",
+		"type-check": "astro check",
 		"check-stylus": "node scripts/compile-inline-stylus.cjs",
-		"check": "astro check",
+		"check:features": "node scripts/check-ui-features.cjs",
+		"check": "astro check && node scripts/compile-inline-stylus.cjs",
 		"dev": "node scripts/generate-icons.js && astro dev",
 		"build": "node scripts/generate-icons.js && node scripts/build-with-pagefind.cjs",
 		"preview": "astro preview",

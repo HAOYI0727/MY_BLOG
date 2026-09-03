@@ -653,7 +653,7 @@ onDestroy(() => {
     <div class="bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-slide-up">
         <Icon icon="material-symbols:error" class="text-xl shrink-0" />
         <span class="text-sm flex-1">{errorMessage}</span>
-        <button onclick={hideError} class="text-white/80 hover:text-white transition-colors">
+        <button type="button" aria-label={i18n(Key.musicDismissError)} onclick={hideError} class="text-white/80 hover:text-white transition-colors">
             <Icon icon="material-symbols:close" class="text-lg" />
         </button>
     </div>
@@ -670,7 +670,7 @@ onDestroy(() => {
                 <h3 class="text-lg font-semibold text-90">{i18n(Key.playlist)}</h3>
                 <div class="flex items-center gap-1">
                     {#if mode === "meting"}
-                        <button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
+                        <button type="button" aria-label={i18n(Key.musicRefresh)} class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
                                 onclick={fetchMetingPlaylist}
                                 disabled={isLoading}
                                 title={i18n(Key.musicRefresh)}>
@@ -681,7 +681,7 @@ onDestroy(() => {
                             {/if}
                         </button>
                     {/if}
-                    <button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center" onclick={togglePlaylist}>
+                    <button type="button" aria-label={i18n(Key.musicClosePlaylist)} class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center" onclick={togglePlaylist}>
                         <Icon icon="material-symbols:close" class="text-lg" />
                     </button>
                 </div>
@@ -728,20 +728,14 @@ onDestroy(() => {
         </div>
     {/if}
     <!-- 折叠状态的小圆球 -->
-    <div class="orb-player w-12 h-12 bg-(--primary) rounded-full shadow-lg cursor-pointer transition-all duration-500 ease-in-out flex items-center justify-center hover:scale-110 active:scale-95"
+    <button type="button" class="orb-player w-12 h-12 border-0 bg-(--primary) rounded-full shadow-lg cursor-pointer transition-all duration-500 ease-in-out flex items-center justify-center hover:scale-110 active:scale-95"
+         aria-hidden={!isCollapsed}
+         inert={!isCollapsed}
          class:opacity-0={!isCollapsed}
          class:scale-0={!isCollapsed}
          class:pointer-events-auto={isCollapsed}
          class:pointer-events-none={!isCollapsed}
          onclick={toggleCollapse}
-         onkeydown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                toggleCollapse();
-            }
-         }}
-         role="button"
-         tabindex="0"
          aria-label={i18n(Key.musicExpand)}>
         {#if isLoading}
             <Icon icon="eos-icons:loading" class="text-white text-lg" />
@@ -754,9 +748,13 @@ onDestroy(() => {
         {:else}
             <Icon icon="material-symbols:music-note" class="text-white text-lg" />
         {/if}
-    </div>
+    </button>
     <!-- 展开状态的完整播放器（封面圆形） -->
     <div class="expanded-player card-base bg-(--float-panel-bg) shadow-xl rounded-2xl p-4 transition-all duration-500 ease-in-out"
+         role="region"
+         aria-label={i18n(Key.musicPlayer)}
+         aria-hidden={isCollapsed}
+         inert={isCollapsed}
          class:opacity-0={isCollapsed}
          class:scale-95={isCollapsed}
          class:pointer-events-auto={!isCollapsed}
@@ -776,12 +774,12 @@ onDestroy(() => {
                 </div>
             </div>
             <div class="flex items-center gap-1">
-                <button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
+                <button type="button" aria-label={mode === "meting" ? i18n(Key.musicSwitchToLocal) : i18n(Key.musicSwitchToMeting)} class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
                         onclick={toggleMode}
                         title={mode === "meting" ? i18n(Key.musicSwitchToLocal) : i18n(Key.musicSwitchToMeting)}>
                     <Icon icon={mode === "meting" ? "material-symbols:cloud" : "material-symbols:folder"} class="text-lg" />
                 </button>
-                <button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
+                <button type="button" aria-label={i18n(Key.playlist)} class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
                         class:text-(--primary)={showPlaylist}
                         onclick={togglePlaylist}
                         title={i18n(Key.playlist)}>
@@ -852,7 +850,7 @@ onDestroy(() => {
         </div>
         <div class="controls flex items-center justify-center gap-2 mb-4">
             <!-- 播放模式切换按钮 -->
-            <button class="w-10 h-10 rounded-lg btn-plain"
+            <button type="button" aria-label={isRepeating === 1 ? i18n(Key.musicRepeatOne) : (isShuffled ? i18n(Key.musicShuffle) : i18n(Key.musicRepeatAll))} class="w-10 h-10 rounded-lg btn-plain"
                     onclick={togglePlaybackMode}
                     title={isRepeating === 1 ? i18n(Key.musicRepeatOne) : (isShuffled ? i18n(Key.musicShuffle) : i18n(Key.musicRepeatAll))}>
                 {#if isRepeating === 1}
@@ -863,11 +861,11 @@ onDestroy(() => {
                     <Icon icon="material-symbols:repeat" class="text-lg" />
                 {/if}
             </button>
-            <button class="btn-plain w-10 h-10 rounded-lg" onclick={previousSong}
+            <button type="button" aria-label={i18n(Key.musicPrevious)} class="btn-plain w-10 h-10 rounded-lg" onclick={previousSong}
                     disabled={playlist.length <= 1}>
                 <Icon icon="material-symbols:skip-previous" class="text-xl" />
             </button>
-            <button class="btn-regular w-12 h-12 rounded-full"
+            <button type="button" aria-label={isPlaying ? i18n(Key.musicPause) : i18n(Key.musicPlay)} class="btn-regular w-12 h-12 rounded-full"
                     class:opacity-50={isLoading}
                     disabled={isLoading}
                     onclick={togglePlay}>
@@ -879,19 +877,19 @@ onDestroy(() => {
                     <Icon icon="material-symbols:play-arrow" class="text-xl" />
                 {/if}
             </button>
-            <button class="btn-plain w-10 h-10 rounded-lg" onclick={nextSong}
+            <button type="button" aria-label={i18n(Key.musicNext)} class="btn-plain w-10 h-10 rounded-lg" onclick={nextSong}
                     disabled={playlist.length <= 1}>
                 <Icon icon="material-symbols:skip-next" class="text-xl" />
             </button>
             <!-- 歌词显示切换按钮 -->
-            <button class="w-10 h-10 rounded-lg btn-plain"
+            <button type="button" aria-label={i18n(Key.musicToggleLyrics)} class="w-10 h-10 rounded-lg btn-plain"
                     onclick={toggleLyrics}
                     title="切换歌词显示">
                 <Icon icon="material-symbols:lyrics" class="text-lg {showLyrics ? 'text-(--primary)' : 'opacity-90'}" />
             </button>
         </div>
         <div class="bottom-controls flex items-center gap-2">
-            <button class="btn-plain w-8 h-8 rounded-lg" onclick={toggleMute}>
+            <button type="button" aria-label={isMuted ? i18n(Key.musicUnmute) : i18n(Key.musicMute)} class="btn-plain w-8 h-8 rounded-lg" onclick={toggleMute}>
                 {#if isMuted || volume === 0}
                     <Icon icon="material-symbols:volume-off" class="text-lg" />
                 {:else if volume < 0.5}
@@ -921,7 +919,7 @@ onDestroy(() => {
                     style="width: {volume * 100}%">
                 </div>
             </div>
-            <button class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
+            <button type="button" aria-label={i18n(Key.musicCollapse)} class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
                     onclick={toggleCollapse}
                     title={i18n(Key.musicCollapse)}>
                 <Icon icon="material-symbols:expand-more" class="text-lg" />

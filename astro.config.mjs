@@ -82,7 +82,13 @@ export default defineConfig({
             cache: true,
             preload: true,
             accessibility: true,
-            updateHead: true,
+            // 保留跨页面公共样式，同时等待文章页新增样式加载完成。
+            // Safari + Vite 开发模式下若先移除旧 style 再执行新页面脚本，
+            // 会出现 DOM 已切换但页面近似无样式/白屏，刷新后才恢复的问题。
+            updateHead: {
+                awaitAssets: true,
+                persistAssets: true,
+            },
             updateBodyClass: false,
             globalInstance: true,
             // Scroll related configuration optimization

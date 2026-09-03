@@ -1,14 +1,12 @@
 ---
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
-import { getTagList, getTagsGroupedByCategory } from "@utils/post";
+import { getTagList } from "@utils/post";
 import { getTagUrl } from "@utils/url";
 import ButtonTag from "@/components/common/buttonTag.astro";
 import WidgetLayout from "./widgetLayout.astro";
-import TagGroupModal from "./TagGroupModal.astro";
 
 const tags = await getTagList();
-const groupedTags = await getTagsGroupedByCategory();
 
 const DEFAULT_SHOW = 10;
 const displayTags = tags.slice(0, DEFAULT_SHOW);
@@ -20,13 +18,14 @@ interface Props {
     side?: string;
 }
 const { class: className, style, side = "default" } = Astro.props;
+const tagModalId = "tag-group-modal";
 ---
 
-<WidgetLayout 
-    name={i18n(I18nKey.tags)} 
-    id={`tags-${side}`} 
+<WidgetLayout
+    name={i18n(I18nKey.tags)}
+    id={`tags-${side}`}
     isCollapsed={false}
-    class={className} 
+    class={className}
     style={style}
 >
     <div class="flex gap-2 flex-wrap">
@@ -36,26 +35,16 @@ const { class: className, style, side = "default" } = Astro.props;
             </ButtonTag>
         ))}
         {hasMore && (
-            <button 
-                id="tags-more-btn" 
-                class="btn-plain rounded-lg px-3 py-1 text-(--primary) border border-(--primary) text-sm hover:bg-(--primary)/10 transition-colors"
+            <button
+                type="button"
+                class="tags-more-btn btn-plain rounded-lg px-3 py-1 text-(--primary) border border-(--primary) text-sm hover:bg-(--primary)/10 transition-colors"
+                data-modal-id={tagModalId}
                 aria-haspopup="dialog"
-                aria-controls="tag-group-modal"
+                aria-controls={tagModalId}
+                aria-expanded="false"
             >
                 {i18n(I18nKey.more)}...
             </button>
         )}
     </div>
 </WidgetLayout>
-
-<!-- 模态框组件 -->
-<TagGroupModal groups={groupedTags} id="tag-group-modal" />
-
-<script>
-    document.getElementById('tags-more-btn')?.addEventListener('click', () => {
-        const modal = document.getElementById('tag-group-modal');
-        if (modal && !modal.open) {
-            modal.showModal();
-        }
-    });
-</script>

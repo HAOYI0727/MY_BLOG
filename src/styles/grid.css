@@ -11,6 +11,11 @@
 
 /* 手机端无侧边栏布局优化 */
 @media (max-width: 768px) {
+    #main-grid {
+        padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+        scroll-padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+    }
+
     .mobile-no-sidebar {
         display: block !important;
         width: 100% !important;

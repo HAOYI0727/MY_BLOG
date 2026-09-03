@@ -660,6 +660,46 @@
     background-color: var(--selection-bg)
 }
 
+/* Keyboard users should always be able to see where they are. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 3px solid color-mix(in oklch, var(--primary) 72%, white 28%);
+    outline-offset: 3px;
+}
+
+.skip-to-content {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 9999;
+    padding: 0.65rem 1rem;
+    border-radius: 0.75rem;
+    color: white;
+    background: var(--primary);
+    font-weight: 700;
+    translate: 0 -160%;
+    transition: translate 150ms ease-out;
+}
+
+.skip-to-content:focus-visible {
+    translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html,
+    body {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 .dash-line {
     position: relative;
 }

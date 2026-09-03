@@ -1,8 +1,17 @@
 /* This is a script to build the site with Pagefind */
 
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const { existsSync } = require('fs');
-const { join } = require('path');
+const { join, resolve } = require('path');
+
+function runLocalBinary(command, args) {
+    const extension = process.platform === 'win32' ? '.cmd' : '';
+    const binary = resolve('node_modules', '.bin', `${command}${extension}`);
+    execFileSync(binary, args, {
+        stdio: 'inherit',
+        cwd: process.cwd(),
+    });
+}
 
 // Detect the platform
 function detectPlatform() {
@@ -20,11 +29,6 @@ function detectPlatform() {
         return 'edgeone';
     }
     if (process.env.VERCEL) {
-        return 'vercel';
-    }
-
-    // Check if specific directories exist
-    if (existsSync('.vercel')) {
         return 'vercel';
     }
 
@@ -57,10 +61,7 @@ function main() {
     try {
         // Run Astro build
         console.log('🔨 Running Astro build...');
-        execSync(`npx astro build`.trim(), {
-            stdio: 'inherit',
-            cwd: process.cwd() // Ensure in the correct directory
-        });
+        runLocalBinary('astro', ['build']);
 
         // Check if output directory exists
         if (!existsSync(outputDir)) {
@@ -70,9 +71,12 @@ function main() {
 
         // Run Pagefind
         console.log(`🔍 Running Pagefind search index generation...`);
-        execSync(`npx pagefind --site ${outputDir}`, {
+        runLocalBinary('pagefind', ['--site', outputDir]);
+
+        console.log('🧭 Verifying reader-facing UI features...');
+        execFileSync(process.execPath, [resolve('scripts', 'check-ui-features.cjs'), outputDir], {
             stdio: 'inherit',
-            cwd: process.cwd() // Ensure in the correct directory
+            cwd: process.cwd(),
         });
 
         console.log('✅ Build completed!');

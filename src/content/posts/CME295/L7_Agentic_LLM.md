@@ -107,7 +107,7 @@ draft: false
 （3）**优化技巧**：
    1. **缓解嵌入差异（Mitigate Discrepancy in Nature of Embeddings）**：为查询构造**Fake document（伪文档）**（如查询“Where is Cuddly?”→伪文档“Cuddly is in…”），让查询嵌入与Chunk嵌入更匹配；
    2. **Chunk上下文化（Contextualize document chunks）**：**为每个Chunk补充全局上下文**，避免Chunk脱离原文导致的检索偏差。以下是专属提示词模板：
-        ```Plain Text
+        ```text
         <document> 
         {WHOLE_DOCUMENT} 
         </document>
@@ -206,7 +206,7 @@ draft: false
 
 以 **find\_teddy\_bear.py** 为例，展示工具的标准设计：包含**数示例据类定义、函数参数、API调用、异常处理、结果返回**，是LLM可调用的工具标准格式。
 
-```Python
+```python
 
 from dataclasses import dataclass
 from geopy.distance import geodesic

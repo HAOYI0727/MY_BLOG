@@ -44,7 +44,7 @@ const monthPosts = allPosts
     if (!date) return false;
     return date.getFullYear() === yearNum && date.getMonth() + 1 === monthNum;
   })
-  .sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
+  .sort((a, b) => b.data.published!.getTime() - a.data.published!.getTime());
 
 const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 const title = `${year}年${monthNames[monthNum-1]}文章`;
@@ -107,20 +107,11 @@ const currentPath = Astro.url.pathname;
                   <!-- 元数据 -->
                   <div class="mt-auto flex flex-wrap items-center justify-between gap-2 text-xs text-60">
                     <div class="flex items-center gap-2 flex-wrap">
-                      <time datetime={post.data.published.toISOString()}>
-                        {formatDateToYYYYMMDD(post.data.published)}
+                      <time datetime={post.data.published!.toISOString()}>
+                        {formatDateToYYYYMMDD(post.data.published!)}
                       </time>
                       {post.data.category && (
-                        <span
-                          class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full"
-                          onclick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            window.location.href = "/category/" + encodeURIComponent(
-                              Array.isArray(post.data.category) ? post.data.category[0] : post.data.category
-                            ) + "/";
-                          }}
-                        >
+                        <span class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full">
                           {Array.isArray(post.data.category) ? post.data.category[0] : post.data.category}
                         </span>
                       )}

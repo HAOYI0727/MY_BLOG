@@ -1,5 +1,5 @@
 ---
-import { getCategoryTree, type CategoryTreeItem } from "@utils/post";
+import { getCategoryTree } from "@utils/post";
 import { i18n } from "@i18n/translation";
 import I18nKey from "@i18n/i18nKey";
 import { Icon } from "astro-icon/components";
@@ -16,7 +16,7 @@ const hasMore = topLevel.length > DEFAULT_SHOW;
 
 // 获取国际化文本（用于客户端切换）
 const moreText = i18n(I18nKey.more);
-const collapseText = i18n(I18nKey.collapse);  // 需确保 I18nKey 中有 collapse
+const collapseText = i18n(I18nKey.collapse);
 
 interface Props {
     class?: string;
@@ -39,7 +39,7 @@ const { class: className, style, side = "default", depth = 3 } = Astro.props;
             <div 
                 class="category-top-item" 
                 data-index={index}
-                style:display={index < DEFAULT_SHOW ? 'block' : 'none'}
+                style={`display: ${index < DEFAULT_SHOW ? 'block' : 'none'}`}
             >
                 <CategoryItem nodes={[node]} maxDepth={depth} />
             </div>
@@ -59,7 +59,7 @@ const { class: className, style, side = "default", depth = 3 } = Astro.props;
     )}
 </WidgetLayout>
 
-<script define:vars={{ DEFAULT_SHOW, moreText, collapseText }}>
+<script is:inline define:vars={{ DEFAULT_SHOW, moreText, collapseText }}>
     const container = document.getElementById('categories-container');
     const btn = document.getElementById('categories-toggle-btn');
     const textSpan = document.getElementById('categories-toggle-text');

@@ -11,6 +11,14 @@ export const en: Translation = {
     [Key.archive]: "Archive",
     [Key.about]: "About",
     [Key.search]: "Search",
+    [Key.searchHint]: "Type a keyword to search all articles",
+    [Key.searchLoading]: "Searching…",
+    [Key.searchNoResults]: "No matching articles found",
+    [Key.searchUnavailable]: "Search is temporarily unavailable",
+    [Key.clearSearch]: "Clear search",
+    [Key.openMenu]: "Open navigation menu",
+    [Key.closeMenu]: "Close navigation menu",
+    [Key.skipToContent]: "Skip to main content",
 
     // Posts
     [Key.directory]: "Directory",
@@ -18,6 +26,7 @@ export const en: Translation = {
     [Key.categories]: "Categories",
     [Key.series]: "Series",
     [Key.posts]: "Posts",
+    [Key.postsAll]: "All posts",
     [Key.recentPosts]: "Recent Posts",
     [Key.postList]: "Post List",
     [Key.statistics]: "Statistics",
@@ -57,6 +66,7 @@ export const en: Translation = {
     [Key.wallpaperNone]: "None",
 
     [Key.more]: "More",
+    [Key.collapse]: "Collapse",
 
     [Key.backTo]: "Back to",
 
@@ -162,6 +172,11 @@ export const en: Translation = {
     [Key.diaryMinutesAgo]: "minutes ago",
     [Key.diaryHoursAgo]: "hours ago",
     [Key.diaryDaysAgo]: "days ago",
+    [Key.diaryUntitled]: "Untitled",
+    [Key.diaryEmpty]: "No diary entries yet.",
+    [Key.diaryDefaultTitle]: "Diary entry",
+    [Key.diaryBackToList]: "Back to diary",
+    [Key.share]: "Share:",
 
     // Albums Page
     [Key.albums]: "Albums",
@@ -272,4 +287,17 @@ export const en: Translation = {
     [Key.musicCollapse]: "Collapse player",
     [Key.musicVolume]: "Volume",
     [Key.musicExpand]: "Expand music player",
+    [Key.musicPlayer]: "Music player",
+    [Key.musicPrevious]: "Previous track",
+    [Key.musicNext]: "Next track",
+    [Key.musicPlay]: "Play",
+    [Key.musicPause]: "Pause",
+    [Key.musicToggleLyrics]: "Toggle lyrics",
+    [Key.musicMute]: "Mute",
+    [Key.musicUnmute]: "Unmute",
+    [Key.musicClosePlaylist]: "Close playlist",
+    [Key.musicDismissError]: "Dismiss music player error",
+    [Key.musicRepeatOne]: "Repeat one",
+    [Key.musicRepeatAll]: "Repeat all",
+    [Key.musicShuffle]: "Shuffle",
 };

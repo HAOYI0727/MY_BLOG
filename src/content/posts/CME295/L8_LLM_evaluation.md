@@ -132,7 +132,7 @@ draft: false
 
 ### 3.2. 标准化提示词模板
 
-```Plain Text
+```text
 Evaluate how relevant the model’s answer is to the user’s prompt.
 Prompt: {prompt}
 Model Response: {model_response}
@@ -155,14 +155,14 @@ Return:
 （3）实现步骤：
 
 - Step 1：**定义期望的输出结构**
-```Python
+```python
 class Response:
     rationale: str  # 评价理由，字符串类型
     score: Literal[0, 1]  # 评分，仅0/1二值
 ```
 
 - Step 2：**将结构传入模型调用，强制输出格式**
-```Python
+```python
 response = client.responses.parse(
     model=model,
     input=input,

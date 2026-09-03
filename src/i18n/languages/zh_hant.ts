@@ -11,6 +11,14 @@ export const zh_hant: Translation = {
     [Key.archive]: "歸檔",
     [Key.about]: "關於",
     [Key.search]: "搜尋",
+    [Key.searchHint]: "輸入關鍵字搜尋全部文章",
+    [Key.searchLoading]: "正在搜尋…",
+    [Key.searchNoResults]: "找不到符合的文章",
+    [Key.searchUnavailable]: "搜尋暫時無法使用",
+    [Key.clearSearch]: "清除搜尋",
+    [Key.openMenu]: "開啟導覽選單",
+    [Key.closeMenu]: "關閉導覽選單",
+    [Key.skipToContent]: "跳至主要內容",
 
     // 文章
     [Key.directory]: "目錄",
@@ -18,6 +26,7 @@ export const zh_hant: Translation = {
     [Key.categories]: "分類",
     [Key.series]: "系列",
     [Key.posts]: "文章",
+    [Key.postsAll]: "全部文章",
     [Key.recentPosts]: "最新文章",
     [Key.postList]: "文章列表",
     [Key.statistics]: "統計",
@@ -57,6 +66,7 @@ export const zh_hant: Translation = {
     [Key.wallpaperNone]: "純色背景",
 
     [Key.more]: "更多",
+    [Key.collapse]: "收起",
 
     [Key.backTo]: "返回",
 
@@ -162,6 +172,11 @@ export const zh_hant: Translation = {
     [Key.diaryMinutesAgo]: "分鐘前",
     [Key.diaryHoursAgo]: "小時前",
     [Key.diaryDaysAgo]: "天前",
+    [Key.diaryUntitled]: "無標題",
+    [Key.diaryEmpty]: "暫無日記。",
+    [Key.diaryDefaultTitle]: "日記",
+    [Key.diaryBackToList]: "返回日記列表",
+    [Key.share]: "分享：",
 
     // 相簿頁面
     [Key.albums]: "相簿",
@@ -272,4 +287,17 @@ export const zh_hant: Translation = {
     [Key.musicCollapse]: "折疊播放器",
     [Key.musicVolume]: "音量控制",
     [Key.musicExpand]: "展開音樂播放器",
+    [Key.musicPlayer]: "音樂播放器",
+    [Key.musicPrevious]: "上一首",
+    [Key.musicNext]: "下一首",
+    [Key.musicPlay]: "播放",
+    [Key.musicPause]: "暫停",
+    [Key.musicToggleLyrics]: "切換歌詞顯示",
+    [Key.musicMute]: "靜音",
+    [Key.musicUnmute]: "取消靜音",
+    [Key.musicClosePlaylist]: "關閉播放清單",
+    [Key.musicDismissError]: "關閉音樂播放器錯誤提示",
+    [Key.musicRepeatOne]: "單曲循環",
+    [Key.musicRepeatAll]: "清單循環",
+    [Key.musicShuffle]: "隨機播放",
 };

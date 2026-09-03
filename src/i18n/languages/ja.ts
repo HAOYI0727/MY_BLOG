@@ -11,6 +11,14 @@ export const ja: Translation = {
     [Key.archive]: "アーカイブ",
     [Key.about]: "について",
     [Key.search]: "検索",
+    [Key.searchHint]: "キーワードを入力してすべての記事を検索",
+    [Key.searchLoading]: "検索中…",
+    [Key.searchNoResults]: "一致する記事が見つかりません",
+    [Key.searchUnavailable]: "検索は一時的に利用できません",
+    [Key.clearSearch]: "検索をクリア",
+    [Key.openMenu]: "ナビゲーションメニューを開く",
+    [Key.closeMenu]: "ナビゲーションメニューを閉じる",
+    [Key.skipToContent]: "メインコンテンツへ移動",
 
     // 投稿
     [Key.directory]: "ディレクトリ",
@@ -18,6 +26,7 @@ export const ja: Translation = {
     [Key.categories]: "カテゴリ",
     [Key.series]: "シリーズ",
     [Key.posts]: "投稿",
+    [Key.postsAll]: "すべての投稿",
     [Key.recentPosts]: "最近の投稿",
     [Key.postList]: "投稿リスト",
     [Key.statistics]: "統計",
@@ -57,6 +66,7 @@ export const ja: Translation = {
     [Key.wallpaperNone]: "なし",
 
     [Key.more]: "もっと",
+    [Key.collapse]: "折りたたむ",
 
     [Key.backTo]: "戻る",
 
@@ -162,6 +172,11 @@ export const ja: Translation = {
     [Key.diaryMinutesAgo]: "分前",
     [Key.diaryHoursAgo]: "時間前",
     [Key.diaryDaysAgo]: "日前",
+    [Key.diaryUntitled]: "無題",
+    [Key.diaryEmpty]: "日記はまだありません。",
+    [Key.diaryDefaultTitle]: "日記",
+    [Key.diaryBackToList]: "日記一覧に戻る",
+    [Key.share]: "共有：",
 
     // アルバムページ
     [Key.albums]: "アルバム",
@@ -272,4 +287,17 @@ export const ja: Translation = {
     [Key.musicCollapse]: "プレイヤーを閉じる",
     [Key.musicVolume]: "音量調節",
     [Key.musicExpand]: "音楽プレイヤーを展開",
+    [Key.musicPlayer]: "音楽プレイヤー",
+    [Key.musicPrevious]: "前の曲",
+    [Key.musicNext]: "次の曲",
+    [Key.musicPlay]: "再生",
+    [Key.musicPause]: "一時停止",
+    [Key.musicToggleLyrics]: "歌詞表示を切り替え",
+    [Key.musicMute]: "ミュート",
+    [Key.musicUnmute]: "ミュート解除",
+    [Key.musicClosePlaylist]: "プレイリストを閉じる",
+    [Key.musicDismissError]: "音楽プレイヤーのエラーを閉じる",
+    [Key.musicRepeatOne]: "1曲リピート",
+    [Key.musicRepeatAll]: "全曲リピート",
+    [Key.musicShuffle]: "シャッフル",
 };

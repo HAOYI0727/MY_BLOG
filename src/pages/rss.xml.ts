@@ -71,8 +71,10 @@ export async function GET(context: APIContext) {
                     (res) => res.default,
                 );
                 if (imageMod) {
-                    const optimizedImg = await getImage({ src: imageMod });
-                    img.setAttribute("src", new URL(optimizedImg.src, context.site).href);
+                    const imageSrc = imageMod.format === "gif"
+                        ? imageMod.src
+                        : (await getImage({ src: imageMod })).src;
+                    img.setAttribute("src", new URL(imageSrc, context.site).href);
                 } else {
                     // log the failed import path
                     console.log(

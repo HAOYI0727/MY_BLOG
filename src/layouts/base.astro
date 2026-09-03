@@ -3,6 +3,8 @@ import "katex/dist/katex.css";
 
 import { siteConfig, profileConfig, musicPlayerConfig, pioConfig } from "@/config";
 import { getAnalyticsConfig } from "@utils/analytics";
+import { i18n } from "@i18n/translation";
+import I18nKey from "@i18n/i18nKey";
 import type { Favicon } from "@/types/config";
 import { defaultFavicons } from "@constants/icon";
 import {
@@ -104,6 +106,12 @@ if (siteConfig.generateOgImages && postSlug) {
     ogImageUrl = new URL(`/og/${postSlug}.png`, Astro.site).toString();
 }
 
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? siteConfig.siteURL).toString();
+const socialImageUrl = ogImageUrl || (banner
+    ? new URL(banner, Astro.site ?? siteConfig.siteURL).toString()
+    : undefined);
+const themeColor = `hsl(${configHue} 64% 52%)`;
+
 const favicons: Favicon[] =
     siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
 
@@ -139,6 +147,7 @@ const { enabled: analyticsEnabled, code: analyticsCode } = getAnalyticsConfig();
         <title>{pageTitle}</title>
         <!-- description -->
         <meta name="description" content={description || pageTitle}>
+        <link rel="canonical" href={canonicalUrl}>
         <!-- keywords -->
         {siteConfig.keywords && siteConfig.keywords.length > 0 && (
             <meta name="keywords" content={siteConfig.keywords.join(', ')} />
@@ -147,10 +156,11 @@ const { enabled: analyticsEnabled, code: analyticsCode } = getAnalyticsConfig();
         <meta name="author" content={profileConfig.name}>
         <!-- Open Graph -->
         <meta property="og:site_name" content={siteConfig.title}>
-        <meta property="og:url" content={Astro.url}>
+        <meta property="og:url" content={canonicalUrl}>
         <meta property="og:title" content={pageTitle}>
         <meta property="og:description" content={description || pageTitle}>
-        {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+        <meta property="og:locale" content={siteLang}>
+        {socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
         {
             setOGTypeArticle ? (
                 <meta property="og:type" content="article" />
@@ -160,11 +170,13 @@ const { enabled: analyticsEnabled, code: analyticsCode } = getAnalyticsConfig();
         }
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content={Astro.url}>
+        <meta property="twitter:url" content={canonicalUrl}>
         <meta name="twitter:title" content={pageTitle}>
         <meta name="twitter:description" content={description || pageTitle}>
+        {socialImageUrl && <meta name="twitter:image" content={socialImageUrl} />}
         <!-- viewport -->
-        <meta name="viewport" content="width=device-width" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content={themeColor} />
         <!-- generator -->
         <meta name="generator" content={Astro.generator} />
         <!-- favicons -->
@@ -225,6 +237,7 @@ const { enabled: analyticsEnabled, code: analyticsCode } = getAnalyticsConfig();
 
     <body class=" min-h-screen " class:list={[{"is-home": isHomePage, "enable-banner": enableBanner}]}
     >
+        <a class="skip-to-content" href="#swup-container">{i18n(I18nKey.skipToContent)}</a>
         <!-- 页面加载动画 -->
         <LoadingOverlay />
         <!-- 全局配置载体 -->
@@ -236,7 +249,7 @@ const { enabled: analyticsEnabled, code: analyticsCode } = getAnalyticsConfig();
         <!-- Analytics -->
         {analyticsEnabled && analyticsCode && <Fragment set:html={analyticsCode} />}
         <!-- Music Player - 仅在启用时加载 -->
-        {musicPlayerConfig.enable && <MusicPlayer client:idle />}
+        {musicPlayerConfig.enable && <MusicPlayer client:load />}
         <!-- Pio 看板娘组件 - 如果启用了侧边栏，可能需要调整 z-index -->
         {pioConfig.enable && <Pio client:visible />}
         <!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
@@ -346,6 +359,8 @@ const setup = () => {
         });
     })
     window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
+        // 首屏动画状态不应带入 Swup 导航，否则新文章可能一直保持透明。
+        document.documentElement.classList.remove('is-loading', 'show-initial-animation', 'banner-restoring');
         // Disable scroll protection when a link is clicked to prevent interference with page jump scrolling to top
         if ((window as any).scrollProtectionManager && typeof (window as any).scrollProtectionManager.disable === 'function') {
             (window as any).scrollProtectionManager.disable();
@@ -421,10 +436,18 @@ const setup = () => {
         }, 300)
     });
     window.swup.hooks.on('page:view', () => {
+        // Safari 在快速点击和往返缓存恢复时可能中断动画；切页完成后强制恢复可见状态。
+        document.documentElement.classList.remove('is-loading', 'show-initial-animation', 'banner-restoring');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        if (loadingOverlay) {
+            loadingOverlay.classList.add('fade-out');
+            loadingOverlay.setAttribute('aria-hidden', 'true');
+            loadingOverlay.style.display = 'none';
+        }
         // Scroll to top of the page after page transition
         window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: 'auto'
         });
         // Check if the current page is a post page, if so, trigger a custom event to initialize the comment system
         setTimeout(() => {
@@ -510,43 +533,55 @@ loadAndInitTranslate();
 // Initialize particle effects
 setupParticleEffects();
 
-// Remove is-loading class and trigger initial-animation after page load
+// Remove is-loading class and trigger initial-animation after page load.
+// The reveal path is idempotent and includes a watchdog so content can never stay hidden.
 if (typeof window !== 'undefined') {
-    const onPageLoaded = () => {
+    let pageRevealed = false;
+    let animationTimer = 0;
+
+    const finishReveal = () => {
+        document.documentElement.classList.remove('is-loading', 'show-initial-animation', 'banner-restoring');
         const overlay = document.getElementById('loading-overlay');
-        const enableBanner = document.body.classList.contains('enable-banner');
-        // 触发 LoadingOverlay 淡出
         if (overlay) {
             overlay.classList.add('fade-out');
+            overlay.setAttribute('aria-hidden', 'true');
+            overlay.style.display = 'none';
         }
-        // 等待 LoadingOverlay 淡出（600ms）
-        setTimeout(() => {
-            if (overlay) {
-                overlay.style.display = 'none';
-            }
-            if (enableBanner) {
-                // banner 开始恢复过渡：添加 banner-restoring 类（解除 CSS 中的 height: 0）
-                document.documentElement.classList.add('banner-restoring');
-                // 等待 banner 恢复过渡完成（600ms）
-                setTimeout(() => {
-                    // 触发各容器淡入动画
-                    document.documentElement.classList.remove('is-loading');
-                    document.documentElement.classList.add('show-initial-animation');
-                    setTimeout(() => {
-                        document.documentElement.classList.remove('show-initial-animation');
-                        document.documentElement.classList.remove('banner-restoring');
-                    }, 1200);
-                }, 600);
-            } else {
-                // 非 banner 模式，直接触发淡入
-                document.documentElement.classList.remove('is-loading');
-                document.documentElement.classList.add('show-initial-animation');
-                setTimeout(() => {
-                    document.documentElement.classList.remove('show-initial-animation');
-                }, 1200);
-            }
-        }, 600);
     };
+
+    const onPageLoaded = () => {
+        if (pageRevealed) return;
+        pageRevealed = true;
+        const overlay = document.getElementById('loading-overlay');
+        const enableBanner = document.body.classList.contains('enable-banner');
+
+        // DOM 可用后立刻解锁页面；遮罩和内容动画并行，不再串行等待 1.2 秒。
+        document.documentElement.classList.remove('is-loading');
+        if (enableBanner) document.documentElement.classList.add('banner-restoring');
+        if (overlay) {
+            overlay.classList.add('fade-out');
+            overlay.setAttribute('aria-hidden', 'true');
+        }
+
+        requestAnimationFrame(() => {
+            document.documentElement.classList.add('show-initial-animation');
+            animationTimer = window.setTimeout(finishReveal, 650);
+        });
+
+        window.setTimeout(() => {
+            if (overlay) overlay.style.display = 'none';
+        }, 300);
+    };
+
+    // Safari 的 bfcache 恢复不会总是再次触发 load/DOMContentLoaded。
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) finishReveal();
+    });
+    // 最终安全网：无论资源、动画或第三方脚本发生什么，2 秒内都恢复正文。
+    window.setTimeout(() => {
+        if (animationTimer) window.clearTimeout(animationTimer);
+        finishReveal();
+    }, 2000);
 
     const configCarrier = document.getElementById('config-carrier');
     const waitForAllResources = configCarrier?.dataset.waitForAllResources === 'true';

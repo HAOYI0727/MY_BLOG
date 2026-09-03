@@ -9,7 +9,7 @@ import utc from "dayjs/plugin/utc";
 import { siteConfig, profileConfig, postConfig } from "@/config";
 import { getSortedPosts } from "@utils/post";
 import { formatDateToYYYYMMDD } from "@utils/date";
-import { getFileDirFromPath, getPostUrl, getPostUrlBySlug, removeFileExtension } from "@utils/url";
+import { getFileDirFromPath, getPostUrl, getPostUrlBySlug, removeFileExtension, url } from "@utils/url";
 import { SUPPORTED_LANGUAGES, langToTranslateMap } from "@i18n/language";
 import { i18n, getTranslation } from "@i18n/translation";
 import I18nKey from "@i18n/i18nKey";
@@ -106,8 +106,8 @@ const postTitle = entry.data.title;
 const postDesc = entry.data.description || postTitle;
 ---
 
-<div id="progress-bar-wrapper" class="fixed top-0 left-0 w-full h-1 z-[999] pointer-events-none" style="display: none;">
-    <div id="progress-bar-fill" class="h-full bg-(--primary) transition-all duration-100 ease-out" style="width: 0%;"></div>
+<div id="progress-bar-wrapper" aria-hidden="true" class="fixed top-0 left-0 w-full h-1 z-[999] pointer-events-none opacity-0 transition-opacity duration-200">
+    <div id="progress-bar-fill" class="h-full w-full origin-left bg-(--primary)" style="transform: scaleX(0);"></div>
 </div>
 
 <GridLayout
@@ -136,6 +136,18 @@ const postDesc = entry.data.description || postTitle;
                 {},
             ]}
         >
+            <nav class="post-reader-nav" aria-label="文章浏览导航">
+                <a
+                    href={url("/")}
+                    class="post-reader-nav__item"
+                    aria-label={i18n(I18nKey.backTo)}
+                    title={i18n(I18nKey.backTo)}
+                >
+                    <Icon name="material-symbols:arrow-back-rounded" />
+                    <span>{i18n(I18nKey.backTo)}</span>
+                </a>
+            </nav>
+
             <!-- 字数统计 & 阅读时间 -->
             <div
                 class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation-up"
@@ -462,7 +474,6 @@ const postDesc = entry.data.description || postTitle;
             >
                 <img
                     id="wechat-qr-image"
-                    src=""
                     alt="微信分享二维码"
                     class="w-full h-full object-contain"
                     loading="lazy"
@@ -484,28 +495,37 @@ const postDesc = entry.data.description || postTitle;
 <!-- ===== 新增：分享 & 进度条客户端逻辑 ===== -->
 <script>
     (function() {
+        const previousCleanup = (window as any).__twilightPostPageCleanup;
+        if (typeof previousCleanup === 'function') previousCleanup();
+        const controller = new AbortController();
+        const { signal } = controller;
+        (window as any).__twilightPostPageCleanup = () => {
+            controller.abort();
+            document.body.style.overflow = '';
+        };
+
         // ---------- 进度条 ----------
         const progressWrapper = document.getElementById('progress-bar-wrapper');
         const progressFill = document.getElementById('progress-bar-fill');
+        const postContainer = document.getElementById('post-container');
 
-        if (progressWrapper && progressFill) {
+        if (progressWrapper && progressFill && postContainer) {
+            const progressWrapperElement = progressWrapper;
+            const progressFillElement = progressFill;
+            const postContainerElement = postContainer;
             let ticking = false;
 
             function updateProgress() {
-                const scrollTop = window.scrollY;
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-                progressFill.style.width = Math.min(progress, 100) + '%';
-
-                // 滚动超过 5% 时显示进度条
-                if (scrollTop > 50) {
-                    progressWrapper.style.display = 'block';
-                } else {
-                    progressWrapper.style.display = 'none';
-                }
+                const articleTop = postContainerElement.getBoundingClientRect().top + window.scrollY;
+                const readableDistance = Math.max(postContainerElement.offsetHeight - window.innerHeight, 1);
+                const rawProgress = (window.scrollY - articleTop) / readableDistance;
+                const progress = Math.min(Math.max(rawProgress, 0), 1);
+                progressFillElement.style.transform = `scaleX(${progress})`;
+                progressWrapperElement.classList.toggle('opacity-0', rawProgress <= 0);
+                progressWrapperElement.classList.toggle('opacity-100', rawProgress > 0);
             }
 
-            window.addEventListener('scroll', () => {
+            const requestProgressUpdate = () => {
                 if (!ticking) {
                     window.requestAnimationFrame(() => {
                         updateProgress();
@@ -513,12 +533,11 @@ const postDesc = entry.data.description || postTitle;
                     });
                     ticking = true;
                 }
-            });
+            };
 
-            // 页面加载完成后初始化
-            window.addEventListener('load', updateProgress);
-            // 窗口大小变化时重新计算
-            window.addEventListener('resize', updateProgress);
+            window.addEventListener('scroll', requestProgressUpdate, { passive: true, signal });
+            window.addEventListener('resize', requestProgressUpdate, { passive: true, signal });
+            updateProgress();
         }
 
         // ---------- 分享功能 ----------
@@ -536,7 +555,7 @@ const postDesc = entry.data.description || postTitle;
         // 微信分享：显示二维码
         function shareToWechat() {
             const modal = document.getElementById('wechat-modal');
-            const qrImage = document.getElementById('wechat-qr-image');
+            const qrImage = document.getElementById('wechat-qr-image') as HTMLImageElement | null;
             const modalContent = document.getElementById('wechat-modal-content');
 
             if (!modal || !qrImage) return;
@@ -579,7 +598,7 @@ const postDesc = entry.data.description || postTitle;
         }
 
         // 备用复制方案
-        function fallbackCopy(text) {
+        function fallbackCopy(text: string) {
             const textarea = document.createElement('textarea');
             textarea.value = text;
             textarea.style.position = 'fixed';
@@ -597,7 +616,7 @@ const postDesc = entry.data.description || postTitle;
         }
 
         // Toast 提示
-        function showToast(message) {
+        function showToast(message: string) {
             const existing = document.getElementById('share-toast');
             if (existing) {
                 existing.remove();
@@ -641,7 +660,7 @@ const postDesc = entry.data.description || postTitle;
         }
 
         // ---------- 绑定分享按钮事件 ----------
-        document.querySelectorAll('.share-btn').forEach((btn) => {
+        document.querySelectorAll<HTMLElement>('.share-btn').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const type = btn.dataset.share;
@@ -658,7 +677,7 @@ const postDesc = entry.data.description || postTitle;
                     default:
                         break;
                 }
-            });
+            }, { signal });
         });
 
         // ---------- 微信模态框控制 ----------
@@ -680,7 +699,7 @@ const postDesc = entry.data.description || postTitle;
         }
 
         if (wechatClose) {
-            wechatClose.addEventListener('click', closeWechatModal);
+            wechatClose.addEventListener('click', closeWechatModal, { signal });
         }
 
         if (wechatModal) {
@@ -688,14 +707,14 @@ const postDesc = entry.data.description || postTitle;
                 if (e.target === wechatModal) {
                     closeWechatModal();
                 }
-            });
+            }, { signal });
 
             // ESC 键关闭
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && wechatModal.style.display === 'flex') {
                     closeWechatModal();
                 }
-            });
+            }, { signal });
         }
 
         if (wechatCopyLinkBtn) {
@@ -703,25 +722,58 @@ const postDesc = entry.data.description || postTitle;
                 copyLink();
                 // 延迟关闭模态框
                 setTimeout(closeWechatModal, 500);
-            });
+            }, { signal });
         }
-
-        // ---------- 页面加载完成后，确保进度条状态正确 ----------
-        window.addEventListener('load', () => {
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-            if (progressFill) {
-                progressFill.style.width = Math.min(progress, 100) + '%';
-            }
-            if (progressWrapper) {
-                progressWrapper.style.display = scrollTop > 50 ? 'block' : 'none';
-            }
-        });
     })();
 </script>
 
 <style is:global>
+    .post-reader-nav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.9rem;
+        border-bottom: 1px dashed var(--line-divider);
+    }
+
+    .post-reader-nav__item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        min-height: 2.5rem;
+        padding: 0.45rem 0.8rem;
+        border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+        border-radius: 0.75rem;
+        background: var(--btn-regular-bg);
+        color: color-mix(in srgb, currentColor 72%, transparent);
+        font-size: 0.85rem;
+        font-weight: 600;
+        line-height: 1;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .post-reader-nav__item:hover {
+        color: var(--primary);
+        border-color: color-mix(in srgb, var(--primary) 58%, transparent);
+        background: color-mix(in srgb, var(--primary) 10%, var(--btn-regular-bg));
+        transform: translateY(-1px);
+    }
+
+    .post-reader-nav__item:active {
+        transform: scale(0.97);
+    }
+
+    .post-reader-nav__item svg {
+        width: 1.15rem;
+        height: 1.15rem;
+        color: var(--primary);
+    }
+
     /* 分享按钮悬停效果增强 */
     .share-btn {
         user-select: none;
@@ -734,7 +786,7 @@ const postDesc = entry.data.description || postTitle;
 
     /* 进度条过渡优化 */
     #progress-bar-fill {
-        will-change: width;
+        will-change: transform;
         transform: translateZ(0);
         backface-visibility: hidden;
     }

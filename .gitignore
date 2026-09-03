@@ -19,3 +19,7 @@ pnpm-debug.log*
 
 # private config
 .env
+.env.local
+.env.*.local
+
+docs/

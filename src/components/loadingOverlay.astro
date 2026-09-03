@@ -16,11 +16,14 @@ const titleInterval = config?.title?.interval ?? 1.5;
 {showOverlay && (
 <div
     id="loading-overlay"
+    role="status"
+    aria-live="polite"
+    aria-label={titleContent}
     class="fixed inset-0 z-100 flex items-center justify-center bg-(--page-bg) transition-opacity duration-600"
 >
     <div class="flex flex-col items-center">
         <!-- loading icon -->
-        {showSpinner && <div class="loading-spinner mb-4"></div>}
+        {showSpinner && <div class="loading-spinner mb-4" aria-hidden="true"></div>}
         <!-- loading title -->
         {showTitle && (
         <div

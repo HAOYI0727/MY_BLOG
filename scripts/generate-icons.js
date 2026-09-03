@@ -83,6 +83,14 @@ function extractIconNames(content) {
         }
     }
 
+    // 提取条件表达式中的所有静态图标名，例如：
+    // icon={isOpen ? "material-symbols:close-rounded" : "material-symbols:menu-rounded"}
+    for (const expression of content.matchAll(/icon=\{([^}]*)\}/gs)) {
+        for (const match of expression[1].matchAll(/["'`]([a-z0-9-]+:[a-z0-9-]+)["'`]/gi)) {
+            icons.add(match[1]);
+        }
+    }
+
     return icons;
 }
 

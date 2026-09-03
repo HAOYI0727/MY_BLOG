@@ -166,10 +166,10 @@ export class WidgetManager {
                         classes.push("hidden md:block");
                         break;
                     case "tablet":
-                        classes.push("md:hidden lg:block");
+                        classes.push("md:hidden min-[1280px]:block");
                         break;
                     case "desktop":
-                        classes.push("lg:hidden");
+                        classes.push("min-[1280px]:hidden");
                         break;
                 }
             });
@@ -182,7 +182,7 @@ export class WidgetManager {
         if (side === "left") {
             if (isFromRight && !isFromLeft) {
                 // 如果是右侧组件在左侧栏渲染（平板模式），则仅在平板显示
-                classes.push("hidden md:block lg:hidden");
+                classes.push("hidden md:block min-[1280px]:hidden");
             }
             // 左侧组件默认显示
         }
@@ -343,12 +343,12 @@ export class WidgetManager {
             ${hasAnyComponents ? "md:grid-cols-[17.5rem_1fr]" : "md:grid-cols-1"}
             ${
                 hasLeftSidebar && hasRightSidebar
-                    ? "lg:grid-cols-[17.5rem_1fr_17.5rem]"
+                    ? "min-[1280px]:grid-cols-[17.5rem_1fr_17.5rem]"
                     : hasLeftSidebar
-                        ? "lg:grid-cols-[17.5rem_1fr]"
+                        ? "min-[1280px]:grid-cols-[17.5rem_1fr]"
                         : hasRightSidebar
-                            ? "lg:grid-cols-[1fr_17.5rem]"
-                            : "lg:grid-cols-1"
+                            ? "min-[1280px]:grid-cols-[1fr_17.5rem]"
+                            : "min-[1280px]:grid-cols-1"
             }
         `.trim().replace(/\s+/g, " ");
 
@@ -359,7 +359,7 @@ export class WidgetManager {
         const leftSidebarClass = `
             mb-0 col-span-1 hidden min-w-0
             ${hasAnyComponents ? "md:flex md:flex-col md:max-w-70" : ""}
-            ${hasLeftSidebar ? "lg:flex lg:flex-col lg:max-w-70 lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2" : "lg:hidden"}
+            ${hasLeftSidebar ? "min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:max-w-70 min-[1280px]:col-start-1 min-[1280px]:col-end-2 min-[1280px]:row-start-1 min-[1280px]:row-end-2" : "min-[1280px]:hidden"}
         `.trim().replace(/\s+/g, " ");
 
         // 右侧侧边栏容器类名
@@ -372,9 +372,9 @@ export class WidgetManager {
             ${
                 hasRightSidebar
                     ? hasLeftSidebar
-                        ? "lg:flex lg:flex-col lg:max-w-70 lg:col-start-3 lg:col-end-4 lg:row-start-1 lg:row-end-2"
-                        : "lg:flex lg:flex-col lg:max-w-70 lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:row-end-2"
-                    : "lg:hidden"
+                        ? "min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:max-w-70 min-[1280px]:col-start-3 min-[1280px]:col-end-4 min-[1280px]:row-start-1 min-[1280px]:row-end-2"
+                        : "min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:max-w-70 min-[1280px]:col-start-2 min-[1280px]:col-end-3 min-[1280px]:row-start-1 min-[1280px]:row-end-2"
+                    : "min-[1280px]:hidden"
             }
         `.trim().replace(/\s+/g, " ");
 
@@ -382,7 +382,7 @@ export class WidgetManager {
         // Always 1 col on mobile
         // 2 cols on tablet if sidebar is present
         const mobileFooterClass = `
-            footer col-span-1 onload-animation-up block lg:hidden transition-swup-fade
+            footer col-span-1 onload-animation-up block min-[1280px]:hidden transition-swup-fade
             ${hasAnyComponents ? "md:col-span-2" : "md:col-span-1"}
         `.trim().replace(/\s+/g, " ");
         
@@ -399,12 +399,12 @@ export class WidgetManager {
             ${hasAnyComponents ? "md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-2" : "md:col-span-1"}
             ${
                 hasLeftSidebar && hasRightSidebar
-                    ? "lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:row-end-2"
+                    ? "min-[1280px]:col-start-2 min-[1280px]:col-end-3 min-[1280px]:row-start-1 min-[1280px]:row-end-2"
                     : hasLeftSidebar
-                        ? "lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:row-end-2"
+                        ? "min-[1280px]:col-start-2 min-[1280px]:col-end-3 min-[1280px]:row-start-1 min-[1280px]:row-end-2"
                         : hasRightSidebar
-                            ? "lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2"
-                            : "lg:col-span-1"
+                            ? "min-[1280px]:col-start-1 min-[1280px]:col-end-2 min-[1280px]:row-start-1 min-[1280px]:row-end-2"
+                            : "min-[1280px]:col-span-1"
             }
         `.trim().replace(/\s+/g, " ");
 

@@ -1,7 +1,6 @@
 <script lang="ts">
 import { onMount } from "svelte";
 
-import { BREAKPOINT_LG } from "@constants/breakpoints";
 import { SYSTEM_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants";
 import {
     getStoredTheme,
@@ -17,23 +16,13 @@ import DropdownPanel from "@/components/common/DropdownPanel.svelte";
 import Icon from "@components/common/icon.svelte";
 
 
-const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE, SYSTEM_MODE];
 let mode: LIGHT_DARK_MODE = $state(siteConfig.defaultTheme || SYSTEM_MODE);
 let isOpen = $state(false);
 
 function switchScheme(newMode: LIGHT_DARK_MODE) {
     mode = newMode;
     setTheme(newMode);
-}
-
-function toggleScheme() {
-    let i = 0;
-    for (; i < seq.length; i++) {
-        if (seq[i] === mode) {
-            break;
-        }
-    }
-    switchScheme(seq[(i + 1) % seq.length]);
+    closePanel();
 }
 
 function openPanel() {
@@ -42,6 +31,14 @@ function openPanel() {
 
 function closePanel() {
     isOpen = false;
+}
+
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape" && isOpen) {
+        event.preventDefault();
+        closePanel();
+        document.getElementById("scheme-switch")?.focus();
+    }
 }
 
 // 点击外部关闭面板
@@ -55,16 +52,27 @@ function handleClickOutside(event: MouseEvent) {
 onMount(() => {
     mode = getStoredTheme();
     document.addEventListener("click", handleClickOutside);
+    document.addEventListener("keydown", handleKeydown);
     return () => {
         document.removeEventListener("click", handleClickOutside);
+        document.removeEventListener("keydown", handleKeydown);
     };
 });
 </script>
 
 
 <!-- z-50 make the panel higher than other float panels -->
-<div class="relative z-50" role="menu" tabindex="-1" onmouseleave={closePanel}>
-    <button aria-label="Light/Dark/System Mode" role="menuitem" class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center" id="scheme-switch" onmouseenter={openPanel} onclick={() => { if (window.innerWidth < BREAKPOINT_LG) { openPanel(); } else { toggleScheme(); } }}>
+<!-- svelte-ignore a11y_no_static_element_interactions (pointer leave only dismisses the already keyboard-accessible panel) -->
+<div class="relative z-50" role="group" aria-label="Color scheme" onmouseleave={closePanel}>
+    <button
+        aria-label="Light/Dark/System Mode"
+        aria-expanded={isOpen}
+        aria-controls="light-dark-panel"
+        class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center"
+        id="scheme-switch"
+        onmouseenter={openPanel}
+        onclick={openPanel}
+    >
         <div class="absolute inset-0 flex items-center justify-center" class:opacity-0={mode !== LIGHT_MODE}>
             <Icon icon="material-symbols:wb-sunny-outline-rounded" class="text-[1.25rem]"></Icon>
         </div>
@@ -75,7 +83,13 @@ onMount(() => {
             <Icon icon="material-symbols:radio-button-partial-outline" class="text-[1.25rem]"></Icon>
         </div>
     </button>
-    <div id="light-dark-panel" class="absolute transition top-11 -right-2 pt-5" class:float-panel-closed={!isOpen}>
+    <div
+        id="light-dark-panel"
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        class="absolute transition top-11 -right-2 pt-5"
+        class:float-panel-closed={!isOpen}
+    >
         <DropdownPanel>
             <DropdownItem
                     isActive={mode === LIGHT_MODE}

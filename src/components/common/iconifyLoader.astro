@@ -9,7 +9,7 @@ const { preloadIcons = [] } = Astro.props;
 ---
 
 <!-- 内联加载逻辑: 从 Iconify API 直接获取 SVG，不依赖 CDN 自定义元素 -->
-<script define:vars={{ preloadIcons }}>
+<script is:inline define:vars={{ preloadIcons }}>
     (function() {
         'use strict';
 

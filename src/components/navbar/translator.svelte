@@ -1,7 +1,6 @@
 <script lang="ts">
 import { onDestroy, onMount } from "svelte";
 
-import { BREAKPOINT_LG } from "@constants/breakpoints";
 import { getTranslateLanguageFromConfig, getSiteLanguage, setStoredLanguage, getDefaultLanguage } from "@/utils/language";
 import { onClickOutside } from "@utils/widget";
 import { siteConfig } from "@/config";
@@ -23,16 +22,20 @@ const sourceLanguage = getTranslateLanguageFromConfig(
     getDefaultLanguage(),
 );
 
-function togglePanel() {
-    isOpen = !isOpen;
-}
-
 function openPanel() {
     isOpen = true;
 }
 
 function closePanel() {
     isOpen = false;
+}
+
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape" && isOpen) {
+        event.preventDefault();
+        closePanel();
+        document.getElementById("translate-switch")?.focus();
+    }
 }
 
 async function changeLanguage(languageCode: string) {
@@ -60,6 +63,7 @@ async function changeLanguage(languageCode: string) {
         setStoredLanguage(languageCode);
         // 更新当前 UI 状态
         currentLanguage = languageCode;
+        closePanel();
     } catch (error) {
         console.error("Failed to execute translation:", error);
     }
@@ -76,6 +80,7 @@ function handleClickOutside(event: MouseEvent) {
 // 组件挂载时添加事件监听和初始化默认语言
 onMount(() => {
     document.addEventListener("click", handleClickOutside);
+    document.addEventListener("keydown", handleKeydown);
     // 初始化当前语言为站点语言（优先缓存）
     currentLanguage = getSiteLanguage();
 });
@@ -83,24 +88,34 @@ onMount(() => {
 onDestroy(() => {
     if (typeof document !== "undefined") {
         document.removeEventListener("click", handleClickOutside);
+        document.removeEventListener("keydown", handleKeydown);
     }
 });
 </script>
 
 {#if siteConfig.translate?.enable}
-<div class="relative z-50" onmouseleave={closePanel}>
+<!-- svelte-ignore a11y_no_static_element_interactions (pointer leave only dismisses the already keyboard-accessible panel) -->
+<div class="relative z-50" role="group" aria-label="Language translation" onmouseleave={closePanel}>
     <!-- 翻译按钮 -->
     <button
         aria-label="Language Translation"
+        aria-expanded={isOpen}
+        aria-controls="translate-panel-wrapper"
         class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center"
         id="translate-switch"
-        onclick={() => { if (window.innerWidth < BREAKPOINT_LG) { openPanel(); } else { togglePanel(); } }}
+        onclick={openPanel}
         onmouseenter={openPanel}
     >
         <Icon icon="material-symbols:translate" class="text-[1.25rem] transition" />
     </button>
     <!-- 翻译面板 -->
-    <div id="translate-panel-wrapper" class="fixed top-14.5 pt-5 right-4 w-[calc(100vw-2rem)] max-w-64 md:absolute md:top-11 md:right-0 md:w-64 md:pt-5 transition-all z-50" class:float-panel-closed={!isOpen}>
+    <div
+        id="translate-panel-wrapper"
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        class="fixed top-14.5 pt-5 right-4 w-[calc(100vw-2rem)] max-w-64 md:absolute md:top-11 md:right-0 md:w-64 md:pt-5 transition-all z-50"
+        class:float-panel-closed={!isOpen}
+    >
         <DropdownPanel
             bind:element={translatePanel}
             id="translate-panel"

@@ -21,7 +21,7 @@ const displayed = sorted.slice(0, limit);
       </h3>
       <div class="timeline">
         {displayed.map((post, index) => (
-          <div class="timeline-item" key={post.id}>
+          <div class="timeline-item">
             <div class="timeline-marker"></div>
             {index < displayed.length - 1 && <div class="timeline-line"></div>}
             <div class="timeline-content">

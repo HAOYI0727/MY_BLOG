@@ -11,12 +11,17 @@ const { groups, id = "tag-group-modal" } = Astro.props;
 
 // 计算总标签数
 const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
+const clientGroups = groups.map((group) => ({
+    category: group.category,
+    tags: group.tags.map((tag) => ({ name: tag, href: getTagUrl(tag) })),
+}));
+// 防止标签文本中的“<”被浏览器当作 script 结束标记解析。
+const serializedGroups = JSON.stringify(clientGroups).replace(/</g, "\\u003c");
 ---
 
-<dialog id={id} class="tag-group-modal">
+<dialog id={id} class="tag-group-modal" aria-hidden="true" inert>
     <div class="modal-content">
-        <!-- 关闭按钮：直接使用内联 onclick，最可靠 -->
-        <button class="close-btn" aria-label="关闭标签面板" title="关闭 (ESC)" onclick="document.getElementById('tag-group-modal').close()">
+        <button type="button" class="close-btn" aria-label="关闭标签面板" title="关闭 (ESC)">
             <Icon name="material-symbols:close" class="text-2xl" />
         </button>
 
@@ -27,49 +32,47 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
                 <span class="tag-count-badge">{totalTags}</span>
             </h2>
             <p class="subtitle">点击标签可筛选对应文章</p>
+            <label class="tag-search">
+                <Icon name="material-symbols:search-rounded" class="search-icon" />
+                <span class="sr-only">搜索标签</span>
+                <input
+                    type="search"
+                    class="tag-search-input"
+                    placeholder="搜索标签或分类…"
+                    autocomplete="off"
+                    spellcheck="false"
+                />
+            </label>
+            <p class="filter-status" aria-live="polite">共 {totalTags} 个标签</p>
         </div>
 
-        <!-- 标签分组列表（无搜索） -->
+        <!-- 标签列表首次打开时再创建，减少每个页面的初始 DOM 和解析时间。 -->
         <div class="modal-body">
-            {groups.map(group => (
-                <div class="group-section" data-category={group.category}>
-                    <h3 class="group-title">
-                        <Icon name="material-symbols:folder" class="group-icon" />
-                        {group.category}
-                        <span class="group-count">{group.tags.length}</span>
-                    </h3>
-                    <div class="tags-container">
-                        {group.tags.map(tag => (
-                            <a 
-                                href={getTagUrl(tag)} 
-                                class="tag-link"
-                                data-tag={tag}
-                            >
-                                {tag}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <div class="empty-state" hidden>
+                <Icon name="material-symbols:search-off-rounded" class="empty-icon" />
+                <p>没有找到匹配的标签</p>
+            </div>
         </div>
+        <script is:inline type="application/json" class="tag-group-data" set:html={serializedGroups}></script>
     </div>
 </dialog>
 
-<style>
+<style is:global>
     .tag-group-modal {
         border: none;
         padding: 0;
         background: transparent;
-        width: 92vw;
-        max-width: 820px;
-        max-height: 88vh;
+        width: min(94vw, 920px);
+        height: min(88dvh, 820px);
+        max-width: none;
+        max-height: none;
         position: fixed;
         inset: 0;
         margin: auto;
         z-index: 99999;
         border-radius: var(--radius-large, 1.2rem);
-        overflow: visible;
-        display: flex;
+        overflow: hidden;
+        display: none;
         flex-direction: column;
         opacity: 0;
         transform: scale(0.92) translateY(12px);
@@ -79,6 +82,7 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
         box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
     }
     .tag-group-modal[open] {
+        display: flex;
         opacity: 1;
         transform: scale(1) translateY(0);
         pointer-events: auto;
@@ -93,11 +97,12 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
     .modal-content {
         background: var(--card-bg);
         border-radius: var(--radius-large, 1.2rem);
-        padding: 2rem 2rem 1.8rem;  /* 右侧留出空间给关闭按钮，稍后调整 */
-        max-height: 88vh;
-        overflow-y: auto;
-        position: relative;  /* 设为 relative，供绝对定位子元素参考 */
-        flex: 1;
+        padding: 1.6rem 1.6rem 1.4rem;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        position: relative;
         border: 1px solid var(--modal-border-color, rgba(255, 255, 255, 0.08));
         backdrop-filter: blur(2px);
         display: flex;
@@ -168,14 +173,54 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
         margin: 0.2rem 0 0.2rem 0.1rem;
     }
 
+    .tag-search {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        min-height: 2.75rem;
+        padding: 0 0.85rem;
+        margin-top: 0.35rem;
+        border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+        border-radius: 0.85rem;
+        background: var(--btn-regular-bg);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .tag-search:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 16%, transparent);
+    }
+    .search-icon {
+        flex: none;
+        color: var(--primary);
+        font-size: 1.25rem;
+    }
+    .tag-search-input {
+        width: 100%;
+        min-width: 0;
+        padding: 0.7rem 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--text-color);
+        font: inherit;
+    }
+    .filter-status {
+        margin: -0.15rem 0 0 0.1rem;
+        color: var(--text-secondary, #666);
+        font-size: 0.78rem;
+    }
+
     /* 标签主体 */
     .modal-body {
         display: flex;
         flex-direction: column;
         gap: 1.8rem;
         flex: 1;
+        min-height: 0;
         overflow-y: auto;
-        padding-right: 0.2rem;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+        padding: 0.1rem 0.45rem 0.5rem 0;
     }
 
     .group-section {
@@ -202,6 +247,7 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
     .group-icon {
         font-size: 1.1rem;
         opacity: 0.8;
+        line-height: 1;
     }
     .group-count {
         font-size: 0.7rem;
@@ -215,7 +261,7 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
 
     .tags-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
         gap: 0.6rem;
         padding-left: 0.2rem;
     }
@@ -235,9 +281,10 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
         align-items: center;
         justify-content: center;
         text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        min-height: 2.35rem;
+        line-height: 1.3;
+        white-space: normal;
+        overflow-wrap: anywhere;
         box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
     .tag-link:hover {
@@ -249,6 +296,25 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
     }
     .tag-link:active {
         transform: scale(0.96);
+    }
+
+    .empty-state {
+        flex: 1;
+        min-height: 12rem;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.7rem;
+        color: var(--text-secondary, #666);
+        text-align: center;
+    }
+    .empty-state:not([hidden]) {
+        display: flex;
+    }
+    .empty-icon {
+        color: var(--primary);
+        font-size: 2rem;
+        opacity: 0.75;
     }
 
     /* 暗色模式适配 */
@@ -269,39 +335,177 @@ const totalTags = groups.reduce((sum, g) => sum + g.tags.length, 0);
 
     /* 响应式 */
     @media (max-width: 640px) {
-        .modal-content { padding: 1.2rem; }
+        .tag-group-modal {
+            width: 94vw;
+            height: 90dvh;
+        }
+        .modal-content { padding: 1.15rem 1rem 1rem; gap: 0.85rem; }
         .modal-title { font-size: 1.3rem; }
-        .tags-container { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
-        .tag-link { font-size: 0.8rem; padding: 0.2rem 0.6rem; }
+        .tags-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .tag-link { font-size: 0.8rem; padding: 0.35rem 0.55rem; }
         .close-btn { width: 2.2rem; height: 2.2rem; }
     }
 </style>
 
 <script>
-    (function() {
-        const dialog = document.getElementById('tag-group-modal');
+    type ClientTagGroup = {
+        category: string;
+        tags: Array<{ name: string; href: string }>;
+    };
+
+    const setupTagGroupModal = () => {
+        const previousController = (window as any).__tagGroupModalController as AbortController | undefined;
+        previousController?.abort();
+
+        const controller = new AbortController();
+        const { signal } = controller;
+        (window as any).__tagGroupModalController = controller;
+
+        const dialog = document.getElementById("tag-group-modal") as HTMLDialogElement | null;
         if (!dialog) return;
 
-        // 点击背景（dialog自身）关闭
-        dialog.addEventListener('click', (e) => {
-            if (e.target === dialog) {
-                dialog.close();
-            }
-        });
+        const body = dialog.querySelector<HTMLElement>(".modal-body");
+        const dataElement = dialog.querySelector<HTMLScriptElement>(".tag-group-data");
+        const searchInput = dialog.querySelector<HTMLInputElement>(".tag-search-input");
+        const status = dialog.querySelector<HTMLElement>(".filter-status");
+        const emptyState = dialog.querySelector<HTMLElement>(".empty-state");
+        const closeButton = dialog.querySelector<HTMLButtonElement>(".close-btn");
+        const totalTags = Number(dialog.querySelector(".tag-count-badge")?.textContent || 0);
+        let sections: HTMLElement[] = [];
+        let rendered = false;
+        let activeButton: HTMLButtonElement | null = null;
 
-        // ESC键关闭：浏览器默认支持，但防止 cancel 默认行为
-        dialog.addEventListener('cancel', (e) => {
-            e.preventDefault();
-            dialog.close();
-        });
+        const ensureTagsRendered = () => {
+            if (rendered || !body || !dataElement || !emptyState) return;
 
-        // 可选：点击标签链接时关闭模态框（跳转由 a 标签处理）
-        dialog.addEventListener('click', (e) => {
-            const link = e.target.closest('.tag-link');
-            if (link) {
-                // 延迟关闭以确保点击事件传播完成（跳转）
-                setTimeout(() => dialog.close(), 50);
+            let groups: ClientTagGroup[] = [];
+            try {
+                groups = JSON.parse(dataElement.textContent || "[]") as ClientTagGroup[];
+            } catch (error) {
+                console.error("Failed to parse tag groups", error);
             }
-        });
-    })();
+
+            const fragment = document.createDocumentFragment();
+            for (const group of groups) {
+                const section = document.createElement("section");
+                section.className = "group-section";
+                section.dataset.category = group.category;
+
+                const heading = document.createElement("h3");
+                heading.className = "group-title";
+
+                const icon = document.createElement("span");
+                icon.className = "group-icon";
+                icon.setAttribute("aria-hidden", "true");
+                icon.textContent = "▸";
+
+                const label = document.createElement("span");
+                label.textContent = group.category;
+
+                const count = document.createElement("span");
+                count.className = "group-count";
+                count.textContent = String(group.tags.length);
+
+                heading.append(icon, label, count);
+
+                const tagContainer = document.createElement("div");
+                tagContainer.className = "tags-container";
+                for (const tag of group.tags) {
+                    const link = document.createElement("a");
+                    link.className = "tag-link";
+                    link.href = tag.href;
+                    link.dataset.tag = tag.name;
+                    link.textContent = tag.name;
+                    tagContainer.append(link);
+                }
+
+                section.append(heading, tagContainer);
+                fragment.append(section);
+            }
+
+            body.insertBefore(fragment, emptyState);
+            sections = Array.from(body.querySelectorAll<HTMLElement>(".group-section"));
+            rendered = true;
+        };
+
+        const filterTags = () => {
+            if (!rendered || !status || !emptyState) return;
+            const query = searchInput?.value.trim().toLocaleLowerCase() || "";
+            let visibleTags = 0;
+
+            for (const section of sections) {
+                const category = (section.dataset.category || "").toLocaleLowerCase();
+                const categoryMatches = !!query && category.includes(query);
+                let visibleInGroup = 0;
+
+                for (const link of section.querySelectorAll<HTMLElement>(".tag-link")) {
+                    const tag = (link.dataset.tag || "").toLocaleLowerCase();
+                    const visible = !query || categoryMatches || tag.includes(query);
+                    link.hidden = !visible;
+                    if (visible) visibleInGroup += 1;
+                }
+
+                section.hidden = visibleInGroup === 0;
+                const count = section.querySelector<HTMLElement>(".group-count");
+                if (count) count.textContent = String(visibleInGroup);
+                visibleTags += visibleInGroup;
+            }
+
+            status.textContent = query
+                ? `找到 ${visibleTags} 个标签`
+                : `共 ${totalTags} 个标签`;
+            emptyState.hidden = visibleTags !== 0;
+        };
+
+        const openModal = (button: HTMLButtonElement) => {
+            ensureTagsRendered();
+            activeButton = button;
+            dialog.removeAttribute("inert");
+            dialog.setAttribute("aria-hidden", "false");
+            button.setAttribute("aria-expanded", "true");
+            if (!dialog.open) dialog.showModal();
+            window.requestAnimationFrame(() => searchInput?.focus());
+        };
+
+        const closeModal = () => {
+            if (dialog.open) dialog.close();
+        };
+
+        document.addEventListener("click", (event) => {
+            const target = event.target;
+            if (!(target instanceof Element)) return;
+
+            const trigger = target.closest<HTMLButtonElement>(
+                '.tags-more-btn[data-modal-id="tag-group-modal"]',
+            );
+            if (trigger) {
+                event.preventDefault();
+                openModal(trigger);
+                return;
+            }
+
+            if (target.closest(".tag-group-modal .tag-link")) closeModal();
+        }, { signal });
+
+        closeButton?.addEventListener("click", closeModal, { signal });
+        searchInput?.addEventListener("input", filterTags, { signal });
+        dialog.addEventListener("click", (event) => {
+            if (event.target === dialog) closeModal();
+        }, { signal });
+        dialog.addEventListener("close", () => {
+            dialog.setAttribute("aria-hidden", "true");
+            dialog.setAttribute("inert", "");
+            document.querySelectorAll<HTMLButtonElement>(
+                '.tags-more-btn[data-modal-id="tag-group-modal"]',
+            ).forEach((button) => button.setAttribute("aria-expanded", "false"));
+            if (searchInput) {
+                searchInput.value = "";
+                filterTags();
+            }
+            activeButton?.focus();
+            activeButton = null;
+        }, { signal });
+    };
+
+    setupTagGroupModal();
 </script>

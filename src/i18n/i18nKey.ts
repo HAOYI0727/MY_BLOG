@@ -7,6 +7,14 @@ enum I18nKey {
     archive = "archive",
     about = "about",
     search = "search",
+    searchHint = "searchHint",
+    searchLoading = "searchLoading",
+    searchNoResults = "searchNoResults",
+    searchUnavailable = "searchUnavailable",
+    clearSearch = "clearSearch",
+    openMenu = "openMenu",
+    closeMenu = "closeMenu",
+    skipToContent = "skipToContent",
 
     // 文章
     directory = "directory",
@@ -14,6 +22,7 @@ enum I18nKey {
     categories = "categories",
     series = "series",
     posts = "posts",
+    postsAll = "postsAll",
     recentPosts = "recentPosts",
     postList = "postList",
     statistics = "statistics",
@@ -54,6 +63,7 @@ enum I18nKey {
     wallpaperNone = "wallpaperNone",
 
     more = "more",
+    collapse = "collapse",
 
     backTo = "backTo",
 
@@ -159,6 +169,13 @@ enum I18nKey {
     diaryMinutesAgo = "diaryMinutesAgo",
     diaryHoursAgo = "diaryHoursAgo",
     diaryDaysAgo = "diaryDaysAgo",
+    diaryUntitled = "diaryUntitled",
+    diaryEmpty = "diaryEmpty",
+    diaryDefaultTitle = "diaryDefaultTitle",
+    diaryBackToList = "diaryBackToList",
+
+    // 分享
+    share = "share",
 
     // 相册页面
     albums = "albums",
@@ -269,6 +286,19 @@ enum I18nKey {
     musicCollapse = "musicCollapse",
     musicVolume = "musicVolume",
     musicExpand = "musicExpand",
+    musicPlayer = "musicPlayer",
+    musicPrevious = "musicPrevious",
+    musicNext = "musicNext",
+    musicPlay = "musicPlay",
+    musicPause = "musicPause",
+    musicToggleLyrics = "musicToggleLyrics",
+    musicMute = "musicMute",
+    musicUnmute = "musicUnmute",
+    musicClosePlaylist = "musicClosePlaylist",
+    musicDismissError = "musicDismissError",
+    musicRepeatOne = "musicRepeatOne",
+    musicRepeatAll = "musicRepeatAll",
+    musicShuffle = "musicShuffle",
 }
 
 export default I18nKey;

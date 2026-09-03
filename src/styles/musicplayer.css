@@ -163,9 +163,15 @@ button.bg-\(--primary\) {
 @media (max-width: 768px) {
     .music-player {
         max-width: 280px;
-        /*left: 8px !important;*/
-        bottom: 8px !important;
-        right: 8px !important;
+        bottom: max(8px, env(safe-area-inset-bottom)) !important;
+        right: max(8px, env(safe-area-inset-right)) !important;
+    }
+    .music-player .orb-player {
+        width: 44px;
+        height: 44px;
+    }
+    .music-player.collapsed .orb-player {
+        opacity: 0.9;
     }
     .music-player.expanded {
         width: calc(100vw - 16px);
@@ -175,6 +181,9 @@ button.bg-\(--primary\) {
     }
     .expanded-player {
         width: min(calc(100vw - 16px), 320px) !important;
+        max-height: calc(100dvh - 24px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
     }
     .playlist-panel {
         width: min(calc(100vw - 16px), 320px) !important;

@@ -126,7 +126,7 @@ site:
         # 是否启用加载页
         enable: true
         # 是否等待所有资源 (如图片、样式表) 加载完成
-        waitForAllResources: true
+        waitForAllResources: false
         # 加载标题配置
         title:
             # 是否启用加载标题
@@ -270,12 +270,7 @@ sidebar:
                 type: "statistics"
                 # 位置策略 ("top" 顶部固定 | "sticky" 粘性)
                 position: "sticky"
-                # 页面可见性配置
-                visibility:
-                    # 匹配模式：'include' (包含), 'exclude' (排除)
-                    mode: "include"
-                    # 页面路径匹配规则列表 (支持正则字符串)
-                    paths: ["^/$", "^/archive$"]
+                # 不限制页面：桌面右栏、平板合并侧栏和移动端组件抽屉均可访问
 
 # 资料配置
 profile:
@@ -437,7 +432,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/gqj.m4a"
                 # 歌词路径
-                lrc: "assets/music/gqj.lrc"
+                lrc: ""
                 # 时长
                 duration: 2760
             - # 列表示例
@@ -497,7 +492,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/CARDIGAN.m4a"
                 # 歌词路径
-                lrc: "assets/music/CARDIGAN.lrc"
+                lrc: ""
                 # 时长
                 duration: 240
             - # 列表示例
@@ -512,7 +507,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/AUGUST.m4a"
                 # 歌词路径
-                lrc: "assets/music/AUGUST.lrc"
+                lrc: ""
                 # 时长
                 duration: 270
             - # 列表示例
@@ -527,7 +522,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/BETTY.m4a"
                 # 歌词路径
-                lrc: "assets/music/BETTY.lrc"
+                lrc: ""
                 # 时长
                 duration: 295
             - # 列表示例
@@ -542,7 +537,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/WILLOW.m4a"
                 # 歌词路径
-                lrc: "assets/music/WILLOW.lrc"
+                lrc: ""
                 # 时长
                 duration: 216
             - # 列表示例
@@ -557,7 +552,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/CHAMPAGNE_PROBLEM.m4a"
                 # 歌词路径
-                lrc: "assets/music/CHAMPAGNE_PROBLEM.lrc"
+                lrc: ""
                 # 时长
                 duration: 244
             - # 列表示例
@@ -572,7 +567,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/NO_BODY_NO_CRIME.m4a"
                 # 歌词路径
-                lrc: "assets/music/NO_BODY_NO_CRIME.lrc"
+                lrc: ""
                 # 时长
                 duration: 218
             - # 列表示例
@@ -587,7 +582,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/FORTNIGHT.m4a"
                 # 歌词路径
-                lrc: "assets/music/FORTNIGHT.lrc"
+                lrc: ""
                 # 时长
                 duration: 229
             - # 列表示例
@@ -602,7 +597,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/DOWN_BAD.m4a"
                 # 歌词路径
-                lrc: "assets/music/DOWN_BAD.lrc"
+                lrc: ""
                 # 时长
                 duration: 264
             - # 列表示例
@@ -617,7 +612,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/HATE_THAT_I_MADE_YOU_LOVE_ME.m4a"
                 # 歌词路径
-                lrc: "assets/music/HATE_THAT_I_MADE_YOU_LOVE_ME.lrc"
+                lrc: ""
                 # 时长
                 duration: 198
             - # 列表示例
@@ -632,7 +627,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/ETERNAL_SUNSHINE.m4a"
                 # 歌词路径
-                lrc: "assets/music/ETERNAL_SUNSHINE.lrc"
+                lrc: ""
                 # 时长
                 duration: 253
             - # 列表示例
@@ -647,7 +642,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/INTRO&TWILIGHT_ZONE.m4a"
                 # 歌词路径
-                lrc: "assets/music/INTRO&TWILIGHT_ZONE.lrc"
+                lrc: ""
                 # 时长
                 duration: 353
             - # 列表示例
@@ -662,7 +657,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/THANK_U_NEXT.m4a"
                 # 歌词路径
-                lrc: "assets/music/THANK_U_NEXT.lrc"
+                lrc: ""
                 # 时长
                 duration: 209
             - # 列表示例
@@ -677,7 +672,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/ONE_LAST_TIME.m4a"
                 # 歌词路径
-                lrc: "assets/music/ONE_LAST_TIME.lrc"
+                lrc: ""
                 # 时长
                 duration: 198
             - # 列表示例
@@ -692,7 +687,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/DIE_WITH_A_SMILE.m4a"
                 # 歌词路径
-                lrc: "assets/music/DIE_WITH_A_SMILE.lrc"
+                lrc: ""
                 # 时长
                 duration: 252
             - # 列表示例
@@ -707,7 +702,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/TALKING_TO_THE_MOON.m4a"
                 # 歌词路径
-                lrc: "assets/music/TALKING_TO_THE_MOON.lrc"
+                lrc: ""
                 # 时长
                 duration: 221
             - # 列表示例
@@ -722,7 +717,7 @@ musicPlayer:
                 # 音乐路径
                 url: "assets/music/KILL_BILL.m4a"
                 # 歌词路径
-                lrc: "assets/music/KILL_BILL.lrc"
+                lrc: ""
                 # 时长
                 duration: 157
     # 是否自动播放

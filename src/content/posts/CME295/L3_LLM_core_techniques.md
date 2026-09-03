@@ -96,7 +96,7 @@ MoE是解决**大模型参数量过大、前向传播计算效率低、显存占
 
 ### 2.6. 代码实现
 
-```Python
+```python
 
 class MoeLayer(nn.Module):
     def __init__(self, experts: List[nn.Module], gate, moe_args):

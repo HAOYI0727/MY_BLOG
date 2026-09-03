@@ -93,9 +93,11 @@ export async function GET(context: APIContext) {
                     (res) => res.default,
                 );
                 if (imageMod) {
-                    // optimize the image and get the final src URL
-                    const optimizedImg = await getImage({ src: imageMod });
-                    img.setAttribute("src", new URL(optimizedImg.src, context.site).href);
+                    // Animated GIFs are already compressed and often grow when converted.
+                    const imageSrc = imageMod.format === "gif"
+                        ? imageMod.src
+                        : (await getImage({ src: imageMod })).src;
+                    img.setAttribute("src", new URL(imageSrc, context.site).href);
                 } else {
                     // log the failed import path
                     console.log(

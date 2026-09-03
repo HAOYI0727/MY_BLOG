@@ -3,27 +3,27 @@
 /* 主要内容区域的过渡动画 - 参考yukina的侧滑效果 */
 .transition-main {
     transition:
-        opacity 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        translate 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        translate 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* 离开动画 - 内容向右上滑出并淡出 */
 .transition-leaving {
     transition:
-        translate 300ms cubic-bezier(0.55, 0.055, 0.675, 0.19),
-        opacity 300ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        translate 200ms cubic-bezier(0.55, 0.055, 0.675, 0.19),
+        opacity 200ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
 html.is-changing .transition-main {
     transition:
-        opacity 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        translate 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        translate 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 html.is-leaving .transition-main {
     transition:
-        opacity 300ms cubic-bezier(0.55, 0.055, 0.675, 0.19),
-        translate 300ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        opacity 200ms cubic-bezier(0.55, 0.055, 0.675, 0.19),
+        translate 200ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
 /* 进入动画 - 从右下角轻微滑入，模仿yukina效果 */
@@ -40,7 +40,7 @@ html.is-animating.is-leaving .transition-leaving {
 
 /* Swup fade 动画 - 保持兼容性 */
 html.is-changing .transition-swup-fade {
-    transition: all 300ms ease-out;
+    transition: opacity 200ms ease-out, translate 200ms ease-out;
 }
 
 html.is-animating .transition-swup-fade:not(.pause-swup-transition) {
@@ -93,27 +93,30 @@ html.is-loading {
     }
 }
 
-/* 隐藏页面加载动画 */
+/*
+ * 内容默认必须可见。只有在初始化脚本明确进入加载/首屏动画状态时才隐藏，
+ * 避免 Safari 恢复页面或 Swup 切页中断后把整页永久留在 opacity: 0。
+ */
 .onload-animation-up, .onload-animation-down {
-    opacity: 0;
-}
-/* 动画结束后或在非加载/非初始动画状态下保持可见 */
-html:not(.is-loading):not(.show-initial-animation) :is(.onload-animation-up, .onload-animation-down) {
     opacity: 1;
+}
+html.is-loading :is(.onload-animation-up, .onload-animation-down),
+html.show-initial-animation :is(.onload-animation-up, .onload-animation-down) {
+    opacity: 0;
 }
 /* 初始加载动画，仅在 .show-initial-animation 存在时触发以避免与 Swup 自身的过渡动画冲突 */
 .show-initial-animation .onload-animation-up {
-    animation: fade-in-up 600ms ease-out forwards;
+    animation: fade-in-up 420ms ease-out forwards;
 }
 .show-initial-animation .onload-animation-down {
-    animation: fade-in-down 600ms ease-out forwards;
+    animation: fade-in-down 420ms ease-out forwards;
 }
 /* 渐进式动画延迟 - 仅在初始加载时应用 */
 .show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(1) { animation-delay: 0ms; }
-.show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(2) { animation-delay: 150ms; }
-.show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(3) { animation-delay: 300ms; }
-.show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(4) { animation-delay: 450ms; }
-.show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(5) { animation-delay: 600ms; }
+.show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(2) { animation-delay: 75ms; }
+.show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(3) { animation-delay: 150ms; }
+.show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(4) { animation-delay: 225ms; }
+.show-initial-animation :is(.onload-animation-up, .onload-animation-down):nth-child(5) { animation-delay: 300ms; }
 
 /* 特殊元素的动画 */
 .transition-slide-in {

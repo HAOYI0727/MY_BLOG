@@ -11,6 +11,14 @@ export const zh_hans: Translation = {
     [Key.archive]: "归档",
     [Key.about]: "关于",
     [Key.search]: "搜索",
+    [Key.searchHint]: "输入关键词搜索全部文章",
+    [Key.searchLoading]: "正在搜索…",
+    [Key.searchNoResults]: "没有找到匹配的文章",
+    [Key.searchUnavailable]: "搜索暂时不可用",
+    [Key.clearSearch]: "清空搜索",
+    [Key.openMenu]: "打开导航菜单",
+    [Key.closeMenu]: "关闭导航菜单",
+    [Key.skipToContent]: "跳到主要内容",
 
     // 文章
     [Key.directory]: "目录",
@@ -18,6 +26,7 @@ export const zh_hans: Translation = {
     [Key.categories]: "分类",
     [Key.series]: "系列",
     [Key.posts]: "文章",
+    [Key.postsAll]: "全部文章",
     [Key.recentPosts]: "最新文章",
     [Key.postList]: "文章列表",
     [Key.statistics]: "统计",
@@ -57,6 +66,7 @@ export const zh_hans: Translation = {
     [Key.wallpaperNone]: "纯色背景",
 
     [Key.more]: "更多",
+    [Key.collapse]: "收起",
 
     [Key.backTo]: "返回",
 
@@ -162,6 +172,11 @@ export const zh_hans: Translation = {
     [Key.diaryMinutesAgo]: "分钟前",
     [Key.diaryHoursAgo]: "小时前",
     [Key.diaryDaysAgo]: "天前",
+    [Key.diaryUntitled]: "无标题",
+    [Key.diaryEmpty]: "暂无日记。",
+    [Key.diaryDefaultTitle]: "日记",
+    [Key.diaryBackToList]: "返回日记列表",
+    [Key.share]: "分享：",
 
     // 相册页面
     [Key.albums]: "相册",
@@ -272,4 +287,17 @@ export const zh_hans: Translation = {
     [Key.musicCollapse]: "折叠播放器",
     [Key.musicVolume]: "音量控制",
     [Key.musicExpand]: "展开音乐播放器",
+    [Key.musicPlayer]: "音乐播放器",
+    [Key.musicPrevious]: "上一首",
+    [Key.musicNext]: "下一首",
+    [Key.musicPlay]: "播放",
+    [Key.musicPause]: "暂停",
+    [Key.musicToggleLyrics]: "切换歌词显示",
+    [Key.musicMute]: "静音",
+    [Key.musicUnmute]: "取消静音",
+    [Key.musicClosePlaylist]: "关闭播放列表",
+    [Key.musicDismissError]: "关闭音乐播放器错误提示",
+    [Key.musicRepeatOne]: "单曲循环",
+    [Key.musicRepeatAll]: "列表循环",
+    [Key.musicShuffle]: "随机播放",
 };

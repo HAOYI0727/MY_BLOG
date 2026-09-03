@@ -4,9 +4,10 @@ import { Icon } from "astro-icon/components";
 
 <!-- There can't be a filter on parent element, or it will break `fixed` -->
 <div class="back-to-top-wrapper block">
-    <div id="back-to-top-btn" class="back-to-top-btn z-100 hide flex items-center rounded-2xl overflow-hidden transition"
-         onclick="backToTop()">
-        <button aria-label="Back to Top" class="btn-card h-full w-full">
+    <div class="back-to-top-shell">
+        <button id="back-to-top-btn" type="button" aria-label="Back to top"
+                class="back-to-top-btn z-100 hide btn-card flex items-center rounded-2xl overflow-hidden transition"
+                onclick="window.scroll({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })">
             <Icon name="material-symbols:keyboard-arrow-up-rounded" class="mx-auto"></Icon>
         </button>
     </div>
@@ -38,9 +39,8 @@ import { Icon } from "astro-icon/components";
             0 0 0 1px var(--btn-regular-bg),
             0 0 1em var(--btn-regular-bg);
 
-        button
-            width: 3rem
-            height: 3rem
+        width: 3rem
+        height: 3rem
 
         i
             font-size: 1.75rem
@@ -66,10 +66,3 @@ import { Icon } from "astro-icon/components";
             &:active
                 scale: 0.9
 </style>
-
-<script is:raw is:inline>
-function backToTop() {
-    // 直接使用原生滚动，避免OverlayScrollbars冲突
-    window.scroll({ top: 0, behavior: 'smooth' });
-}
-</script>

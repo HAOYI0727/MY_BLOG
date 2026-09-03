@@ -3,8 +3,11 @@ import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 
 import { siteConfig } from "@/config";
+import { i18n } from "@i18n/translation";
+import I18nKey from "@i18n/i18nKey";
 import { pathsEqual, url } from "@utils/url";
 import { widgetManager } from "@utils/widget";
+import { getTagsGroupedByCategory } from "@utils/post";
 import Navbar from "@components/navbar.astro";
 import FullscreenWallpaper from "@components/fullscreenWallpaper.astro";
 import Banner from "@components/banner.astro";
@@ -12,6 +15,7 @@ import Sidebar from "@components/sidebar.astro";
 import Footer from "@components/footer.astro";
 import TocButton from "@components/tocButton.astro";
 import BackToTopButton from "@components/back2TopButton.astro";
+import TagGroupModal from "@components/sidebar/TagGroupModal.astro";
 import BaseLayout from "./base.astro";
 import "@styles/grid.css";
 
@@ -66,6 +70,7 @@ const {
     middleSidebarClass,
     mobileFooterClass,
 } = widgetManager.getGridLayout(headings, Astro.url.pathname);
+const groupedTags = await getTagsGroupedByCategory();
 ---
 
 <BaseLayout
@@ -163,7 +168,7 @@ const {
                     )
                 }
 
-                <div class="contents lg:contents md:flex md:flex-col md:col-start-1 md:row-start-1 md:gap-4">
+                <div class="contents min-[1280px]:contents md:flex md:flex-col md:col-start-1 md:row-start-1 md:gap-4">
                     {
                         hasLeftSidebar ? (
                             <Sidebar
@@ -192,6 +197,7 @@ const {
 
                 <main
                     id="swup-container"
+                    tabindex="-1"
                     class={`${mainContentClass} transition-swup-fade`}
                 >
                     <div id="grid-class-carrier" data-grid-class={gridCols} class="hidden"></div>
@@ -201,21 +207,12 @@ const {
                     >
                         <slot />
                         <div
-                            class="footer col-span-2 onload-animation-up hidden lg:block transition-swup-fade"
+                            class="footer col-span-2 onload-animation-up hidden min-[1280px]:block transition-swup-fade"
                         >
                             <Footer />
                         </div>
                     </div>
                 </main>
-
-                <div class={middleSidebarClass}>
-                    <Sidebar
-                        id="middle-sidebar"
-                        side="middle"
-                        class={`${transparentClass} onload-animation-up`}
-                        headings={headings}
-                    />
-                </div>
 
                 <div class={mobileFooterClass}>
                     <Footer />
@@ -225,8 +222,66 @@ const {
         </div>
     </div>
 
+    <!-- Keep viewport-fixed mobile controls outside the transformed content wrapper. -->
+    <div class={middleSidebarClass}>
+        <details class="mobile-sidebar-drawer">
+            <summary
+                class="card-base fixed bottom-4 left-4 z-[102] flex h-12 w-12 cursor-pointer list-none items-center justify-center rounded-full shadow-xl transition active:scale-90"
+                aria-label={`${i18n(I18nKey.directory)} / ${i18n(I18nKey.statistics)}`}
+                title={`${i18n(I18nKey.directory)} / ${i18n(I18nKey.statistics)}`}
+            >
+                <Icon name="material-symbols:widgets-rounded" class="drawer-open-icon text-[1.4rem] text-(--primary)" />
+                <Icon name="material-symbols:close-rounded" class="drawer-close-icon hidden text-[1.4rem] text-(--primary)" />
+            </summary>
+            <div class="mobile-sidebar-panel fixed bottom-19 left-3 right-3 z-[101] max-h-[72vh] overflow-y-auto overscroll-contain rounded-(--radius-large) border border-black/5 bg-(--float-panel-bg) p-2 shadow-2xl backdrop-blur-md dark:border-white/10">
+                <Sidebar
+                    id="middle-sidebar"
+                    side="middle"
+                    class={`${transparentClass} onload-animation-up`}
+                    headings={headings}
+                />
+            </div>
+        </details>
+    </div>
+
+    <!-- 全站只保留一个按需渲染的标签面板，避免左右/移动侧栏重复输出数百个标签。 -->
+    <TagGroupModal groups={groupedTags} id="tag-group-modal" />
+
     <TocButton />
 
     <BackToTopButton />
 
 </BaseLayout>
+
+<style>
+    .mobile-sidebar-drawer > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .mobile-sidebar-drawer:not([open]) > div {
+        display: none;
+    }
+
+    .mobile-sidebar-drawer[open] .drawer-open-icon {
+        display: none;
+    }
+
+    .mobile-sidebar-drawer[open] .drawer-close-icon {
+        display: block;
+    }
+
+    .mobile-sidebar-drawer[open]::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: rgb(0 0 0 / 45%);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        pointer-events: none;
+    }
+
+    :global(body:has(.mobile-sidebar-drawer[open])) {
+        overflow: hidden;
+    }
+</style>

@@ -1,7 +1,6 @@
 <script lang="ts">
 import { onMount } from "svelte";
 
-import { BREAKPOINT_LG } from "@/constants/breakpoints";
 import { WALLPAPER_FULLSCREEN, WALLPAPER_BANNER, WALLPAPER_NONE } from "@constants/constants";
 import {
     getStoredWallpaperMode,
@@ -17,23 +16,13 @@ import DropdownPanel from "@/components/common/DropdownPanel.svelte";
 import Icon from "@components/common/icon.svelte";
 
 
-const seq: WALLPAPER_MODE[] = [WALLPAPER_BANNER, WALLPAPER_FULLSCREEN, WALLPAPER_NONE];
 let mode: WALLPAPER_MODE = $state(siteConfig.wallpaper.mode || WALLPAPER_BANNER);
 let isOpen = $state(false);
 
 function switchWallpaperMode(newMode: WALLPAPER_MODE) {
     mode = newMode;
     setWallpaperMode(newMode);
-}
-
-function toggleWallpaperMode() {
-    let i = 0;
-    for (; i < seq.length; i++) {
-        if (seq[i] === mode) {
-            break;
-        }
-    }
-    switchWallpaperMode(seq[(i + 1) % seq.length]);
+    closePanel();
 }
 
 function openPanel() {
@@ -42,6 +31,14 @@ function openPanel() {
 
 function closePanel() {
     isOpen = false;
+}
+
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape" && isOpen) {
+        event.preventDefault();
+        closePanel();
+        document.getElementById("wallpaper-mode-switch")?.focus();
+    }
 }
 
 // 点击外部关闭面板
@@ -55,16 +52,27 @@ function handleClickOutside(event: MouseEvent) {
 onMount(() => {
     mode = getStoredWallpaperMode();
     document.addEventListener("click", handleClickOutside);
+    document.addEventListener("keydown", handleKeydown);
     return () => {
         document.removeEventListener("click", handleClickOutside);
+        document.removeEventListener("keydown", handleKeydown);
     };
 });
 </script>
 
 
 <!-- z-50 make the panel higher than other float panels -->
-<div class="relative z-50" role="menu" tabindex="-1" onmouseleave={closePanel}>
-    <button aria-label="Wallpaper Mode" role="menuitem" class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center" id="wallpaper-mode-switch" onmouseenter={openPanel} onclick={() => { if (window.innerWidth < BREAKPOINT_LG) { openPanel(); } else { toggleWallpaperMode(); } }}>
+<!-- svelte-ignore a11y_no_static_element_interactions (pointer leave only dismisses the already keyboard-accessible panel) -->
+<div class="relative z-50" role="group" aria-label="Wallpaper mode" onmouseleave={closePanel}>
+    <button
+        aria-label="Wallpaper Mode"
+        aria-expanded={isOpen}
+        aria-controls="wallpaper-mode-panel"
+        class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center"
+        id="wallpaper-mode-switch"
+        onmouseenter={openPanel}
+        onclick={openPanel}
+    >
         <div class="absolute inset-0 flex items-center justify-center" class:opacity-0={mode !== WALLPAPER_BANNER}>
             <Icon icon="material-symbols:image-outline" class="text-[1.25rem]"></Icon>
         </div>
@@ -75,7 +83,13 @@ onMount(() => {
             <Icon icon="material-symbols:hide-image-outline" class="text-[1.25rem]"></Icon>
         </div>
     </button>
-    <div id="wallpaper-mode-panel" class="absolute transition top-11 -right-2 pt-5" class:float-panel-closed={!isOpen}>
+    <div
+        id="wallpaper-mode-panel"
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        class="absolute transition top-11 -right-2 pt-5"
+        class:float-panel-closed={!isOpen}
+    >
         <DropdownPanel>
             <DropdownItem
                     isActive={mode === WALLPAPER_BANNER}

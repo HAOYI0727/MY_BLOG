@@ -1,7 +1,6 @@
 <script lang="ts">
 import { onMount } from "svelte";
 
-import { BREAKPOINT_LG } from "@constants/breakpoints";
 import { getDefaultHue, getHue, setHue } from "@utils/hue";
 import { onClickOutside } from "@utils/widget";
 import { i18n } from "@i18n/translation";
@@ -17,16 +16,20 @@ function resetHue() {
     hue = getDefaultHue();
 }
 
-function togglePanel() {
-    isOpen = !isOpen;
-}
-
 function openPanel() {
     isOpen = true;
 }
 
 function closePanel() {
     isOpen = false;
+}
+
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape" && isOpen) {
+        event.preventDefault();
+        closePanel();
+        document.getElementById("display-settings-switch")?.focus();
+    }
 }
 
 // 点击外部关闭面板
@@ -40,8 +43,10 @@ function handleClickOutside(event: MouseEvent) {
 onMount(() => {
     hue = getHue();
     document.addEventListener("click", handleClickOutside);
+    document.addEventListener("keydown", handleKeydown);
     return () => {
         document.removeEventListener("click", handleClickOutside);
+        document.removeEventListener("keydown", handleKeydown);
     };
 });
 
@@ -52,15 +57,22 @@ $effect(() => {
 });
 </script>
 
-<div class="relative z-50" onmouseleave={closePanel}>
-    <button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center" 
+<!-- svelte-ignore a11y_no_static_element_interactions (pointer leave only dismisses the already keyboard-accessible panel) -->
+<div class="relative z-50" role="group" aria-label="Display settings" onmouseleave={closePanel}>
+    <button aria-label="Display Settings" aria-expanded={isOpen} aria-controls="display-setting-wrapper" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center"
         id="display-settings-switch"
-        onclick={() => { if (window.innerWidth < BREAKPOINT_LG) { openPanel(); } else { togglePanel(); } }}
+        onclick={openPanel}
         onmouseenter={openPanel}
     >
         <Icon icon="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
     </button>
-    <div id="display-setting-wrapper" class="fixed top-14.5 pt-5 right-4 w-[calc(100vw-2rem)] max-w-80 md:absolute md:top-11 md:right-0 md:w-80 md:pt-5 transition-all z-50" class:float-panel-closed={!isOpen}>
+    <div
+        id="display-setting-wrapper"
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        class="fixed top-14.5 pt-5 right-4 w-[calc(100vw-2rem)] max-w-80 md:absolute md:top-11 md:right-0 md:w-80 md:pt-5 transition-all z-50"
+        class:float-panel-closed={!isOpen}
+    >
         <div id="display-setting" class="card-base float-panel px-4 py-4 w-full">
             <div class="flex flex-row gap-2 mb-3 items-center justify-between">
                 <div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3

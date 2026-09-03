@@ -88,19 +88,19 @@ function renderComponent(component: any, index: number) {
 }
 ---
 
-<div id={id || "sidebar"} data-side={side} class:list={[className, "flex flex-col w-full h-full gap-(--sidebar-spacing)"]}>
-    <!-- 顶部固定组件区域 -->
-    {topComponents.map((component, index) => {
-        const renderData = renderComponent(component, index);
-        if (!renderData) return null;
+<div id={id || "sidebar"} data-side={side} class:list={[className, "sidebar-shell w-full self-start gap-(--sidebar-spacing)"]}>
+    <!-- 所有组件位于同一个滚动流：侧栏被主动滚动时，Profile、TOC、Statistics 等整体移动。 -->
+    <div class="sidebar-scroll-region flex flex-col w-full gap-(--sidebar-spacing)">
+        {topComponents.map((component, index) => {
+            const renderData = renderComponent(component, index);
+            if (!renderData) return null;
 
-        const { Component, props } = renderData;
-        return <Component {...props} side={side} />;
-    })}
+            const { Component, props } = renderData;
+            return <Component {...props} side={side} />;
+        })}
 
-    <!-- 粘性组件区域 -->
-    {stickyComponents.length > 0 && (
-        <div id="sidebar-sticky" class="flex flex-col w-full gap-(--sidebar-spacing) sticky top-[calc(var(--sidebar-top)-var(--main-content-top))]">
+        {stickyComponents.length > 0 && (
+            <div id={`sidebar-sticky-${side}`} class="flex flex-col w-full gap-(--sidebar-spacing)">
             {stickyComponents.map((component, index) => {
                 const renderData = renderComponent(component, index);
                 if (!renderData) return null;
@@ -108,6 +108,122 @@ function renderComponent(component: any, index: number) {
                 const { Component, props } = renderData;
                 return <Component {...props} side={side} />;
             })}
-        </div>
-    )}
+            </div>
+        )}
+    </div>
 </div>
+
+<style is:global>
+    /*
+     * 粘住侧栏外壳而不是内部滚动层：外壳的包含块是整页网格，
+     * 因此正文滚动时侧栏静止，并在到达页尾时自然随网格结束。
+     */
+    @media (min-width: 768px) {
+        [data-side="left"].sidebar-shell,
+        [data-side="right"].sidebar-shell {
+            position: sticky;
+            top: calc(var(--sidebar-top) - var(--main-content-top));
+            max-height: calc(100dvh - var(--sidebar-top) - var(--sidebar-top));
+            min-height: 0;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        [data-side="left"] > .sidebar-scroll-region,
+        [data-side="right"] > .sidebar-scroll-region {
+            position: relative;
+            z-index: 1;
+            flex: 1 1 auto;
+            min-height: 0;
+            max-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            touch-action: pan-y;
+            scrollbar-gutter: stable;
+            scrollbar-width: thin;
+            scrollbar-color: color-mix(in srgb, var(--primary) 45%, transparent) transparent;
+            padding-right: 0.25rem;
+            scroll-padding-block: 0.25rem;
+            row-gap: var(--sidebar-spacing);
+        }
+
+        /*
+         * Profile 与后续组件始终保持普通文档流。即使 Swup 在切页时
+         * 暂停某个持久化组件的动画，也不能把 Statistics 提升到头像之上。
+         */
+        .sidebar-scroll-region > [id^="profile-"],
+        .sidebar-scroll-region > [id^="sidebar-sticky-"] {
+            position: relative !important;
+            inset: auto !important;
+            flex: 0 0 auto;
+        }
+
+        .sidebar-scroll-region > [id^="profile-"] {
+            z-index: 2;
+            isolation: isolate;
+        }
+
+        .sidebar-scroll-region > [id^="sidebar-sticky-"] {
+            z-index: 1;
+        }
+
+        .sidebar-scroll-region [id^="statistics-"] {
+            position: relative !important;
+            inset: auto !important;
+            z-index: 0;
+            clear: both;
+            margin-block-start: 0 !important;
+            isolation: isolate;
+        }
+
+        [data-side="left"] > .sidebar-scroll-region::-webkit-scrollbar,
+        [data-side="right"] > .sidebar-scroll-region::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        [data-side="left"] > .sidebar-scroll-region::-webkit-scrollbar-thumb,
+        [data-side="right"] > .sidebar-scroll-region::-webkit-scrollbar-thumb {
+            background: color-mix(in srgb, var(--primary) 42%, transparent);
+            border-radius: 999px;
+        }
+    }
+</style>
+
+<script>
+    const setupSidebarWheelRouting = () => {
+        const previousController = (window as any).__sidebarWheelController as AbortController | undefined;
+        previousController?.abort();
+
+        const controller = new AbortController();
+        const { signal } = controller;
+        (window as any).__sidebarWheelController = controller;
+
+        document.querySelectorAll<HTMLElement>(
+            '.sidebar-shell[data-side="left"], .sidebar-shell[data-side="right"]',
+        ).forEach((sidebar) => {
+            const scrollRegion = sidebar.querySelector<HTMLElement>(":scope > .sidebar-scroll-region");
+            if (!scrollRegion) return;
+
+            sidebar.addEventListener("wheel", (event) => {
+                // 保留浏览器缩放手势；普通纵向滚轮始终交给当前侧栏。
+                if (event.ctrlKey || event.deltaY === 0) return;
+                const maxScroll = scrollRegion.scrollHeight - scrollRegion.clientHeight;
+                if (maxScroll <= 0) return;
+
+                event.preventDefault();
+                const unit = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+                    ? 16
+                    : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+                        ? scrollRegion.clientHeight
+                        : 1;
+                scrollRegion.scrollTop = Math.min(
+                    maxScroll,
+                    Math.max(0, scrollRegion.scrollTop + event.deltaY * unit),
+                );
+            }, { passive: false, signal });
+        });
+    };
+
+    setupSidebarWheelRouting();
+</script>

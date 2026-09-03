@@ -1,7 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
 
-import { type NavbarLink } from "@/types/config";
+import { LinkPreset, type NavbarLink } from "@/types/config";
+import { LinkPresets } from "@constants/link-presets";
 import { url } from "@utils/url";
 
 
@@ -11,20 +12,48 @@ interface Props {
 }
 
 const { link, class: className } = Astro.props;
+const children = (link.children || []).map((child) =>
+    typeof child === "number" ? LinkPresets[child as LinkPreset] : child,
+);
+const hasChildren = children.length > 0;
 ---
 
-<div class:list={["nav-link-container", className]}>
+<div class:list={["nav-link-container", { "dropdown-container": hasChildren }, className]}>
     <a
         aria-label={link.name}
+        aria-haspopup={hasChildren ? "menu" : undefined}
         href={link.external ? link.url : url(link.url)}
         target={link.external ? "_blank" : null}
+        rel={link.external ? "noopener noreferrer" : undefined}
         class="btn-plain scale-animation rounded-lg h-11 font-bold px-3 active:scale-95 nav-link-item"
         data-link-name={link.name}
     >
         <div class="flex items-center">
             {link.icon && <Icon name={link.icon} class="text-[1.1rem] nav-link-icon" />}
-            <span class="nav-link-text ml-2 hidden lg:inline">{link.name}</span>
+            <span class="nav-link-text ml-2 hidden min-[1280px]:inline">{link.name}</span>
+            {hasChildren && <Icon name="material-symbols:keyboard-arrow-down-rounded" class="dropdown-arrow text-[1rem] ml-0.5 transition-transform" />}
             {link.external && <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.875rem] transition -translate-y-px ml-1 text-black/20 dark:text-white/20" />}
         </div>
     </a>
+    {hasChildren && (
+        <div class="dropdown-menu" role="menu" aria-label={link.name}>
+            <div class="dropdown-content p-2 min-w-60">
+                {children.map((child) => (
+                    <a
+                        href={child.external ? child.url : url(child.url)}
+                        target={child.external ? "_blank" : undefined}
+                        rel={child.external ? "noopener noreferrer" : undefined}
+                        role="menuitem"
+                        class="group flex items-start gap-3 rounded-lg px-3 py-2.5 hover:bg-(--btn-plain-bg-hover) focus-visible:bg-(--btn-plain-bg-hover)"
+                    >
+                        {child.icon && <Icon name={child.icon} class="mt-0.5 text-[1.15rem] shrink-0 text-(--primary)" />}
+                        <span class="min-w-0">
+                            <span class="block font-bold text-75 group-hover:text-(--primary)">{child.name}</span>
+                            {child.description && <span class="block text-xs leading-4 text-50 mt-0.5">{child.description}</span>}
+                        </span>
+                    </a>
+                ))}
+            </div>
+        </div>
+    )}
 </div>
