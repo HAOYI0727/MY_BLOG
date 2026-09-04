@@ -78,6 +78,7 @@ export default defineConfig({
                 "#left-sidebar",
                 "#right-sidebar",
                 "#middle-sidebar",
+                "#page-overlay-container",
             ],
             cache: true,
             preload: true,

@@ -1,6 +1,7 @@
 ---
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
+import type { WALLPAPER_MODE } from "@/types/config";
 
 import { siteConfig } from "@/config";
 import { i18n } from "@i18n/translation";
@@ -16,6 +17,7 @@ import Footer from "@components/footer.astro";
 import TocButton from "@components/tocButton.astro";
 import BackToTopButton from "@components/back2TopButton.astro";
 import TagGroupModal from "@components/sidebar/TagGroupModal.astro";
+import WelcomeGateway from "@components/WelcomeGateway.astro";
 import BaseLayout from "./base.astro";
 import "@styles/grid.css";
 
@@ -31,6 +33,7 @@ interface Props {
     setOGTypeArticle?: boolean;
     postSlug?: string;
     headings?: MarkdownHeading[];
+    wallpaperMode?: WALLPAPER_MODE;
 }
 
 const {
@@ -41,15 +44,17 @@ const {
     setOGTypeArticle,
     postSlug,
     headings = [],
+    wallpaperMode,
 } = Astro.props;
-const hasBannerCredit = siteConfig.wallpaper.mode === "banner" && siteConfig.wallpaper.banner?.credit?.enable;
+const effectiveWallpaperMode = wallpaperMode ?? siteConfig.wallpaper.mode;
+const hasBannerCredit = effectiveWallpaperMode === "banner" && siteConfig.wallpaper.banner?.credit?.enable;
 const hasBannerLink = !!siteConfig.wallpaper.banner?.credit?.url;
 
 // 检查是否为首页
 const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 
 // 检查是否应该启用半透明效果
-const shouldEnableTransparency = siteConfig.wallpaper.mode === "banner" || siteConfig.wallpaper.mode === "fullscreen";
+const shouldEnableTransparency = effectiveWallpaperMode === "banner" || effectiveWallpaperMode === "fullscreen";
 
 // 为组件添加半透明效果的CSS类
 const transparentClass = shouldEnableTransparency ? "wallpaper-transparent" : "";
@@ -80,7 +85,10 @@ const groupedTags = await getTagsGroupedByCategory();
     lang={lang}
     setOGTypeArticle={setOGTypeArticle}
     postSlug={postSlug}
+    wallpaperMode={wallpaperMode}
 >
+    <!-- 常驻在 Swup 容器外，确保从任意页面返回首页时都能重新展示。 -->
+    <WelcomeGateway />
     <!-- Navbar -->
     <slot slot="head" name="head" />
     <div
@@ -98,7 +106,7 @@ const groupedTags = await getTagsGroupedByCategory();
     <!-- 全屏壁纸 - 总是渲染但通过CSS控制可见性 -->
     <FullscreenWallpaper
         config={siteConfig.wallpaper}
-        class={siteConfig.wallpaper.mode === "fullscreen" ? "" : "hidden"}
+        class={shouldEnableTransparency ? "" : "hidden"}
     />
 
     <!-- 为全屏壁纸模式添加body类 -->
@@ -114,12 +122,12 @@ const groupedTags = await getTagsGroupedByCategory();
     <Banner
         config={siteConfig.wallpaper}
         isHomePage={isHomePage}
-        class={siteConfig.wallpaper.mode === "banner" ? "" : "hidden"}
+        class={effectiveWallpaperMode === "banner" ? "" : "hidden"}
     />
 
     <!-- Main content -->
     <div
-        class={`absolute w-full z-30 pointer-events-none transition-transform duration-600 top-0 min-h-[calc(100vh-var(--main-content-top))] ${siteConfig.wallpaper.mode !== "banner" ? "no-banner-layout" : ""} ${transparentClass}`}
+        class={`absolute w-full z-30 pointer-events-none transition-transform duration-600 top-0 min-h-[calc(100vh-var(--main-content-top))] ${effectiveWallpaperMode !== "banner" ? "no-banner-layout" : ""} ${transparentClass}`}
         style="transform: translateY(var(--main-content-top))"
     >
         <div
@@ -200,6 +208,7 @@ const groupedTags = await getTagsGroupedByCategory();
                     tabindex="-1"
                     class={`${mainContentClass} transition-swup-fade`}
                 >
+                    <div id="page-wallpaper-carrier" data-wallpaper-mode={wallpaperMode || ""} class="hidden"></div>
                     <div id="grid-class-carrier" data-grid-class={gridCols} class="hidden"></div>
                     <div
                         id="content-wrapper"
@@ -250,6 +259,11 @@ const groupedTags = await getTagsGroupedByCategory();
     <TocButton />
 
     <BackToTopButton />
+
+    <!-- Page-specific dialogs stay outside transformed content so position:fixed remains viewport-bound. -->
+    <div id="page-overlay-container">
+        <slot name="page-overlay" />
+    </div>
 
 </BaseLayout>
 

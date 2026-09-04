@@ -6,13 +6,46 @@
 
 - Markdown / MDX 内容集合，支持草稿、置顶、分类、标签、封面、阅读时间和上一篇/下一篇。
 - KaTeX 数学公式、Mermaid 图表、Callout、自动标题锚点和 Expressive Code 代码高亮。
-- Pagefind 静态全文搜索，生产构建后自动生成索引。
+- 科技感欢迎导航页，汇总站点简介、全部分类气泡、最新文章和主要功能入口。
+- Pagefind 静态全文搜索，支持快捷键、键盘选择和搜索状态反馈，生产构建后自动生成索引。
 - RSS、Atom、Sitemap、robots.txt、Open Graph 元信息及可选的文章 OG 图片。
 - 响应式双侧栏、文章目录、主题色、明暗模式、壁纸模式与 Swup 页面过渡。
+- 阅读进度、跨会话继续阅读、预计剩余时间、相关文章推荐和可复制的章节锚点。
+- QQ、微信二维码、复制链接与系统原生分享；操作结果在当前页面以弹窗或 Toast 反馈。
+- 客户端多语言翻译，提供 14 种目标语言，并维护简体中文、繁体中文、英语和日语本地界面表。
 - 项目、技能、时间线、日记、相册、友链和 Bangumi 页面。
 - 本地 / Meting 音乐播放器、Waline / Twikoo 评论、Umami 统计与可选看板娘。
 - GitHub Pages、Vercel、Cloudflare Pages、Netlify、EdgeOne 和 Docker 部署配置。
 - 可选 Decap CMS 管理后台（当前 OAuth 集成默认关闭）。
+
+## 当前体验优化
+
+### 欢迎页与主页
+
+- 每次正常进入首页都会展示欢迎导航页，而不是仅在首次访问时显示。
+- 欢迎页沿用主页壁纸和蓝紫色科技视觉，叠加半透明面板、扫描光、星点与柔和动态效果。
+- 全部文章分类以气泡形式展示，气泡大小会参考分类文章数量；点击后直接进入对应分类的文章卡片页。
+- “最新灵感”固定展示三张等尺寸文章卡片，并提供归档、项目、时间线、关于和全文搜索提示。
+- 点击“进入我的博客”会播放揭幕式过渡动画；系统启用“减少动态效果”时会自动降低动画强度。
+- 主页使用 Banner 模式时，Banner 下方仍延续同一张壁纸，不会突然变成纯黑背景。
+
+### 文章与分类浏览
+
+- 文章详情页默认使用全屏壁纸并隐藏首屏 Banner，使正文阅读空间更加连贯。
+- 文章页顶部“返回首页”通过一次性 `?view=home` 意图直接进入主页正文；地址栏会立即恢复为 `/`，之后正常访问首页仍会显示欢迎页。
+- 分类入口统一指向 `/category/[slug]/`，分类页采用响应式三列文章卡片，而不是传统 Archive 列表。
+- 多级分类支持面包屑、父级返回、直接子分类入口和空状态提示。
+- `/posts/` 按年月显示等比例归档卡片，月份和日期会依据站点语言自动格式化。
+
+### 阅读、搜索与分享
+
+- 全局阅读进度条按文章正文区域计算，不会把评论和页尾内容错误计入进度。
+- 浏览器会在本地保存最近阅读的文章和位置，首页与文章归档页可从“继续阅读”卡片恢复。
+- 文章元信息会动态显示剩余阅读时间，正文末尾会根据分类与标签推荐相关文章。
+- 二级及以下标题带有可复制章节链接，便于引用和分享具体段落。
+- 搜索支持 `Ctrl/⌘ + K` 或 `/` 打开、方向键选择、`Enter` 访问、`Esc` 关闭，并对加载中、无结果和不可用状态提供反馈。
+- QQ 分享会打开小型分享窗口；微信分享使用当前页小弹窗展示二维码；复制链接与系统分享会显示即时反馈，不会切换整个页面。
+- 移动端导航和侧栏提供遮罩、独立滚动、键盘关闭与焦点状态，长目录不会覆盖统计卡片。
 
 ## 技术栈
 
@@ -52,9 +85,10 @@ pnpm preview
 | 命令 | 作用 |
 | --- | --- |
 | `pnpm dev` | 生成本地图标数据并启动 Astro 开发服务器 |
-| `pnpm build` | 生成图标、构建站点并创建 Pagefind 搜索索引 |
+| `pnpm build` | 生成图标、构建站点、创建 Pagefind 索引并检查关键 UI 功能契约 |
 | `pnpm preview` | 本地预览生产构建 |
 | `pnpm check` | 执行 Astro 类型/模板检查和 Stylus 编译检查 |
+| `pnpm check:features` | 检查已有构建目录中的导航、翻译、分类、文章和交互功能标记 |
 | `pnpm type-check` | 执行 Astro 类型与模板诊断 |
 | `pnpm check-stylus` | 单独检查 `.styl` 和组件内联 Stylus |
 | `pnpm new-post -- path/title` | 在 `src/content/posts` 下创建文章模板 |
@@ -67,6 +101,9 @@ pnpm preview
 ├── scripts/                    # 图标生成、文章创建、构建与样式检查脚本
 ├── src/
 │   ├── components/             # Astro / Svelte UI 组件
+│   │   ├── WelcomeGateway.astro     # 首页欢迎导航与进入动画
+│   │   ├── ContinueReading.astro    # 跨会话继续阅读入口
+│   │   └── PostCollectionGrid.astro # 分类/月度文章卡片网格
 │   ├── constants/              # 路由、图标与布局常量
 │   ├── content/                # 文章与各展示页的数据源
 │   │   ├── posts/              # Markdown / MDX 文章
@@ -76,13 +113,13 @@ pnpm preview
 │   │   ├── projects/           # 项目 JSON
 │   │   ├── skills/             # 技能 JSON
 │   │   └── timeline/           # 时间线 JSON
-│   ├── i18n/                   # 本地界面翻译
+│   ├── i18n/                   # 翻译键、语言配置与四套本地界面翻译
 │   ├── layouts/                # 基础布局与网格布局
 │   ├── pages/                  # Astro 文件路由和 Feed / OG 接口
 │   ├── plugins/                # Markdown、代码块、翻译等扩展
 │   ├── styles/                 # 全局 CSS 与 Stylus
 │   ├── types/                  # 配置类型
-│   └── utils/                  # 内容读取、排序、URL、主题等工具
+│   └── utils/                  # 内容、URL、壁纸、分享与阅读连续性等工具
 ├── astro.config.mjs            # Astro、Markdown 插件及部署适配器
 ├── src/content.config.ts       # 文章 Content Collection Schema
 ├── twilight.config.yaml        # 站点的主要业务与视觉配置
@@ -95,11 +132,11 @@ pnpm preview
 
 | 路由 | 内容 |
 | --- | --- |
-| `/`、`/[page]/` | 分页文章首页 |
+| `/`、`/[page]/` | 欢迎导航与分页文章首页 |
 | `/posts/`、`/posts/[slug]/` | 文章列表与详情 |
 | `/posts/[year]/[month]/` | 月度归档 |
 | `/archive/` | 总归档 |
-| `/category/[slug]/` | 分类筛选 |
+| `/category/[slug]/` | 分类文章卡片与多级分类导航 |
 | `/projects/`、`/skills/`、`/timeline/` | 个人展示页 |
 | `/diary/`、`/diary/[slug]/` | 日记列表与详情 |
 | `/albums/`、`/albums/[id]/` | 相册列表与详情 |
@@ -120,6 +157,29 @@ pnpm preview
 - `particle`、`musicPlayer`、`pio`：粒子、音乐播放器和看板娘。
 
 修改域名时务必同步更新 `site.siteURL`；RSS、Atom、Sitemap、robots.txt、canonical/OG URL 都依赖它。Decap CMS 启用时，还需要同步检查 `.decap.yml` 中的仓库、域名和 OAuth 地址。
+
+### 翻译配置
+
+翻译功能当前已经启用，源语言为简体中文：
+
+```yaml
+site:
+  lang: "zh_hans"
+  translate:
+    enable: true
+    service: "client.edge"
+    showSelectTag: false
+    autoDiscriminate: true
+```
+
+顶部导航栏使用自定义语言选择器，因此 `showSelectTag` 保持为 `false`，避免翻译插件再注入一套重复下拉框。支持语言统一定义在 `src/i18n/language.ts`；本地界面翻译位于 `src/i18n/languages/`，目前包含：
+
+- `zh_hans.ts`：简体中文，也是当前站点源语言。
+- `zh_hant.ts`：繁体中文。
+- `en.ts`：英语。
+- `ja.ts`：日语。
+
+新增界面文案时，应先在 `src/i18n/i18nKey.ts` 增加翻译键，再同时补齐以上四个语言文件。`Translation` 类型要求每张本地语言表覆盖全部键，`pnpm check` 会在遗漏时报告错误。其余目标语言由客户端翻译服务处理。
 
 ## 写文章
 
@@ -184,7 +244,7 @@ comment: true
 
 ### Pagefind
 
-`pnpm build` 先执行 Astro 构建，再对最终目录运行 Pagefind。默认构建产物是 `dist/`；Vercel 环境使用 `.vercel/output/static/`。搜索只索引带 `data-pagefind-body` 的页面，因此索引页数少于生成页数属于正常现象。
+`pnpm build` 先执行 Astro 构建，再对最终目录运行 Pagefind，最后执行 `scripts/check-ui-features.cjs` 验证关键界面功能。默认构建产物是 `dist/`；Vercel 环境使用 `.vercel/output/static/`。搜索只索引带 `data-pagefind-body` 的页面，因此索引页数少于生成页数属于正常现象。
 
 ### 评论
 
@@ -254,8 +314,8 @@ pnpm build
 ```
 
 - 相册与文章图片数量较多，首次生产构建需要进行 Sharp 图片优化，耗时和磁盘占用会明显高于普通博客。
-- 翻译插件包含动态执行逻辑，Vite 会提示 `eval` 风险；本站当前关闭翻译功能。若准备开启，应先审查或替换该插件。
-- 音乐、评论、Google Fonts、Iconify 回退、二维码分享与部分友链头像依赖外部网络服务。
+- 翻译功能当前已开启。翻译插件包含动态执行逻辑，因此 Vite 构建时会提示 `eval` 风险；升级或替换插件后应重新测试语言切换、Swup 无刷新导航和源语言恢复。
+- 翻译、Meting、评论、Google Fonts、Iconify 回退、二维码分享与部分友链头像依赖外部网络；网络不可用时，博客正文、导航和本地搜索索引仍应保持可访问。
 - 本地音乐的 `url` / `lrc` 必须能在 `public/` 下找到；没有歌词时请将 `lrc` 留空，避免产生 404 请求。
 - `dist/`、`.astro/`、`.vercel/` 和 `node_modules/` 均为生成目录，不应提交。
 

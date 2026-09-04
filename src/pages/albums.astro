@@ -8,6 +8,8 @@ import I18nKey from "@i18n/i18nKey";
 import GridLayout from "@layouts/grid.astro";
 import BackwardButton from "@components/backwardButton.astro";
 import ImageWrapper from "@components/common/imageWrapper.astro";
+import { siteConfig } from "@/config";
+import { langToLocaleMap } from "@i18n/language";
 
 const pageTitle = LinkPresets[LinkPreset.Albums].name;
 const pageDescription = LinkPresets[LinkPreset.Albums].description;
@@ -31,7 +33,7 @@ const groupedAlbums = groupAlbumsByFolder(visibleAlbums);
                     {pageDescription}
                 </p>
                 <div class="mt-4 flex items-center gap-4 text-sm text-60">
-                    <span>{visibleAlbums.length} 个相册</span>
+                    <span>{visibleAlbums.length} {i18n(I18nKey.albumsCount)}</span>
                 </div>
             </header>
 
@@ -83,7 +85,7 @@ const groupedAlbums = groupAlbumsByFolder(visibleAlbums);
                                                         </span>
                                                     )}
                                                 </div>
-                                                <time>{new Date(album.date).toLocaleDateString('zh-CN')}</time>
+                                                <time>{new Date(album.date).toLocaleDateString(langToLocaleMap[siteConfig.lang] || "zh-Hans")}</time>
                                             </div>
                                             <!-- 标签 -->
                                             {album.tags && album.tags.length > 0 && (

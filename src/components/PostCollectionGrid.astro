@@ -1,0 +1,116 @@
+---
+import { Icon } from "astro-icon/components";
+
+import type { PostForList } from "@utils/post";
+import { formatDateToYYYYMMDD } from "@utils/date";
+import { getCategoryPathParts } from "@utils/category";
+import { getCategoryUrl, getPostUrl } from "@utils/url";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+
+interface Props {
+    posts: PostForList[];
+    emptyText?: string;
+}
+
+const { posts, emptyText = i18n(I18nKey.noPosts) } = Astro.props;
+---
+
+{
+    posts.length > 0 ? (
+        <div class="post-collection-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {posts.map((post) => {
+                const postUrl = getPostUrl(post);
+                const categoryParts = getCategoryPathParts(post.data.category);
+                const primaryCategory = categoryParts?.[categoryParts.length - 1];
+
+                return (
+                    <article class="collection-card group card-glass flex min-h-full flex-col overflow-hidden rounded-2xl border border-white/30 transition-all duration-300 hover:-translate-y-1.5 hover:border-(--primary)/50 hover:shadow-2xl dark:border-white/10">
+                        <a href={postUrl} class="block overflow-hidden" aria-label={post.data.title}>
+                            {post.data.cover ? (
+                                <div class="relative aspect-[16/9] overflow-hidden bg-(--card-bg)">
+                                    <img
+                                        src={post.data.cover}
+                                        alt=""
+                                        class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
+                                    <span class="absolute bottom-3 right-3 flex h-9 w-9 translate-y-2 items-center justify-center rounded-full bg-black/45 text-xl text-white opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                                        <Icon name="material-symbols:arrow-forward-rounded" />
+                                    </span>
+                                </div>
+                            ) : (
+                                <div class="collection-card-placeholder relative flex aspect-[16/9] items-end overflow-hidden p-5">
+                                    <Icon name="material-symbols:article-outline-rounded" class="absolute right-4 top-4 text-4xl text-white/55" />
+                                    <span class="text-xs font-semibold uppercase tracking-[0.18em] text-white/75">ZHY&apos;s Blog</span>
+                                </div>
+                            )}
+                        </a>
+
+                        <div class="flex flex-1 flex-col p-5">
+                            <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-60">
+                                <time datetime={post.data.published.toISOString()} class="inline-flex items-center gap-1.5">
+                                    <Icon name="material-symbols:calendar-today-outline-rounded" />
+                                    {formatDateToYYYYMMDD(post.data.published)}
+                                </time>
+                                {primaryCategory && (
+                                    <a
+                                        href={getCategoryUrl(categoryParts)}
+                                        class="rounded-full bg-(--primary)/10 px-2.5 py-1 text-(--primary) transition-colors hover:bg-(--primary) hover:text-white"
+                                    >
+                                        {primaryCategory}
+                                    </a>
+                                )}
+                            </div>
+
+                            <h2 class="mb-2 text-lg font-semibold leading-snug text-90 transition-colors group-hover:text-(--primary)">
+                                <a href={postUrl}>{post.data.title}</a>
+                            </h2>
+
+                            {post.data.description && (
+                                <p class="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-75">
+                                    {post.data.description}
+                                </p>
+                            )}
+
+                            <a href={postUrl} class="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-(--primary)">
+                                {i18n(I18nKey.readArticle)}
+                                <Icon name="material-symbols:arrow-right-alt-rounded" class="text-lg transition-transform group-hover:translate-x-1" />
+                            </a>
+                        </div>
+                    </article>
+                );
+            })}
+        </div>
+    ) : (
+        <div class="py-14 text-center text-60" role="status">
+            <Icon name="material-symbols:inbox-outline-rounded" class="mx-auto mb-3 block text-5xl opacity-70" />
+            <p>{emptyText}</p>
+        </div>
+    )
+}
+
+<style>
+    .card-glass {
+        background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 6%);
+    }
+
+    .collection-card-placeholder {
+        background:
+            radial-gradient(circle at 75% 15%, rgb(255 255 255 / 22%), transparent 26%),
+            linear-gradient(135deg, oklch(0.58 0.19 calc(var(--hue) - 24)), oklch(0.46 0.17 calc(var(--hue) + 34)));
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .collection-card,
+        .collection-card img,
+        .collection-card :global(svg) {
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>

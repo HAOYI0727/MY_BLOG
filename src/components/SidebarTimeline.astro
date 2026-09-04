@@ -1,6 +1,8 @@
 ---
 // src/components/SidebarTimeline.astro
 import { formatDateToYYYYMMDD } from "@utils/date";
+import { i18n } from "@i18n/translation";
+import I18nKey from "@i18n/i18nKey";
 
 export interface Props {
   posts: any[];
@@ -16,8 +18,8 @@ const displayed = sorted.slice(0, limit);
   displayed.length > 0 && (
     <aside class="sidebar-timeline">
       <h3 class="text-sm font-semibold text-60 uppercase tracking-wider mb-4 flex items-center gap-2">
-        <span>📅 学习时间线</span>
-        <span class="text-xs font-normal opacity-60">（{displayed.length} 篇）</span>
+        <span>📅 {i18n(I18nKey.learningTimeline)}</span>
+        <span class="text-xs font-normal opacity-60">（{displayed.length} {i18n(I18nKey.postsCount)}）</span>
       </h3>
       <div class="timeline">
         {displayed.map((post, index) => (

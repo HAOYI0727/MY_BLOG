@@ -1,0 +1,50 @@
+---
+import { Icon } from "astro-icon/components";
+
+import type { PostForList } from "@utils/post";
+import { i18n } from "@i18n/translation";
+import I18nKey from "@i18n/i18nKey";
+import PostCollectionGrid from "@components/PostCollectionGrid.astro";
+
+interface Props {
+    posts: PostForList[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+    posts.length > 0 && (
+        <section class="related-posts card-base mb-4 overflow-hidden rounded-(--radius-large) p-5 md:p-6" aria-labelledby="related-posts-title">
+            <div class="mb-5 flex items-start gap-3">
+                <div class="related-posts__icon flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-(--primary)">
+                    <Icon name="material-symbols:lightbulb-outline-rounded" class="text-[1.45rem]" />
+                </div>
+                <div class="min-w-0">
+                    <h2 id="related-posts-title" class="text-lg font-bold text-90 md:text-xl">
+                        {i18n(I18nKey.relatedPosts)}
+                    </h2>
+                    <p class="mt-1 text-sm leading-relaxed text-60">
+                        {i18n(I18nKey.relatedPostsDescription)}
+                    </p>
+                </div>
+            </div>
+            <PostCollectionGrid posts={posts} />
+        </section>
+    )
+}
+
+<style>
+    .related-posts {
+        border: 1px solid color-mix(in oklch, var(--primary) 16%, transparent);
+        background:
+            radial-gradient(circle at 92% 0%, color-mix(in oklch, var(--primary) 11%, transparent), transparent 34%),
+            color-mix(in srgb, var(--card-bg) 92%, transparent);
+    }
+
+    .related-posts__icon {
+        border: 1px solid color-mix(in oklch, var(--primary) 20%, transparent);
+        background: color-mix(in oklch, var(--primary) 10%, var(--btn-regular-bg));
+        box-shadow: 0 0.55rem 1.5rem color-mix(in oklch, var(--primary) 9%, transparent);
+    }
+</style>

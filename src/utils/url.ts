@@ -52,7 +52,7 @@ export function getCategoryUrl(category: string | string[] | null): string {
     if (!label || label.toLowerCase() === i18n(I18nKey.uncategorized).toLowerCase()) {
         return url("/archive/?uncategorized=true");
     }
-    return url(`/archive/?category=${encodeURIComponent(label)}`);
+    return url(`/category/${encodeURIComponent(label)}/`);
 }
 
 export function getTagUrl(tag: string): string {

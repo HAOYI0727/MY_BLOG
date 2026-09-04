@@ -1,26 +1,36 @@
 ---
 // src/pages/category/[...slug].astro
 
-import { getCollection } from "astro:content";
 import GridLayout from "@layouts/grid.astro";
 import BackwardButton from "@components/backwardButton.astro";
-import { formatDateToYYYYMMDD } from "@utils/date";
+import PostCollectionGrid from "@components/PostCollectionGrid.astro";
 import { i18n } from "@i18n/translation";
 import I18nKey from "@i18n/i18nKey";
-import { CATEGORY_SEPARATOR } from "@utils/category";
+import { CATEGORY_SEPARATOR, getCategoryPathParts } from "@utils/category";
 import { getCategoryList, getSortedPostsList } from "@utils/post";
+import { getCategoryUrl } from "@utils/url";
 
 // 生成所有分类的静态路径
 export async function getStaticPaths() {
   const categories = await getCategoryList();
-  return categories.map((cat) => ({
-    params: { slug: cat.name },
-    props: { categoryName: cat.name, categoryCount: cat.count },
+  const categoryPrefixes = new Map<string, number>();
+
+  for (const category of categories) {
+    const parts = category.name.split(CATEGORY_SEPARATOR).filter(Boolean);
+    parts.forEach((_, index) => {
+      const prefix = parts.slice(0, index + 1).join(CATEGORY_SEPARATOR);
+      categoryPrefixes.set(prefix, (categoryPrefixes.get(prefix) || 0) + category.count);
+    });
+  }
+
+  return Array.from(categoryPrefixes, ([name, count]) => ({
+    params: { slug: name },
+    props: { categoryName: name, categoryCount: count },
   }));
 }
 
 // 接收 props 和 params
-const { categoryName, categoryCount } = Astro.props;
+const { categoryName } = Astro.props;
 const slug = Astro.params.slug;
 const slugParts = slug ? slug.split(CATEGORY_SEPARATOR).filter(Boolean) : [];
 
@@ -30,21 +40,20 @@ const allCategories = await getCategoryList();
 
 // 过滤出当前分类下的文章（精确匹配）
 const filteredPosts = allPosts.filter((post) => {
-  const postCat = post.data.category;
-  if (!postCat) return false;
-  const parts = Array.isArray(postCat) ? postCat : [postCat];
-  return parts.length === slugParts.length && parts.every((p, i) => p === slugParts[i]);
+  const parts = getCategoryPathParts(post.data.category);
+  if (!parts) return false;
+  return parts.length >= slugParts.length && slugParts.every((part, index) => parts[index] === part);
 });
 
 // 构建面包屑
 const breadcrumbItems = slugParts.map((part, idx) => ({
   name: part,
-  url: "/category/" + slugParts.slice(0, idx + 1).join(CATEGORY_SEPARATOR) + "/",
+  url: getCategoryUrl(slugParts.slice(0, idx + 1)),
 }));
 
 // 父级分类 URL（如果有）
 const parentSlug = slugParts.length > 1 ? slugParts.slice(0, -1).join(CATEGORY_SEPARATOR) : null;
-const parentUrl = parentSlug ? "/category/" + parentSlug + "/" : null;
+const parentUrl = parentSlug ? getCategoryUrl(parentSlug.split(CATEGORY_SEPARATOR)) : null;
 
 // 子分类列表（直接子级）
 const childCategories = allCategories.filter((cat) => {
@@ -57,7 +66,7 @@ const childCategories = allCategories.filter((cat) => {
 
 // 页面标题（取最后一级）
 const pageTitle = slugParts[slugParts.length - 1] || categoryName;
-const pageDescription = i18n(I18nKey.postsCount) + `：${filteredPosts.length}`;
+const pageDescription = `${filteredPosts.length} ${i18n(I18nKey.postsCount)}`;
 ---
 
 <GridLayout title={pageTitle} description={pageDescription}>
@@ -67,9 +76,9 @@ const pageDescription = i18n(I18nKey.postsCount) + `：${filteredPosts.length}`;
 
       <!-- 面包屑导航 -->
       <nav class="text-sm text-60 mb-4 flex flex-wrap items-center gap-1">
-        <a href="/" class="hover:text-(--primary) transition-colors">首页</a>
+        <a href="/" class="hover:text-(--primary) transition-colors">{i18n(I18nKey.home)}</a>
         <span class="mx-1">/</span>
-        <a href="/posts/" class="hover:text-(--primary) transition-colors">分类</a>
+        <a href="/posts/" class="hover:text-(--primary) transition-colors">{i18n(I18nKey.categories)}</a>
         {breadcrumbItems.map((item, index) => (
           <>
             <span class="mx-1">/</span>
@@ -90,21 +99,21 @@ const pageDescription = i18n(I18nKey.postsCount) + `：${filteredPosts.length}`;
           {pageTitle}
         </h1>
         <p class="text-neutral-600 dark:text-neutral-400">
-          {i18n(I18nKey.postsCount)}：{filteredPosts.length} 篇文章
+          {filteredPosts.length} {i18n(I18nKey.postsCount)}
         </p>
         <div class="mt-3 flex flex-wrap gap-3">
           <a
             href="/posts/"
             class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--primary) text-white"
           >
-            {i18n(I18nKey.postsAll) || "返回全部"}
+            {i18n(I18nKey.postsAll)}
           </a>
           {parentUrl && (
             <a
               href={parentUrl}
               class="btn-regular h-8 px-4 rounded-lg text-sm transition-colors bg-(--card-bg) hover:bg-(--primary)/10 border border-(--line-divider)"
             >
-              ← 返回上级
+              ← {i18n(I18nKey.backToParent)}
             </a>
           )}
         </div>
@@ -113,11 +122,11 @@ const pageDescription = i18n(I18nKey.postsCount) + `：${filteredPosts.length}`;
       <!-- 子分类列表（如果有） -->
       {childCategories.length > 0 && (
         <div class="mb-8">
-          <h2 class="text-sm font-semibold text-60 uppercase tracking-wider mb-3">子分类</h2>
+          <h2 class="text-sm font-semibold text-60 uppercase tracking-wider mb-3">{i18n(I18nKey.subcategories)}</h2>
           <div class="flex flex-wrap gap-2">
             {childCategories.map((child) => (
               <a
-                href={"/category/" + encodeURIComponent(child.name) + "/"}
+                href={getCategoryUrl(child.name.split(CATEGORY_SEPARATOR))}
                 class="inline-flex items-center px-4 py-2 rounded-full text-sm bg-(--card-bg) border border-(--line-divider) hover:border-(--primary) hover:text-(--primary) transition-all"
               >
                 {child.name.split(CATEGORY_SEPARATOR).pop()}
@@ -128,66 +137,13 @@ const pageDescription = i18n(I18nKey.postsCount) + `：${filteredPosts.length}`;
         </div>
       )}
 
-      <!-- ========== 文章列表：时间线 + 卡片样式 ========== -->
-      <div class="relative space-y-6 pl-6 before:absolute before:left-1 before:top-2 before:bottom-2 before:w-0.5 before:bg-(--primary)/20 before:rounded-full">
-        {filteredPosts.length === 0 ? (
-          <p class="text-center text-60 py-12">该分类下暂无文章</p>
-        ) : (
-          filteredPosts.map((post) => (
-            <article class="group relative bg-(--card-bg) rounded-xl p-6 border border-(--line-divider) hover:border-(--primary) transition-all duration-300 hover:shadow-lg">
-              <!-- 时间线圆点（位于卡片左侧） -->
-              <div class="absolute -left-[1.65rem] top-6 w-3 h-3 rounded-full bg-(--primary) border-2 border-white dark:border-neutral-900 shadow-md group-hover:scale-125 transition-transform"></div>
-
-              <a href={`/posts/${post.id}/`} class="block">
-                <!-- 日期显示在卡片顶部 -->
-                <time datetime={post.data.published.toISOString()} class="text-sm text-60 font-mono block mb-2">
-                  {formatDateToYYYYMMDD(post.data.published)}
-                </time>
-
-                <h2 class="text-xl font-semibold text-90 group-hover:text-(--primary) transition-colors mb-2">
-                  {post.data.title}
-                </h2>
-
-                {post.data.description && (
-                  <p class="text-75 mb-3 line-clamp-2">
-                    {post.data.description}
-                  </p>
-                )}
-
-                <div class="flex flex-wrap items-center gap-4 text-sm text-60">
-                  <!-- 分类标签（只显示第一级，可点击） -->
-                  {post.data.category && (
-                    <a
-                      href={"/category/" + encodeURIComponent(Array.isArray(post.data.category) ? post.data.category[0] : post.data.category) + "/"}
-                      class="px-2 py-0.5 bg-(--primary)/10 text-(--primary) rounded-full text-xs hover:bg-(--primary) hover:text-white transition-colors"
-                    >
-                      {Array.isArray(post.data.category) ? post.data.category[0] : post.data.category}
-                    </a>
-                  )}
-                  <!-- 标签 -->
-                  {post.data.tags && post.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-1">
-                      {post.data.tags.slice(0, 2).map((tag) => (
-                        <span class="px-2 py-0.5 bg-black/5 dark:bg-white/5 text-60 rounded-full text-xs">
-                          {tag}
-                        </span>
-                      ))}
-                      {post.data.tags.length > 2 && (
-                        <span class="text-60 text-xs">+{post.data.tags.length - 2}</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </a>
-            </article>
-          ))
-        )}
-      </div>
+      <!-- 与月份归档一致的三列文章卡片视图。 -->
+      <PostCollectionGrid posts={filteredPosts} emptyText={i18n(I18nKey.categoryEmpty)} />
 
       <!-- 回到顶部 -->
       <div class="mt-8 text-center">
         <a href="#top-row" class="text-60 text-xs hover:text-(--primary) transition-colors">
-          ↑ 回到顶部
+          ↑ {i18n(I18nKey.backToTop)}
         </a>
       </div>
     </div>

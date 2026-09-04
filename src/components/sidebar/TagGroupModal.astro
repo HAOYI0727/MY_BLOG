@@ -2,6 +2,8 @@
 import type { CategoryTagGroup } from "@utils/post";
 import { getTagUrl } from "@utils/url";
 import { Icon } from "astro-icon/components";
+import { i18n } from "@i18n/translation";
+import I18nKey from "@i18n/i18nKey";
 
 interface Props {
     groups: CategoryTagGroup[];
@@ -21,36 +23,36 @@ const serializedGroups = JSON.stringify(clientGroups).replace(/</g, "\\u003c");
 
 <dialog id={id} class="tag-group-modal" aria-hidden="true" inert>
     <div class="modal-content">
-        <button type="button" class="close-btn" aria-label="关闭标签面板" title="关闭 (ESC)">
+        <button type="button" class="close-btn" aria-label={i18n(I18nKey.closeTagPanel)} title={`${i18n(I18nKey.close)} (ESC)`}>
             <Icon name="material-symbols:close" class="text-2xl" />
         </button>
 
         <!-- 头部：标题 + 统计 -->
         <div class="modal-header">
             <h2 class="modal-title">
-                所有标签
+                {i18n(I18nKey.allTags)}
                 <span class="tag-count-badge">{totalTags}</span>
             </h2>
-            <p class="subtitle">点击标签可筛选对应文章</p>
+            <p class="subtitle">{i18n(I18nKey.tagPanelHint)}</p>
             <label class="tag-search">
                 <Icon name="material-symbols:search-rounded" class="search-icon" />
-                <span class="sr-only">搜索标签</span>
+                <span class="sr-only">{i18n(I18nKey.searchTags)}</span>
                 <input
                     type="search"
                     class="tag-search-input"
-                    placeholder="搜索标签或分类…"
+                    placeholder={i18n(I18nKey.searchTagsPlaceholder)}
                     autocomplete="off"
                     spellcheck="false"
                 />
             </label>
-            <p class="filter-status" aria-live="polite">共 {totalTags} 个标签</p>
+            <p class="filter-status" aria-live="polite">{totalTags} {i18n(I18nKey.tagsCount)}</p>
         </div>
 
         <!-- 标签列表首次打开时再创建，减少每个页面的初始 DOM 和解析时间。 -->
         <div class="modal-body">
             <div class="empty-state" hidden>
                 <Icon name="material-symbols:search-off-rounded" class="empty-icon" />
-                <p>没有找到匹配的标签</p>
+                <p>{i18n(I18nKey.noMatchingTags)}</p>
             </div>
         </div>
         <script is:inline type="application/json" class="tag-group-data" set:html={serializedGroups}></script>

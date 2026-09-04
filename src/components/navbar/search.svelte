@@ -19,6 +19,7 @@ let initialized = $state(false);
 let pagefindLoaded = false;
 let isDesktopSearchExpanded = $state(false);
 let isMobilePanelOpen = $state(false);
+let selectedIndex = $state(-1);
 let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 let initializationTimer: ReturnType<typeof setTimeout> | undefined;
 let requestSequence = 0;
@@ -95,7 +96,51 @@ function clearSearch() {
     keyword = "";
     result = [];
     status = "idle";
+    selectedIndex = -1;
     focusSearchInput(window.matchMedia("(min-width: 1280px)").matches);
+}
+
+function selectResult(index: number) {
+    if (result.length === 0) {
+        selectedIndex = -1;
+        return;
+    }
+    selectedIndex = (index + result.length) % result.length;
+    requestAnimationFrame(() => {
+        document.getElementById(`search-result-${selectedIndex}`)?.scrollIntoView({
+            block: "nearest",
+        });
+    });
+}
+
+function handleSearchKeydown(event: KeyboardEvent) {
+    if (status !== "ready" || result.length === 0) return;
+
+    if (event.key === "ArrowDown") {
+        event.preventDefault();
+        selectResult(selectedIndex + 1);
+        return;
+    }
+    if (event.key === "ArrowUp") {
+        event.preventDefault();
+        selectResult(selectedIndex < 0 ? result.length - 1 : selectedIndex - 1);
+        return;
+    }
+    if (event.key === "Enter" && selectedIndex >= 0) {
+        event.preventDefault();
+        const target = result[selectedIndex]?.url;
+        if (!target) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey) {
+            window.open(target, "_blank", "noopener,noreferrer");
+        } else {
+            dismissSearch();
+            keyword = "";
+            result = [];
+            status = "idle";
+            selectedIndex = -1;
+            navigateToPage(target);
+        }
+    }
 }
 
 function handleResultClick(event: MouseEvent, resultUrl: string) {
@@ -104,6 +149,7 @@ function handleResultClick(event: MouseEvent, resultUrl: string) {
     keyword = "";
     result = [];
     status = "idle";
+    selectedIndex = -1;
     navigateToPage(resultUrl);
 }
 
@@ -221,8 +267,10 @@ $effect(() => {
         requestSequence += 1;
         result = [];
         status = "idle";
+        selectedIndex = -1;
         return;
     }
+    selectedIndex = -1;
     debounceTimer = setTimeout(() => search(query), 250);
 });
 
@@ -253,12 +301,17 @@ onDestroy(() => {
     <input
         id="search-input-desktop"
         aria-label={i18n(I18nKey.search)}
-        aria-controls="search-panel"
+        role="combobox"
+        aria-controls="search-results"
         aria-expanded={panelVisible}
+        aria-activedescendant={selectedIndex >= 0 ? `search-result-${selectedIndex}` : undefined}
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
         aria-keyshortcuts="Control+K Meta+K /"
         placeholder={i18n(I18nKey.search)}
         bind:value={keyword}
         onfocus={expandDesktopSearch}
+        onkeydown={handleSearchKeydown}
         class="transition-all pl-10 pr-9 text-sm bg-transparent outline-0 h-full {isDesktopSearchExpanded ? 'w-full opacity-100' : 'w-0 opacity-0 pointer-events-none'} text-black/60 dark:text-white/60"
     >
     {#if isDesktopSearchExpanded && keyword}
@@ -296,9 +349,15 @@ onDestroy(() => {
             <input
                 id="search-input-mobile"
                 aria-label={i18n(I18nKey.search)}
+                role="combobox"
                 aria-controls="search-results"
+                aria-expanded={panelVisible}
+                aria-activedescendant={selectedIndex >= 0 ? `search-result-${selectedIndex}` : undefined}
+                aria-autocomplete="list"
+                aria-haspopup="listbox"
                 placeholder={i18n(I18nKey.searchHint)}
                 bind:value={keyword}
+                onkeydown={handleSearchKeydown}
                 class="pl-10 pr-11 w-full h-full text-sm bg-transparent outline-0 text-black/60 dark:text-white/60"
             >
             {#if keyword}
@@ -313,7 +372,13 @@ onDestroy(() => {
             {/if}
         </div>
 
-        <div id="search-results" aria-live="polite" aria-busy={status === "loading"}>
+        <div
+            id="search-results"
+            role={status === "ready" ? "listbox" : undefined}
+            aria-label={status === "ready" ? i18n(I18nKey.search) : undefined}
+            aria-live="polite"
+            aria-busy={status === "loading"}
+        >
             {#if status === "idle"}
                 <div class="min-[1280px]:hidden flex items-center gap-2 px-3 py-4 text-sm text-50">
                     <Icon icon="material-symbols:lightbulb-outline-rounded" class="text-[1.1rem] text-(--primary)"></Icon>
@@ -330,14 +395,18 @@ onDestroy(() => {
                     <span>{status === "empty" ? i18n(I18nKey.searchNoResults) : i18n(I18nKey.searchUnavailable)}</span>
                 </div>
             {:else}
-                <div class="px-3 pt-2 pb-1 text-xs font-medium text-50">
+                <div role="presentation" class="px-3 pt-2 pb-1 text-xs font-medium text-50">
                     {result.length} {i18n(I18nKey.posts)}
                 </div>
-                {#each result as item}
+                {#each result as item, index}
                     <a
+                        id={`search-result-${index}`}
                         href={item.url}
+                        role="option"
+                        aria-selected={selectedIndex === index}
                         onclick={(event) => handleResultClick(event, item.url)}
-                        class="transition group block rounded-xl text-lg px-3 py-2 hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active)"
+                        onmouseenter={() => (selectedIndex = index)}
+                        class="transition group block rounded-xl text-lg px-3 py-2 hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) {selectedIndex === index ? 'bg-(--btn-plain-bg-hover)' : ''}"
                     >
                         <div class="transition text-90 inline-flex items-center font-bold group-hover:text-(--primary)">
                             {item.meta.title}
@@ -348,6 +417,9 @@ onDestroy(() => {
                         </div>
                     </a>
                 {/each}
+                <div role="presentation" class="sticky bottom-0 mt-1 hidden items-center justify-end border-t border-(--line-divider) bg-(--float-panel-bg) px-3 py-2 text-xs text-50 min-[1280px]:flex">
+                    {i18n(I18nKey.searchKeyboardHint)}
+                </div>
             {/if}
         </div>
     </DropdownPanel>

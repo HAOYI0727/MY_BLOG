@@ -90,6 +90,35 @@ export type PostForList = {
     id: string;
     data: ResolvedPost["data"];
 };
+
+export function getRelatedPosts(
+    current: CollectionEntry<"posts">,
+    posts: ResolvedPost[],
+    limit = 3,
+): PostForList[] {
+    const currentCategory = getCategoryPathParts(current.data.category)?.join("/").toLowerCase() || "";
+    const currentTags = new Set(current.data.tags.map((tag) => tag.trim().toLowerCase()).filter(Boolean));
+
+    return posts
+        .filter((post) => post.id !== current.id)
+        .map((post, index) => {
+            const category = getCategoryPathParts(post.data.category)?.join("/").toLowerCase() || "";
+            const sharedTags = post.data.tags.reduce(
+                (count, tag) => count + (currentTags.has(tag.trim().toLowerCase()) ? 1 : 0),
+                0,
+            );
+            const sameCategory = currentCategory.length > 0 && category === currentCategory;
+            return {
+                post,
+                index,
+                score: (sameCategory ? 8 : 0) + sharedTags * 3,
+            };
+        })
+        .sort((a, b) => b.score - a.score || a.index - b.index)
+        .slice(0, limit)
+        .map(({ post }) => ({ id: post.id, data: post.data }));
+}
+
 export async function getSortedPostsList(): Promise<PostForList[]> {
     const sortedFullPosts = await getRawSortedPosts();
 

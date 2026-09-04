@@ -7,11 +7,11 @@ site:
     # 站点副标题
     subtitle: "There is only one heroism in the world: to see the world as it is and to love it."
     # 语言配置
-    lang: "en"
+    lang: "zh_hans"
     # 翻译配置
     translate:
         # 启用翻译功能
-        enable: false
+        enable: true
         # 翻译服务
         service: "client.edge"
         # 显示语言选择下拉框

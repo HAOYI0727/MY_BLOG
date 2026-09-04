@@ -6,6 +6,7 @@ import { getAnalyticsConfig } from "@utils/analytics";
 import { i18n } from "@i18n/translation";
 import I18nKey from "@i18n/i18nKey";
 import type { Favicon } from "@/types/config";
+import type { WALLPAPER_MODE } from "@/types/config";
 import { defaultFavicons } from "@constants/icon";
 import {
     BANNER_HEIGHT,
@@ -40,9 +41,10 @@ interface Props {
     lang?: string;
     setOGTypeArticle?: boolean;
     postSlug?: string;
+    wallpaperMode?: WALLPAPER_MODE;
 }
 
-let { title, banner, description, lang, setOGTypeArticle, postSlug } = Astro.props;
+let { title, banner, description, lang, setOGTypeArticle, postSlug, wallpaperMode } = Astro.props;
 
 // apply a class to the body element to decide the height of the banner, only used for initial page load
 const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
@@ -52,8 +54,10 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 const configHue = siteConfig.themeColor.hue;
 
 // 获取导航栏透明模式配置
-const navbarTransparentMode =
-    siteConfig.wallpaper.banner?.navbar?.transparentMode || "semi";
+const initialWallpaperMode = wallpaperMode ?? siteConfig.wallpaper.mode;
+const navbarTransparentMode = initialWallpaperMode === "fullscreen"
+    ? siteConfig.wallpaper.fullscreen?.navbar?.transparentMode || "semi"
+    : siteConfig.wallpaper.banner?.navbar?.transparentMode || "semi";
 // 判断是否应该显示顶部高光效果（只在full和semifull模式下显示）
 const shouldShowTopHighlight =
     navbarTransparentMode === "full" || navbarTransparentMode === "semifull";
@@ -90,7 +94,7 @@ const getDefaultBanner = (): string => {
 // TODO don't use post cover as banner for now
 banner = getDefaultBanner();
 
-const enableBanner = siteConfig.wallpaper.mode === "banner";
+const enableBanner = initialWallpaperMode === "banner";
 
 let pageTitle: string;
 if (title) {
@@ -242,6 +246,19 @@ const { enabled: analyticsEnabled, code: analyticsCode } = getAnalyticsConfig();
         <LoadingOverlay />
         <!-- 全局配置载体 -->
         <ConfigCarrier />
+        <!-- Global progress UI persists while Swup replaces the main content. -->
+        <div
+            id="progress-bar-wrapper"
+            role="progressbar"
+            aria-label={i18n(I18nKey.readingProgress)}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+            aria-hidden="true"
+            class="fixed top-0 left-0 w-full h-1 z-[999] pointer-events-none opacity-0 transition-opacity duration-200"
+        >
+            <div id="progress-bar-fill" class="h-full w-full origin-left bg-(--primary)" style="transform: scaleX(0);"></div>
+        </div>
         <!-- 页面顶部渐变高光效果 - 只在full和semifull模式下显示 -->
         {shouldShowTopHighlight && <div class="top-gradient-highlight"></div>}
         <!-- 页面内容 -->
@@ -313,6 +330,14 @@ const { enabled: analyticsEnabled, code: analyticsCode } = getAnalyticsConfig();
 </style>
 
 
+<style is:global>
+    #progress-bar-fill {
+        backface-visibility: hidden;
+        transform: translateZ(0) scaleX(0);
+        will-change: transform;
+    }
+</style>
+
 <script>
 import {
     BANNER_HEIGHT,
@@ -332,6 +357,8 @@ import { initMarkdownActions } from "@/utils/markdown";
 import { initFancybox, cleanupFancybox } from "@utils/fancybox";
 import { loadAndInitTranslate } from "@utils/language";
 import { setupParticleEffects } from "@/utils/particle";
+import { initReadingContinuity } from "@utils/readingContinuity";
+import { initPostShare } from "@utils/postShare";
 
 
 // 初始化Swup
@@ -359,6 +386,9 @@ const setup = () => {
         });
     })
     window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
+        window.__twilightReadingContinuityCleanup?.();
+        window.__twilightPostPageCleanup?.();
+        window.__twilightPostShareCleanup?.();
         // 首屏动画状态不应带入 Swup 导航，否则新文章可能一直保持透明。
         document.documentElement.classList.remove('is-loading', 'show-initial-animation', 'banner-restoring');
         // Disable scroll protection when a link is clicked to prevent interference with page jump scrolling to top
@@ -461,8 +491,12 @@ const setup = () => {
                 document.dispatchEvent(pageLoadedEvent);
             }
         }, 300);
-        // Initialize Fancybox
+        // Initialize page-specific enhancements after Swup replaces the content.
+        initWallpaperMode();
         initFancybox();
+        initMarkdownActions();
+        initReadingContinuity();
+        initPostShare();
     });
     initFancybox();
     window.swup.hooks.on("content:replace", () => {
@@ -526,6 +560,12 @@ initWallpaperMode();
 
 // 初始化 Markdown 相关操作以防止因 Swup 无刷新跳转的机制限制而导致操作失效
 initMarkdownActions();
+
+// Restore reading progress and render the local cross-session prompt.
+initReadingContinuity();
+
+// Bind article share controls on direct loads and after every Swup navigation.
+initPostShare();
 
 // Initialize translate.js
 loadAndInitTranslate();

@@ -1,0 +1,992 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { profileConfig, siteConfig } from "@/config";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import { formatDateToYYYYMMDD } from "@utils/date";
+import { getCategoryList, getSortedPostsList } from "@utils/post";
+import { getCategoryUrl, getPostUrl, pathsEqual, url } from "@utils/url";
+
+const wallpaperSource = siteConfig.wallpaper.src;
+const desktopImages = typeof wallpaperSource === "string"
+    ? [wallpaperSource]
+    : Array.isArray(wallpaperSource)
+        ? wallpaperSource
+        : [wallpaperSource.desktop || []].flat();
+const mobileImages = typeof wallpaperSource === "object" && !Array.isArray(wallpaperSource)
+    ? [wallpaperSource.mobile || []].flat()
+    : desktopImages;
+
+const allPosts = await getSortedPostsList();
+const categories = await getCategoryList();
+const latestPosts = allPosts.slice(0, 3);
+const allCategories = categories.slice().sort((a, b) => b.count - a.count);
+const maxCategoryCount = Math.max(...allCategories.map((category) => category.count), 1);
+const publishedYears = allPosts.map((post) => post.data.published.getFullYear());
+const yearRange = publishedYears.length
+    ? `${Math.min(...publishedYears)}—${Math.max(...publishedYears)}`
+    : "—";
+const homePath = url("/");
+const isHomePage = pathsEqual(Astro.url.pathname, homePath);
+const slides = desktopImages.slice(0, 3).map((desktop, index) => ({
+    desktop,
+    mobile: mobileImages[index % Math.max(mobileImages.length, 1)] || desktop,
+}));
+const sparkles = Array.from({ length: 24 }, (_, index) => ({
+    x: (index * 37 + 11) % 100,
+    y: (index * 61 + 7) % 100,
+    size: 2 + (index % 4),
+    delay: (index % 8) * -0.55,
+    duration: 3.8 + (index % 5) * 0.8,
+}));
+---
+
+<!--
+    文章页的“返回首页”使用 ?view=home 表达直达主页意图。
+    这段内联脚本在欢迎页节点创建前运行，避免完整页面跳转时短暂闪现欢迎页。
+-->
+<script is:inline>
+    (() => {
+        const directHomeQuery = new URL(window.location.href).searchParams.get("view") === "home";
+        if (directHomeQuery) document.documentElement.classList.add("welcome-direct-home");
+    })();
+</script>
+
+<section
+    id="welcome-gateway"
+    class="welcome-gateway fixed inset-0 z-[1000] isolate flex min-h-[100svh] items-center justify-center overflow-x-hidden overflow-y-auto px-3 py-3 text-white sm:px-5 sm:py-5"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="welcome-title"
+    data-welcome-gateway
+    data-home-path={homePath}
+    hidden={!isHomePage}
+>
+    <div class="welcome-slides fixed inset-0 -z-40" aria-hidden="true">
+        {slides.map((slide, index) => (
+            <span
+                style={`--slide-desktop:url('${slide.desktop}');--slide-mobile:url('${slide.mobile}');--slide-index:${index};`}
+            ></span>
+        ))}
+    </div>
+    <div class="welcome-dreamscape fixed inset-0 -z-30" aria-hidden="true"></div>
+    <div class="welcome-aurora welcome-aurora-one fixed -z-20" aria-hidden="true"></div>
+    <div class="welcome-aurora welcome-aurora-two fixed -z-20" aria-hidden="true"></div>
+    <div class="welcome-aurora welcome-aurora-three fixed -z-20" aria-hidden="true"></div>
+    <div class="welcome-sparkles fixed inset-0 -z-10" aria-hidden="true">
+        {sparkles.map((sparkle) => (
+            <i
+                style={`--sparkle-x:${sparkle.x}%;--sparkle-y:${sparkle.y}%;--sparkle-size:${sparkle.size}px;--sparkle-delay:${sparkle.delay}s;--sparkle-duration:${sparkle.duration}s;`}
+            ></i>
+        ))}
+    </div>
+
+    <div class="welcome-shell-wrap mx-auto my-auto w-full max-w-[92rem] rounded-[2rem] sm:rounded-[2.6rem]">
+        <div class="welcome-shell relative overflow-hidden rounded-[calc(2rem-1px)] sm:rounded-[calc(2.6rem-1px)]">
+            <div class="welcome-glass-shine absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+            <div class="welcome-inner-glow absolute pointer-events-none" aria-hidden="true"></div>
+            <div class="welcome-scanline absolute inset-x-0 pointer-events-none" aria-hidden="true"></div>
+            <span class="welcome-corner welcome-corner-tl" aria-hidden="true"></span>
+            <span class="welcome-corner welcome-corner-tr" aria-hidden="true"></span>
+            <span class="welcome-corner welcome-corner-bl" aria-hidden="true"></span>
+            <span class="welcome-corner welcome-corner-br" aria-hidden="true"></span>
+
+            <header class="welcome-topbar relative z-10 flex items-center justify-between gap-4 border-b border-white/15 px-5 py-4 sm:px-8 sm:py-5 lg:px-10">
+                <div class="flex min-w-0 items-center gap-3">
+                    <div class="welcome-avatar">
+                        <img src={profileConfig.avatar} alt="" width="44" height="44" loading="eager" />
+                        <span aria-hidden="true"></span>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="truncate text-sm font-semibold tracking-wide">{siteConfig.title}</p>
+                        <p class="mt-0.5 truncate text-[0.65rem] tracking-[0.12em] text-white/48">A UNIVERSE OF IDEAS · BY {profileConfig.name.toUpperCase()}</p>
+                    </div>
+                </div>
+
+                <div class="welcome-live hidden items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-3.5 py-2 text-[0.65rem] tracking-[0.12em] text-white/60 md:flex">
+                    <i aria-hidden="true"></i>
+                    KNOWLEDGE BASE IS GROWING
+                </div>
+
+                <button id="welcome-skip" type="button" class="welcome-skip" aria-label={i18n(I18nKey.welcomeSkipLabel)}>
+                    <span class="hidden sm:inline">{i18n(I18nKey.welcomeSkip)}</span>
+                    <Icon name="material-symbols:close-rounded" />
+                </button>
+            </header>
+
+            <div class="welcome-content relative z-10 grid lg:grid-cols-[minmax(0,1.05fr)_minmax(28rem,0.95fr)]">
+                <section class="welcome-hero relative flex flex-col justify-between overflow-hidden p-6 sm:p-9 lg:min-h-[43rem] lg:p-10 xl:p-12">
+                    <div class="welcome-hero-grid absolute inset-0 -z-10" aria-hidden="true"></div>
+                    <div class="welcome-floating-orb welcome-floating-orb-a absolute" aria-hidden="true">
+                        <span>AI</span>
+                    </div>
+                    <div class="welcome-floating-orb welcome-floating-orb-b absolute" aria-hidden="true">
+                        <Icon name="material-symbols:auto-awesome-rounded" />
+                    </div>
+
+                    <div>
+                        <div class="welcome-badge">
+                            <Icon name="material-symbols:explore-outline-rounded" />
+                            <span>WELCOME, CURIOUS MIND</span>
+                            <i></i>
+                        </div>
+
+                        <h1 id="welcome-title" class="welcome-title">
+                            <span>{i18n(I18nKey.welcomeHeadlineLead)}</span>
+                            <span class="welcome-title-gradient">{i18n(I18nKey.welcomeHeadlineAccent)}</span>
+                        </h1>
+
+                        <p class="welcome-lead">
+                            {i18n(I18nKey.welcomeIntro)}
+                        </p>
+
+                        <dl class="welcome-stats">
+                            <div>
+                                <dt>Articles</dt>
+                                <dd><strong>{allPosts.length}</strong><span>{i18n(I18nKey.welcomeDeepContent)}</span></dd>
+                            </div>
+                            <div>
+                                <dt>Topics</dt>
+                                <dd><strong>{categories.length}</strong><span>{i18n(I18nKey.welcomeKnowledgeAreas)}</span></dd>
+                            </div>
+                            <div>
+                                <dt>Journey</dt>
+                                <dd><strong>{yearRange}</strong><span>{i18n(I18nKey.welcomeUpdating)}</span></dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <div class="mt-9">
+                        <div class="welcome-topics" aria-label={i18n(I18nKey.welcomeAllCategories)}>
+                            <span class="welcome-mini-label">{i18n(I18nKey.welcomeAllCategories)} · {allCategories.length} {i18n(I18nKey.welcomeKnowledgePlanets)}</span>
+                            <div class="welcome-topic-bubbles">
+                                {allCategories.map((category, index) => (
+                                    <a
+                                        href={getCategoryUrl(category.name)}
+                                        data-welcome-link
+                                        class="welcome-topic"
+                                        style={`--topic-index:${index};--bubble-delay:${index * -0.72}s;--bubble-size:${(4.05 + (category.count / maxCategoryCount) * 1.05).toFixed(2)}rem`}
+                                    >
+                                        <i></i>
+                                        {category.name.replaceAll("_", " ")}
+                                        <span>{category.count}</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div class="welcome-actions">
+                            <button id="welcome-enter" type="button" class="welcome-primary">
+                                <span>
+                                    <small>START EXPLORING</small>
+                                    <strong>{i18n(I18nKey.welcomeEnterBlog)}</strong>
+                                </span>
+                                <i><Icon name="material-symbols:arrow-forward-rounded" /></i>
+                            </button>
+                            <a href={url("/posts/")} data-welcome-link class="welcome-secondary">
+                                <Icon name="material-symbols:library-books-outline-rounded" />
+                                {i18n(I18nKey.postsAll)}
+                                <span>{allPosts.length}</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="welcome-explore border-t border-white/15 bg-white/[0.035] p-5 sm:p-7 lg:border-l lg:border-t-0 lg:p-8" aria-label={i18n(I18nKey.welcomeContentGuide)}>
+                    <div class="welcome-section-head">
+                        <div>
+                            <span>LIVE KNOWLEDGE STREAM</span>
+                            <h2>{i18n(I18nKey.welcomeLatestIdeas)}</h2>
+                        </div>
+                        <a href={url("/posts/")} data-welcome-link>
+                            {i18n(I18nKey.welcomeViewAll)} <Icon name="material-symbols:arrow-right-alt-rounded" />
+                        </a>
+                    </div>
+
+                    <div class="welcome-latest-grid">
+                        {latestPosts.map((post, index) => (
+                            <a
+                                href={getPostUrl(post)}
+                                data-welcome-link
+                                class="welcome-latest group"
+                            >
+                                <div class="welcome-cover">
+                                    {post.data.cover ? (
+                                        <img
+                                            src={post.data.cover}
+                                            alt=""
+                                            loading={isHomePage && index === 0 ? "eager" : "lazy"}
+                                            decoding="async"
+                                        />
+                                    ) : (
+                                        <Icon name="material-symbols:article-outline-rounded" />
+                                    )}
+                                    <span class="welcome-cover-overlay"></span>
+                                    <span class="welcome-order">0{index + 1}</span>
+                                </div>
+                                <div class="welcome-latest-copy">
+                                    <time datetime={post.data.published.toISOString()}>{formatDateToYYYYMMDD(post.data.published)}</time>
+                                    <h3>{post.data.title}</h3>
+                                    <p>{post.data.description || i18n(I18nKey.welcomeOpenArticle)}</p>
+                                </div>
+                                <span class="welcome-card-arrow"><Icon name="material-symbols:arrow-outward-rounded" /></span>
+                            </a>
+                        ))}
+                    </div>
+
+                    <div class="welcome-path-head">
+                        <div>
+                            <span class="welcome-mini-label">{i18n(I18nKey.welcomeQuickPortal)}</span>
+                            <strong>{i18n(I18nKey.welcomeChoosePath)}</strong>
+                        </div>
+                        <Icon name="material-symbols:alt-route-rounded" />
+                    </div>
+
+                    <nav class="welcome-features" aria-label={i18n(I18nKey.quickNavigation)}>
+                        <a href={url("/archive/")} data-welcome-link class="welcome-feature" data-tone="purple">
+                            <i><Icon name="material-symbols:calendar-month-outline-rounded" /></i>
+                            <span><strong>{i18n(I18nKey.archive)}</strong><small>{i18n(I18nKey.welcomeArchiveDescription)}</small></span>
+                            <b>01</b>
+                        </a>
+                        <a href={url("/projects/")} data-welcome-link class="welcome-feature" data-tone="blue">
+                            <i><Icon name="material-symbols:work" /></i>
+                            <span><strong>{i18n(I18nKey.projects)}</strong><small>{i18n(I18nKey.welcomeProjectsDescription)}</small></span>
+                            <b>02</b>
+                        </a>
+                        <a href={url("/timeline/")} data-welcome-link class="welcome-feature" data-tone="indigo">
+                            <i><Icon name="material-symbols:timeline" /></i>
+                            <span><strong>{i18n(I18nKey.timeline)}</strong><small>{i18n(I18nKey.welcomeTimelineDescription)}</small></span>
+                            <b>03</b>
+                        </a>
+                        <a href={url("/about/")} data-welcome-link class="welcome-feature" data-tone="cyan">
+                            <i><Icon name="material-symbols:person-outline-rounded" /></i>
+                            <span><strong>{i18n(I18nKey.about)}</strong><small>{i18n(I18nKey.welcomeMeetAuthor)} {profileConfig.name}</small></span>
+                            <b>04</b>
+                        </a>
+                    </nav>
+
+                    <div class="welcome-search-tip">
+                        <span><Icon name="material-symbols:search-rounded" /></span>
+                        <p><strong>{i18n(I18nKey.welcomeSearchTitle)}</strong><small>{i18n(I18nKey.welcomeSearchHint)}</small></p>
+                        <Icon name="material-symbols:keyboard-command-key" />
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function initWelcomeGateway() {
+        const gateway = document.querySelector<HTMLElement>("[data-welcome-gateway]");
+        if (!gateway || gateway.dataset.initialized === "true") return;
+        gateway.dataset.initialized = "true";
+        let closeTimer = 0;
+        let pointerFrame = 0;
+
+        const normalizePath = (path: string) => path.replace(/^\/+|\/+$/g, "").toLowerCase();
+        const isHomePath = () => normalizePath(window.location.pathname) === normalizePath(gateway.dataset.homePath || "/");
+
+        const hideGateway = (moveFocus = false, immediate = false, usePortalReveal = false) => {
+            window.clearTimeout(closeTimer);
+            if (!immediate) {
+                gateway.classList.add(usePortalReveal ? "is-opening" : "is-leaving");
+                if (usePortalReveal) document.documentElement.classList.add("welcome-revealing");
+            }
+            const finish = () => {
+                gateway.hidden = true;
+                gateway.classList.remove("is-leaving", "is-opening");
+                document.body.classList.remove("welcome-open");
+                window.setTimeout(() => document.documentElement.classList.remove("welcome-revealing"), 220);
+                if (moveFocus) document.getElementById("swup-container")?.focus({ preventScroll: true });
+            };
+            if (immediate) finish();
+            else closeTimer = window.setTimeout(finish, usePortalReveal ? 920 : 520);
+        };
+
+        const showGateway = () => {
+            window.clearTimeout(closeTimer);
+            gateway.hidden = false;
+            gateway.classList.remove("is-leaving", "is-opening");
+            document.documentElement.classList.remove("welcome-revealing");
+            gateway.scrollTop = 0;
+            document.body.classList.add("welcome-open");
+            window.setTimeout(() => document.getElementById("welcome-enter")?.focus({ preventScroll: true }), 70);
+        };
+
+        const consumeDirectHomeIntent = () => {
+            const currentUrl = new URL(window.location.href);
+            const shouldEnterHome = currentUrl.searchParams.get("view") === "home";
+            if (!shouldEnterHome) return false;
+
+            currentUrl.searchParams.delete("view");
+            const cleanUrl = `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`;
+            window.history.replaceState(window.history.state, "", cleanUrl);
+            return true;
+        };
+
+        const syncWithRoute = () => {
+            if (!isHomePath()) {
+                hideGateway(false, true);
+                return;
+            }
+            if (consumeDirectHomeIntent()) {
+                hideGateway(true, true);
+                document.documentElement.classList.remove("welcome-direct-home");
+                return;
+            }
+            document.documentElement.classList.remove("welcome-direct-home");
+            showGateway();
+        };
+
+        document.getElementById("welcome-enter")?.addEventListener("click", (event) => {
+            const button = event.currentTarget as HTMLElement;
+            const rect = button.getBoundingClientRect();
+            gateway.style.setProperty("--exit-x", `${rect.left + rect.width / 2}px`);
+            gateway.style.setProperty("--exit-y", `${rect.top + rect.height / 2}px`);
+            hideGateway(true, false, true);
+        });
+        document.getElementById("welcome-skip")?.addEventListener("click", () => hideGateway(true));
+        gateway.querySelectorAll<HTMLAnchorElement>("[data-welcome-link]").forEach((link) => {
+            link.addEventListener("click", () => hideGateway(false));
+        });
+
+        gateway.addEventListener("pointermove", (event) => {
+            window.cancelAnimationFrame(pointerFrame);
+            pointerFrame = window.requestAnimationFrame(() => {
+                const x = event.clientX / window.innerWidth - 0.5;
+                const y = event.clientY / window.innerHeight - 0.5;
+                gateway.style.setProperty("--pointer-x", `${event.clientX}px`);
+                gateway.style.setProperty("--pointer-y", `${event.clientY}px`);
+                gateway.style.setProperty("--parallax-x", `${x * 14}px`);
+                gateway.style.setProperty("--parallax-y", `${y * 10}px`);
+            });
+        }, { passive: true });
+
+        gateway.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") hideGateway(true);
+            if (event.key === "Tab") {
+                const focusable = Array.from(gateway.querySelectorAll<HTMLElement>("button:not([disabled]), a[href]"));
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (!first || !last) return;
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            }
+        });
+
+        const bindSwup = () => {
+            if (!window.swup?.hooks || gateway.dataset.swupBound === "true") return;
+            gateway.dataset.swupBound = "true";
+            window.swup.hooks.on("page:view", syncWithRoute);
+        };
+
+        if (window.swup?.hooks) bindSwup();
+        else document.addEventListener("swup:enable", bindSwup, { once: true });
+        syncWithRoute();
+    }
+
+    initWelcomeGateway();
+</script>
+
+<style>
+    :global(body.welcome-open) { overflow: hidden; }
+    :global(html.welcome-direct-home) .welcome-gateway { display: none !important; }
+
+    .welcome-gateway {
+        --pointer-x: 50vw;
+        --pointer-y: 45vh;
+        --parallax-x: 0px;
+        --parallax-y: 0px;
+        --exit-x: 50vw;
+        --exit-y: 72vh;
+        --tech-primary: oklch(0.72 0.18 var(--hue));
+        --tech-cyan: oklch(0.82 0.13 calc(var(--hue) - 65));
+        --tech-violet: oklch(0.73 0.18 calc(var(--hue) + 28));
+        opacity: 1;
+        clip-path: circle(150% at 50% 50%);
+        background: #172344;
+        transition: clip-path 0.92s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.62s ease, visibility 0.52s ease;
+        will-change: clip-path, opacity;
+    }
+
+    .welcome-gateway.is-leaving { visibility: hidden; opacity: 0; }
+    .welcome-gateway.is-opening {
+        clip-path: circle(0 at var(--exit-x) var(--exit-y));
+        opacity: 0.18;
+        pointer-events: none;
+    }
+
+    .welcome-gateway.is-opening .welcome-shell-wrap {
+        opacity: 0;
+        transform: translateY(-1.4rem) scale(0.955);
+        transition: opacity 0.38s ease, transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .welcome-gateway.is-opening .welcome-slides span { transform: scale(1.13); }
+
+    :global(html.welcome-revealing #banner-wrapper) {
+        animation: welcome-banner-reveal 1.08s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    :global(html.welcome-revealing #top-row) {
+        animation: welcome-navbar-reveal 0.82s 0.16s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .welcome-slides span {
+        position: absolute;
+        inset: -2%;
+        background-image: linear-gradient(112deg, rgb(15 31 69 / 31%), rgb(55 37 99 / 23%)), var(--slide-mobile);
+        background-position: center;
+        background-size: cover;
+        opacity: 0;
+        transform: scale(1.06);
+        animation: welcome-slideshow 18s infinite, welcome-kenburns 18s ease-in-out infinite;
+        animation-delay: calc(var(--slide-index) * 6s);
+    }
+
+    .welcome-dreamscape {
+        background:
+            linear-gradient(135deg, rgb(29 57 113 / 17%), rgb(71 46 119 / 15%)),
+            radial-gradient(circle at var(--pointer-x) var(--pointer-y), oklch(0.7 0.12 var(--hue) / 14%), transparent 27rem);
+        backdrop-filter: saturate(0.98);
+    }
+
+    .welcome-aurora {
+        border-radius: 50%;
+        filter: blur(70px);
+        opacity: 0.35;
+        pointer-events: none;
+        transition: transform 0.25s ease-out;
+    }
+
+    .welcome-aurora-one {
+        left: -8rem;
+        top: 10%;
+        height: 28rem;
+        width: 28rem;
+        background: rgb(88 101 255 / 65%);
+        transform: translate(var(--parallax-x), var(--parallax-y));
+        animation: welcome-float-a 10s ease-in-out infinite;
+    }
+
+    .welcome-aurora-two {
+        bottom: -10rem;
+        right: 3%;
+        height: 32rem;
+        width: 32rem;
+        background: oklch(0.68 0.18 calc(var(--hue) + 24) / 52%);
+        transform: translate(calc(var(--parallax-x) * -1), calc(var(--parallax-y) * -1));
+        animation: welcome-float-b 12s ease-in-out infinite;
+    }
+
+    .welcome-aurora-three {
+        right: 21%;
+        top: -10rem;
+        height: 24rem;
+        width: 24rem;
+        background: rgb(54 223 255 / 48%);
+        animation: welcome-float-c 13s ease-in-out infinite;
+    }
+
+    .welcome-sparkles i {
+        position: absolute;
+        left: var(--sparkle-x);
+        top: var(--sparkle-y);
+        height: var(--sparkle-size);
+        width: var(--sparkle-size);
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 0 0.55rem rgb(170 210 255 / 90%);
+        opacity: 0.18;
+        animation: welcome-twinkle var(--sparkle-duration) ease-in-out var(--sparkle-delay) infinite;
+    }
+
+    .welcome-shell-wrap {
+        position: relative;
+        padding: 1px;
+        overflow: hidden;
+        background: linear-gradient(125deg, rgb(255 255 255 / 62%), var(--tech-primary) 34%, var(--tech-cyan) 68%, var(--tech-violet));
+        box-shadow: 0 2.2rem 8rem rgb(7 18 65 / 43%), 0 0 3rem rgb(112 94 255 / 15%);
+        animation: welcome-shell-rise 0.82s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    .welcome-shell-wrap::before {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        height: 65rem;
+        width: 65rem;
+        content: "";
+        background: conic-gradient(transparent 15%, rgb(255 255 255 / 78%), transparent 36%, var(--tech-cyan), transparent 60%, var(--tech-primary), transparent 82%);
+        transform: translate(-50%, -50%);
+        animation: welcome-border-spin 11s linear infinite;
+    }
+
+    .welcome-shell {
+        background: linear-gradient(135deg, rgb(35 54 108 / 55%), rgb(54 39 100 / 50%));
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 17%);
+        backdrop-filter: blur(21px) saturate(1.08);
+    }
+
+    .welcome-scanline {
+        z-index: 20;
+        top: -0.2rem;
+        height: 1px;
+        opacity: 0.34;
+        background: linear-gradient(90deg, transparent, var(--tech-cyan) 24% 76%, transparent);
+        box-shadow: 0 0 1rem var(--tech-cyan);
+        animation: welcome-scan 8s linear infinite;
+    }
+
+    .welcome-corner {
+        position: absolute;
+        z-index: 21;
+        height: 1.15rem;
+        width: 1.15rem;
+        pointer-events: none;
+        opacity: 0.55;
+    }
+
+    .welcome-corner-tl { left: 0.75rem; top: 0.75rem; border-left: 1px solid var(--tech-cyan); border-top: 1px solid var(--tech-cyan); }
+    .welcome-corner-tr { right: 0.75rem; top: 0.75rem; border-right: 1px solid var(--tech-cyan); border-top: 1px solid var(--tech-cyan); }
+    .welcome-corner-bl { bottom: 0.75rem; left: 0.75rem; border-bottom: 1px solid var(--tech-primary); border-left: 1px solid var(--tech-primary); }
+    .welcome-corner-br { bottom: 0.75rem; right: 0.75rem; border-bottom: 1px solid var(--tech-primary); border-right: 1px solid var(--tech-primary); }
+
+    .welcome-glass-shine {
+        background:
+            linear-gradient(120deg, rgb(255 255 255 / 12%), transparent 19%, transparent 75%, rgb(146 109 255 / 9%)),
+            radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgb(255 255 255 / 10%), transparent 17rem);
+    }
+
+    .welcome-inner-glow {
+        left: -5rem;
+        top: 15%;
+        height: 21rem;
+        width: 21rem;
+        border-radius: 50%;
+        background: rgb(93 117 255 / 18%);
+        filter: blur(45px);
+    }
+
+    .welcome-avatar { position: relative; flex: none; }
+    .welcome-avatar img { height: 2.75rem; width: 2.75rem; border: 2px solid rgb(255 255 255 / 58%); border-radius: 50%; object-fit: cover; box-shadow: 0 0 1.4rem rgb(107 143 255 / 48%); }
+    .welcome-avatar span { position: absolute; bottom: 0; right: 0; height: 0.7rem; width: 0.7rem; border: 2px solid #17183b; border-radius: 50%; background: #6fffc1; box-shadow: 0 0 0.7rem #6fffc1; }
+
+    .welcome-live i { height: 0.45rem; width: 0.45rem; border-radius: 50%; background: #70ffd1; box-shadow: 0 0 0 0 rgb(112 255 209 / 48%); animation: welcome-live-pulse 2s ease-out infinite; }
+
+    .welcome-skip {
+        display: inline-flex;
+        min-height: 2.65rem;
+        align-items: center;
+        gap: 0.55rem;
+        border: 1px solid rgb(255 255 255 / 18%);
+        border-radius: 999px;
+        background: rgb(255 255 255 / 7%);
+        padding: 0.35rem 0.45rem 0.35rem 0.95rem;
+        color: rgb(255 255 255 / 66%);
+        font-size: 0.72rem;
+        backdrop-filter: blur(0.8rem);
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .welcome-skip :global(svg) { font-size: 1.25rem; transition: transform 0.35s ease; }
+    .welcome-skip:hover { border-color: rgb(255 255 255 / 42%); background: rgb(255 255 255 / 14%); color: white; }
+    .welcome-skip:hover :global(svg) { transform: rotate(90deg); }
+
+    .welcome-hero-grid {
+        opacity: 0.24;
+        background-image:
+            linear-gradient(oklch(0.82 0.13 calc(var(--hue) - 65) / 21%) 1px, transparent 1px),
+            linear-gradient(90deg, oklch(0.82 0.13 calc(var(--hue) - 65) / 21%) 1px, transparent 1px);
+        background-size: 3.4rem 3.4rem;
+        mask-image: radial-gradient(circle at 30% 45%, black, transparent 70%);
+    }
+
+    .welcome-floating-orb {
+        z-index: -1;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgb(255 255 255 / 26%);
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgb(255 255 255 / 17%), rgb(104 90 255 / 20%));
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 24%), 0 0 2rem rgb(101 105 255 / 20%);
+        color: rgb(255 255 255 / 65%);
+        backdrop-filter: blur(0.8rem);
+    }
+
+    .welcome-floating-orb-a { right: 10%; top: 15%; height: 4.5rem; width: 4.5rem; font-size: 1rem; font-weight: 700; animation: welcome-orb-a 7s ease-in-out infinite; }
+    .welcome-floating-orb-b { right: 4%; top: 39%; height: 2.9rem; width: 2.9rem; color: var(--tech-cyan); animation: welcome-orb-b 8.5s ease-in-out infinite; }
+
+    .welcome-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid rgb(164 173 255 / 28%);
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgb(121 98 255 / 18%), rgb(59 207 255 / 10%));
+        padding: 0.4rem 0.75rem;
+        color: rgb(255 255 255 / 70%);
+        font-size: 0.64rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+    }
+
+    .welcome-badge :global(svg) { color: #a8d9ff; font-size: 1rem; }
+    .welcome-badge i { height: 0.33rem; width: 0.33rem; border-radius: 50%; background: var(--tech-cyan); box-shadow: 0 0 0.65rem var(--tech-cyan); }
+
+    .welcome-title {
+        margin-top: 1.5rem;
+        max-width: 47rem;
+        font-size: clamp(3.3rem, 5.3vw, 6.1rem);
+        font-weight: 700;
+        letter-spacing: -0.055em;
+        line-height: 0.99;
+        text-shadow: 0 0.4rem 2.8rem rgb(5 5 30 / 30%);
+    }
+
+    .welcome-title > span { display: block; }
+    .welcome-title-gradient {
+        width: max-content;
+        max-width: 100%;
+        padding-bottom: 0.08em;
+        background: linear-gradient(100deg, #a9c8ff 5%, var(--tech-primary) 32%, var(--tech-cyan) 62%, #b8b6ff 95%);
+        background-size: 220% auto;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: welcome-gradient-text 7s linear infinite;
+    }
+
+    .welcome-lead {
+        margin-top: 1.45rem;
+        max-width: 39rem;
+        color: rgb(255 255 255 / 67%);
+        font-size: clamp(0.92rem, 1.3vw, 1.08rem);
+        line-height: 1.82;
+    }
+
+    .welcome-stats {
+        display: grid;
+        max-width: 42rem;
+        grid-template-columns: 0.86fr 0.86fr 1.28fr;
+        gap: 0.65rem;
+        margin-top: 1.8rem;
+    }
+
+    .welcome-stats > div {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 14%);
+        border-radius: 1rem;
+        background: linear-gradient(145deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 4%));
+        padding: 0.85rem 0.95rem;
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%);
+    }
+
+    .welcome-stats > div::after { position: absolute; bottom: -1.8rem; right: -1.8rem; height: 4rem; width: 4rem; content: ""; border-radius: 50%; background: rgb(141 114 255 / 20%); filter: blur(0.8rem); }
+    .welcome-stats dt { color: rgb(255 255 255 / 40%); font-size: 0.57rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    .welcome-stats dd { display: flex; flex-direction: column; margin-top: 0.25rem; }
+    .welcome-stats strong { font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: 1; }
+    .welcome-stats span { margin-top: 0.28rem; color: rgb(255 255 255 / 39%); font-size: 0.61rem; }
+
+    .welcome-mini-label { color: rgb(255 255 255 / 42%); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; }
+    .welcome-topics { border-top: 1px solid rgb(255 255 255 / 14%); padding-top: 0.85rem; }
+    .welcome-topic-bubbles {
+        display: flex;
+        min-height: 5.45rem;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.55rem;
+        margin-top: 0.35rem;
+    }
+
+    .welcome-topic {
+        position: relative;
+        display: inline-flex;
+        height: var(--bubble-size, 4.45rem);
+        width: var(--bubble-size, 4.45rem);
+        flex: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.18rem;
+        border: 1px solid oklch(0.82 0.13 calc(var(--hue) - 65) / 32%);
+        border-radius: 50%;
+        background:
+            radial-gradient(circle at 30% 24%, rgb(255 255 255 / 17%), transparent 28%),
+            linear-gradient(145deg, oklch(0.64 0.18 calc(var(--hue) + var(--topic-index) * 12) / 29%), rgb(255 255 255 / 4%));
+        padding: 0.45rem;
+        color: rgb(255 255 255 / 82%);
+        font-size: 0.61rem;
+        line-height: 1.05;
+        text-align: center;
+        text-transform: capitalize;
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 18%), 0 0.65rem 1.6rem rgb(25 45 130 / 17%);
+        backdrop-filter: blur(0.85rem);
+        animation: welcome-bubble-float 5.6s ease-in-out var(--bubble-delay) infinite;
+        transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .welcome-topic::after { position: absolute; inset: 0.32rem; content: ""; border: 1px solid rgb(255 255 255 / 8%); border-radius: 50%; pointer-events: none; }
+    .welcome-topic i { position: absolute; right: 15%; top: 13%; height: 0.32rem; width: 0.32rem; border-radius: 50%; background: var(--tech-cyan); box-shadow: 0 0 0.55rem var(--tech-cyan); }
+    .welcome-topic span { color: var(--tech-cyan); font-size: 0.55rem; }
+    .welcome-topic:hover { border-color: var(--tech-cyan); background-color: rgb(110 128 255 / 16%); box-shadow: inset 0 1px 0 rgb(255 255 255 / 24%), 0 0 1.8rem oklch(0.72 0.18 var(--hue) / 30%); animation-play-state: paused; }
+
+    .welcome-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.35rem; }
+
+    .welcome-primary {
+        position: relative;
+        display: inline-flex;
+        min-width: 15.7rem;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 28%);
+        border-radius: 999px;
+        background: linear-gradient(110deg, oklch(0.64 0.2 var(--hue)), oklch(0.7 0.18 calc(var(--hue) - 28)) 52%, oklch(0.74 0.16 calc(var(--hue) - 62)));
+        padding: 0.4rem 0.42rem 0.4rem 1.35rem;
+        box-shadow: 0 0.8rem 2.8rem rgb(116 77 255 / 36%), inset 0 1px 0 rgb(255 255 255 / 35%);
+        text-align: left;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .welcome-primary::before { position: absolute; inset: 0; content: ""; background: linear-gradient(110deg, transparent 20%, rgb(255 255 255 / 28%) 43%, transparent 65%); transform: translateX(-130%); animation: welcome-button-shine 3.8s ease-in-out infinite; }
+    .welcome-primary > span { position: relative; display: flex; flex-direction: column; }
+    .welcome-primary small { color: rgb(255 255 255 / 60%); font-size: 0.49rem; letter-spacing: 0.13em; }
+    .welcome-primary strong { margin-top: 0.05rem; font-size: 0.94rem; }
+    .welcome-primary > i { position: relative; display: grid; height: 3.1rem; width: 3.1rem; flex: none; place-items: center; border-radius: 50%; background: rgb(255 255 255 / 91%); color: #6557dd; font-size: 1.35rem; box-shadow: 0 0.35rem 1rem rgb(48 24 130 / 25%); transition: transform 0.28s ease; }
+    .welcome-primary:hover { box-shadow: 0 1.1rem 3.4rem rgb(116 77 255 / 48%), inset 0 1px 0 rgb(255 255 255 / 45%); transform: translateY(-0.18rem); }
+    .welcome-primary:hover > i { transform: rotate(-28deg) scale(1.05); }
+
+    .welcome-secondary {
+        display: inline-flex;
+        min-height: 3.85rem;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid rgb(255 255 255 / 17%);
+        border-radius: 999px;
+        background: rgb(255 255 255 / 7%);
+        padding: 0 1rem;
+        color: rgb(255 255 255 / 72%);
+        font-size: 0.75rem;
+        backdrop-filter: blur(0.8rem);
+        transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .welcome-secondary > span { border-radius: 999px; background: rgb(255 255 255 / 10%); padding: 0.12rem 0.4rem; color: rgb(255 255 255 / 46%); font-size: 0.6rem; }
+    .welcome-secondary:hover { border-color: rgb(255 255 255 / 34%); background: rgb(255 255 255 / 12%); transform: translateY(-0.15rem); }
+
+    .welcome-section-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 0.75rem; }
+    .welcome-section-head > div > span { color: rgb(255 255 255 / 40%); font-size: 0.55rem; font-weight: 600; letter-spacing: 0.16em; }
+    .welcome-section-head h2 { margin-top: 0.15rem; font-size: 1.45rem; font-weight: 650; }
+    .welcome-section-head > a { display: inline-flex; align-items: center; gap: 0.3rem; color: rgb(255 255 255 / 50%); font-size: 0.69rem; transition: color 0.2s ease; }
+    .welcome-section-head > a:hover { color: #c8b6ff; }
+
+    .welcome-latest-grid { display: grid; grid-template-columns: 1fr; gap: 0.55rem; }
+
+    .welcome-latest {
+        position: relative;
+        display: grid;
+        min-width: 0;
+        grid-template-columns: 6.15rem minmax(0, 1fr);
+        align-items: center;
+        gap: 0.65rem;
+        min-height: 6.1rem;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 13%);
+        border-radius: 1rem;
+        background: linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 3%));
+        padding: 0.5rem;
+        color: white;
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 7%);
+        transition: transform 0.24s ease, border-color 0.24s ease, background-color 0.24s ease;
+    }
+
+    .welcome-latest:hover { border-color: rgb(173 183 255 / 42%); background: rgb(255 255 255 / 10%); transform: translateY(-0.16rem); }
+    .welcome-cover { position: relative; display: grid; height: 5rem; place-items: center; overflow: hidden; border-radius: 0.72rem; background: linear-gradient(135deg, #4855af, #5c9dca); }
+    .welcome-cover img { height: 100%; width: 100%; object-fit: cover; transition: filter 0.5s ease, transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .welcome-cover-overlay { position: absolute; inset: 0; background: linear-gradient(145deg, transparent 35%, rgb(17 11 48 / 60%)); }
+    .welcome-latest:hover img { filter: saturate(1.18); transform: scale(1.055); }
+    .welcome-order { position: absolute; left: 0.45rem; top: 0.4rem; border-radius: 999px; background: rgb(12 10 42 / 45%); padding: 0.12rem 0.38rem; color: rgb(255 255 255 / 72%); font-size: 0.56rem; backdrop-filter: blur(0.5rem); }
+    .welcome-latest-copy { min-width: 0; padding-right: 2.15rem; }
+    .welcome-latest time { color: rgb(255 255 255 / 38%); font-size: 0.57rem; letter-spacing: 0.08em; }
+    .welcome-latest h3 { display: -webkit-box; margin-top: 0.28rem; overflow: hidden; font-size: 0.78rem; font-weight: 650; line-height: 1.33; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .welcome-latest p { display: -webkit-box; margin-top: 0.2rem; overflow: hidden; color: rgb(255 255 255 / 38%); font-size: 0.6rem; line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
+    .welcome-card-arrow { position: absolute; right: 0.65rem; top: 50%; display: grid; height: 1.75rem; width: 1.75rem; place-items: center; border: 1px solid rgb(255 255 255 / 18%); border-radius: 50%; background: rgb(255 255 255 / 7%); color: rgb(255 255 255 / 55%); transform: translateY(-50%); transition: background-color 0.2s ease, color 0.2s ease, transform 0.25s ease; }
+    .welcome-latest:hover .welcome-card-arrow { background: white; color: #507be5; transform: translateY(-50%) rotate(45deg); }
+
+    .welcome-path-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 1.05rem 0 0.55rem; }
+    .welcome-path-head > div { display: flex; flex-direction: column; }
+    .welcome-path-head strong { margin-top: 0.12rem; font-size: 0.84rem; }
+    .welcome-path-head > :global(svg) { color: rgb(178 184 255 / 55%); font-size: 1.4rem; }
+    .welcome-features { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+
+    .welcome-feature {
+        position: relative;
+        display: grid;
+        min-width: 0;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 0.65rem;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 13%);
+        border-radius: 0.9rem;
+        background: linear-gradient(135deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 3%));
+        padding: 0.62rem;
+        color: white;
+        transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .welcome-feature > i { display: grid; height: 2.35rem; width: 2.35rem; place-items: center; border-radius: 0.7rem; font-size: 1.15rem; box-shadow: inset 0 1px 0 rgb(255 255 255 / 18%); }
+    .welcome-feature > span { display: flex; min-width: 0; flex-direction: column; }
+    .welcome-feature strong { font-size: 0.74rem; }
+    .welcome-feature small { margin-top: 0.08rem; overflow: hidden; color: rgb(255 255 255 / 38%); font-size: 0.58rem; text-overflow: ellipsis; white-space: nowrap; }
+    .welcome-feature b { position: absolute; right: 0.45rem; top: 0.32rem; color: rgb(255 255 255 / 16%); font-size: 0.5rem; font-weight: 500; }
+    .welcome-feature[data-tone="purple"] > i { background: linear-gradient(135deg, rgb(137 102 255 / 58%), rgb(179 106 241 / 35%)); color: #ded2ff; }
+    .welcome-feature[data-tone="blue"] > i { background: linear-gradient(135deg, rgb(66 142 255 / 58%), rgb(69 210 255 / 32%)); color: #c8efff; }
+    .welcome-feature[data-tone="indigo"] > i { background: linear-gradient(135deg, rgb(93 104 240 / 58%), rgb(117 152 255 / 32%)); color: #d9e1ff; }
+    .welcome-feature[data-tone="cyan"] > i { background: linear-gradient(135deg, rgb(47 196 207 / 55%), rgb(91 236 192 / 30%)); color: #c6fff0; }
+    .welcome-feature:hover { border-color: rgb(198 188 255 / 35%); background: rgb(255 255 255 / 11%); transform: translateY(-0.13rem) scale(1.01); }
+
+    .welcome-search-tip {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 0.65rem;
+        margin-top: 0.7rem;
+        border: 1px solid rgb(153 171 255 / 15%);
+        border-radius: 0.9rem;
+        background: linear-gradient(90deg, rgb(97 89 211 / 15%), rgb(73 175 223 / 8%));
+        padding: 0.62rem 0.72rem;
+    }
+
+    .welcome-search-tip > span { display: grid; height: 2.05rem; width: 2.05rem; place-items: center; border-radius: 0.62rem; background: rgb(255 255 255 / 9%); color: #bdd7ff; }
+    .welcome-search-tip p { display: flex; min-width: 0; flex-direction: column; }
+    .welcome-search-tip strong { font-size: 0.7rem; }
+    .welcome-search-tip small { margin-top: 0.08rem; color: rgb(255 255 255 / 38%); font-size: 0.57rem; }
+    .welcome-search-tip > :global(svg) { color: rgb(255 255 255 / 22%); font-size: 1.15rem; }
+    kbd { border: 1px solid rgb(255 255 255 / 17%); border-radius: 0.25rem; background: rgb(255 255 255 / 7%); padding: 0.08rem 0.25rem; color: rgb(255 255 255 / 68%); }
+
+    :is(.welcome-skip, .welcome-primary, .welcome-secondary, .welcome-topic, .welcome-latest, .welcome-feature):focus-visible {
+        outline: 2px solid #bfe9ff;
+        outline-offset: 3px;
+    }
+
+    @media (min-width: 768px) {
+        .welcome-slides span { background-image: linear-gradient(112deg, rgb(15 31 69 / 31%), rgb(55 37 99 / 23%)), var(--slide-desktop); }
+    }
+
+    @media (max-width: 1023px) {
+        .welcome-shell-wrap { max-width: 54rem; }
+        .welcome-hero { min-height: 40rem; }
+        .welcome-floating-orb-a { right: 7%; }
+        .welcome-explore { background: rgb(45 48 103 / 20%); }
+    }
+
+    @media (max-width: 639px) {
+        .welcome-title { font-size: clamp(2.75rem, 14vw, 4.1rem); }
+        .welcome-floating-orb-a { right: 4%; top: 12%; height: 3.3rem; width: 3.3rem; opacity: 0.7; }
+        .welcome-floating-orb-b { display: none; }
+        .welcome-stats { grid-template-columns: 1fr 1fr; }
+        .welcome-stats > div:last-child { grid-column: 1 / -1; }
+        .welcome-stats > div:last-child dd { flex-direction: row; align-items: end; gap: 0.6rem; }
+        .welcome-topic-bubbles { min-height: 4.35rem; justify-content: center; gap: 0.35rem; }
+        .welcome-topic,
+        .welcome-topic:nth-child(n) { height: 4rem; width: 4rem; min-width: 0; font-size: 0.54rem; }
+        .welcome-primary,
+        .welcome-secondary { width: 100%; }
+        .welcome-secondary { justify-content: center; }
+        .welcome-latest-grid { grid-template-columns: 1fr; }
+        .welcome-latest { grid-template-columns: 5.4rem minmax(0, 1fr); min-height: 5.7rem; padding: 0.5rem; }
+        .welcome-cover { height: 4.65rem; min-height: 0; border-radius: 0.72rem; }
+        .welcome-card-arrow { display: none; }
+        .welcome-latest-copy { padding-right: 0.15rem; }
+        .welcome-feature { padding: 0.55rem; }
+        .welcome-feature > i { height: 2.15rem; width: 2.15rem; }
+    }
+
+    @media (max-height: 780px) and (min-width: 1024px) {
+        .welcome-shell-wrap { max-width: 84rem; }
+        .welcome-topbar { padding-top: 0.7rem; padding-bottom: 0.7rem; }
+        .welcome-hero { min-height: 0; padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .welcome-title { margin-top: 0.8rem; font-size: 4rem; }
+        .welcome-lead { margin-top: 0.8rem; line-height: 1.55; }
+        .welcome-stats { margin-top: 1rem; }
+        .welcome-stats > div { padding: 0.65rem 0.75rem; }
+        .welcome-topic-bubbles { min-height: 4.6rem; }
+        .welcome-topic,
+        .welcome-topic:nth-child(n) { height: 4.1rem; width: 4.1rem; }
+        .welcome-latest { min-height: 5.2rem; }
+        .welcome-cover { height: 4.25rem; }
+        .welcome-explore { padding-top: 1.1rem; padding-bottom: 1.1rem; }
+        .welcome-path-head { margin-top: 0.7rem; }
+        .welcome-search-tip { margin-top: 0.5rem; }
+    }
+
+    @keyframes welcome-slideshow {
+        0% { opacity: 0; }
+        7%, 30% { opacity: 1; }
+        40%, 100% { opacity: 0; }
+    }
+
+    @keyframes welcome-kenburns {
+        0% { transform: scale(1.09) translate3d(-0.5%, 0, 0); }
+        38% { transform: scale(1.03) translate3d(0.5%, -0.5%, 0); }
+        100% { transform: scale(1.09) translate3d(-0.5%, 0, 0); }
+    }
+
+    @keyframes welcome-shell-rise {
+        from { opacity: 0; transform: translateY(1.3rem) scale(0.985); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes welcome-banner-reveal {
+        from { filter: blur(0.75rem) saturate(1.35); opacity: 0.45; transform: scale(1.055); }
+        to { filter: blur(0) saturate(1); opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes welcome-navbar-reveal {
+        from { opacity: 0; transform: translateY(-1rem); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes welcome-border-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    @keyframes welcome-scan { from { top: -0.2rem; } to { top: calc(100% + 0.2rem); } }
+    @keyframes welcome-bubble-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-0.42rem); } }
+    @keyframes welcome-gradient-text { to { background-position: 220% center; } }
+    @keyframes welcome-button-shine { 0%, 45% { transform: translateX(-130%); } 72%, 100% { transform: translateX(130%); } }
+    @keyframes welcome-live-pulse { 0% { box-shadow: 0 0 0 0 rgb(112 255 209 / 48%); } 75%, 100% { box-shadow: 0 0 0 0.5rem rgb(112 255 209 / 0%); } }
+    @keyframes welcome-twinkle { 0%, 100% { opacity: 0.12; transform: scale(0.6); } 50% { opacity: 0.8; transform: scale(1.35); } }
+    @keyframes welcome-float-a { 0%, 100% { translate: 0 0; } 50% { translate: 2rem 1.3rem; } }
+    @keyframes welcome-float-b { 0%, 100% { translate: 0 0; } 50% { translate: -1.8rem -1rem; } }
+    @keyframes welcome-float-c { 0%, 100% { translate: 0 0; } 50% { translate: 1rem 2rem; } }
+    @keyframes welcome-orb-a { 0%, 100% { transform: translateY(0) rotate(-8deg); } 50% { transform: translateY(-0.8rem) rotate(5deg); } }
+    @keyframes welcome-orb-b { 0%, 100% { transform: translateY(0) rotate(7deg); } 50% { transform: translateY(0.7rem) rotate(-8deg); } }
+
+    @media (prefers-reduced-motion: reduce) {
+        .welcome-slides span:first-child { opacity: 1; animation: none; }
+        .welcome-slides span:not(:first-child),
+        .welcome-aurora,
+        .welcome-sparkles i,
+        .welcome-shell-wrap,
+        .welcome-shell-wrap::before,
+        .welcome-scanline,
+        .welcome-live i,
+        .welcome-title-gradient,
+        .welcome-primary::before,
+        .welcome-floating-orb,
+        .welcome-topic { animation: none; }
+        .welcome-gateway,
+        .welcome-primary,
+        .welcome-latest,
+        .welcome-feature { transition-duration: 0.01ms; }
+    }
+</style>

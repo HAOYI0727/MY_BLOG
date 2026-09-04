@@ -29,6 +29,15 @@ export class TableOfContents extends HTMLElement {
         }
     };
 
+    _handleKeydown = (e: KeyboardEvent) => {
+        if (e.key !== "Escape") return;
+        const panel = this.querySelector('.toc-floating-panel');
+        if (!panel || panel.classList.contains('hidden')) return;
+        e.preventDefault();
+        this.toggleFloatingPanel(false);
+        this.querySelector<HTMLButtonElement>('.toc-floating-btn')?.focus({ preventScroll: true });
+    };
+
     constructor() {
         super();
         this.observer = new IntersectionObserver(this.markVisibleSection);
@@ -181,7 +190,10 @@ export class TableOfContents extends HTMLElement {
 
     toggleFloatingPanel(show: boolean) {
         const panel = this.querySelector('.toc-floating-panel');
+        const button = this.querySelector('.toc-floating-btn');
         if (!panel) return;
+        button?.setAttribute("aria-expanded", String(show));
+        panel.setAttribute("aria-hidden", String(!show));
         if (show) {
             panel.classList.remove('hidden');
             requestAnimationFrame(() => {
@@ -288,6 +300,8 @@ export class TableOfContents extends HTMLElement {
 
             document.removeEventListener('click', this._handleDocClick);
             document.addEventListener('click', this._handleDocClick);
+            document.removeEventListener('keydown', this._handleKeydown);
+            document.addEventListener('keydown', this._handleKeydown);
 
             // 监听 backToTop 按钮的状态
             const backToTopBtn = document.getElementById('back-to-top-btn');
@@ -398,6 +412,7 @@ export class TableOfContents extends HTMLElement {
         const btn = this.querySelector('.toc-floating-btn');
         btn?.removeEventListener('click', this._handleBtnClick);
         document.removeEventListener('click', this._handleDocClick);
+        document.removeEventListener('keydown', this._handleKeydown);
     };
 }
 

@@ -4,6 +4,11 @@ import { LinkPresets } from "@constants/link-presets";
 import { LinkPreset } from "@/types/config";
 import { getSortedPostsList } from "@utils/post";
 import GridLayout from "@layouts/grid.astro";
+import ContinueReading from "@components/ContinueReading.astro";
+import { siteConfig } from "@/config";
+import { langToLocaleMap } from "@i18n/language";
+import { i18n } from "@i18n/translation";
+import I18nKey from "@i18n/i18nKey";
 
 const pageTitle = LinkPresets[LinkPreset.Posts].name;
 const pageDescription = LinkPresets[LinkPreset.Posts].description;
@@ -56,10 +61,12 @@ const monthGroups = Array.from(monthMap.values()).sort((a, b) => {
   return b.month - a.month;
 });
 
-const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+const dateLocale = langToLocaleMap[siteConfig.lang] || "zh-Hans";
+const yearMonthFormatter = new Intl.DateTimeFormat(dateLocale, { year: "numeric", month: "long" });
 ---
 
 <GridLayout title={pageTitle} description={pageDescription}>
+  <ContinueReading />
   <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
     <div class="card-base z-10 px-9 py-6 relative w-full">
       
@@ -77,7 +84,7 @@ const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8�
         </div>
         <span class="inline-flex items-center gap-1 px-3 py-1 bg-(--primary)/10 text-(--primary) text-sm rounded-full font-medium">
           <span class="i-ic:round-article w-4 h-4"></span>
-          {allPosts.length} 篇
+          {allPosts.length} {i18n(I18nKey.postsCount)}
         </span>
       </header>
 
@@ -121,13 +128,13 @@ const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8�
               {/* 底部信息区域 */}
               <div class="absolute bottom-0 left-0 right-0 p-5 text-white z-10">
                 <div class="text-xl font-bold drop-shadow-lg leading-tight">
-                  {year}年{monthNames[month-1]}
+                  {yearMonthFormatter.format(new Date(year, month - 1, 1))}
                 </div>
                 <div class="flex items-center gap-2 text-sm opacity-90 drop-shadow-md mt-1">
                   <span class="i-ic:round-article w-4 h-4"></span>
-                  <span>{count} 篇文章</span>
+                  <span>{count} {i18n(I18nKey.postsCount)}</span>
                   {earliestCover && (
-                    <span class="text-xs opacity-70 ml-1">· 封面图</span>
+                    <span class="text-xs opacity-70 ml-1">· {i18n(I18nKey.coverImage)}</span>
                   )}
                 </div>
               </div>
@@ -143,7 +150,7 @@ const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8�
 
       <!-- 底部统计 -->
       <div class="mt-12 text-center text-60 text-sm">
-        共 {monthGroups.length} 个月份归档
+        {monthGroups.length} {i18n(I18nKey.monthArchives)}
       </div>
     </div>
   </div>

@@ -1,0 +1,81 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { i18n } from "@i18n/translation";
+import I18nKey from "@i18n/i18nKey";
+---
+
+<aside
+    id="continue-reading"
+    class="card-base continue-reading mb-4 overflow-hidden rounded-(--radius-large)"
+    aria-labelledby="continue-reading-label"
+    hidden
+>
+    <div class="flex items-start gap-3 p-4 sm:items-center sm:p-5">
+        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-(--btn-regular-bg) text-(--primary)">
+            <Icon name="material-symbols:history-rounded" class="text-[1.45rem]" />
+        </div>
+
+        <div class="min-w-0 flex-1">
+            <div class="mb-1 flex items-center gap-2">
+                <span id="continue-reading-label" class="text-xs font-bold uppercase tracking-[0.12em] text-(--primary)">
+                    {i18n(I18nKey.continueReading)}
+                </span>
+                <span data-continue-progress-text class="text-xs text-50"></span>
+            </div>
+            <a
+                data-continue-link
+                href="/"
+                class="group block rounded-md font-bold text-90 outline-none hover:text-(--primary)"
+            >
+                <span data-continue-title class="block truncate"></span>
+                <span class="mt-1 block text-sm font-normal text-50">
+                    {i18n(I18nKey.continueReadingDescription)}
+                </span>
+            </a>
+
+            <div
+                data-continue-progress
+                class="mt-3 h-1.5 overflow-hidden rounded-full bg-black/5 dark:bg-white/10"
+                role="progressbar"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+                aria-label={i18n(I18nKey.readingProgress)}
+            >
+                <div data-continue-progress-fill class="h-full origin-left rounded-full bg-(--primary)" style="transform: scaleX(0)"></div>
+            </div>
+        </div>
+
+        <div class="flex shrink-0 items-center gap-1">
+            <a
+                data-continue-action
+                href="/"
+                class="btn-regular hidden h-10 items-center gap-1.5 rounded-xl px-3 text-sm font-semibold sm:inline-flex"
+            >
+                <Icon name="material-symbols:play-arrow" class="text-lg" />
+                <span>{i18n(I18nKey.resumeReading)}</span>
+            </a>
+            <button
+                data-continue-dismiss
+                type="button"
+                class="btn-plain flex h-10 w-10 items-center justify-center rounded-xl"
+                aria-label={i18n(I18nKey.dismiss)}
+                title={i18n(I18nKey.dismiss)}
+            >
+                <Icon name="material-symbols:close-rounded" class="text-xl" />
+            </button>
+        </div>
+    </div>
+</aside>
+
+<style>
+    .continue-reading {
+        border: 1px solid color-mix(in oklch, var(--primary) 20%, transparent);
+        box-shadow: 0 0.45rem 1.4rem color-mix(in oklch, var(--primary) 8%, transparent);
+    }
+
+    [data-continue-progress-fill] {
+        transition: transform 220ms ease-out;
+    }
+</style>

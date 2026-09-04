@@ -700,7 +700,7 @@ onDestroy(() => {
                         }}
                         role="button"
                         tabindex="0"
-                        aria-label="播放 {song.title} - {song.artist}">
+                        aria-label={`${i18n(Key.musicPlayTrack)} ${song.title} - ${song.artist}`}>
                         <div class="w-6 h-6 flex items-center justify-center">
                             {#if index === currentIndex && isPlaying}
                                 <Icon icon="material-symbols:graphic-eq" class="text-(--primary) animate-pulse" />
@@ -761,7 +761,7 @@ onDestroy(() => {
          class:pointer-events-none={isCollapsed}>
         <div class="flex items-center gap-4 mb-4">
             <div class="cover-container relative w-16 h-16 rounded-full overflow-hidden shrink-0">
-                <img src={getAssetPath(currentSong.cover)} alt="封面"
+                <img src={getAssetPath(currentSong.cover)} alt={i18n(Key.coverImage)}
                      class="w-full h-full object-cover transition-transform duration-300"
                      class:spinning={isPlaying && !isLoading}
                      class:animate-pulse={isLoading} />
@@ -794,11 +794,11 @@ onDestroy(() => {
                  onscroll={handleLrcScroll}>
                 {#if noLyrics}
                     <div class="h-full flex items-center justify-center text-sm text-30">
-                        暂无歌词
+                        {i18n(Key.musicNoLyrics)}
                     </div>
                 {:else if lyrics.length === 0}
                      <div class="h-full flex items-center justify-center text-sm text-30">
-                        加载歌词中...
+                        {i18n(Key.musicLyricsLoading)}
                     </div>
                 {:else}
                     <div class="py-8">
@@ -810,7 +810,7 @@ onDestroy(() => {
                                class:scale-105={index === currentLrcIndex}
                                class:text-50={index !== currentLrcIndex}
                                class:opacity-60={index !== currentLrcIndex}
-                               title="跳转至此句">
+                               title={i18n(Key.musicJumpToLyric)}>
                                 {line.text}
                             </button>
                         {/each}
@@ -884,7 +884,7 @@ onDestroy(() => {
             <!-- 歌词显示切换按钮 -->
             <button type="button" aria-label={i18n(Key.musicToggleLyrics)} class="w-10 h-10 rounded-lg btn-plain"
                     onclick={toggleLyrics}
-                    title="切换歌词显示">
+                    title={i18n(Key.musicToggleLyrics)}>
                 <Icon icon="material-symbols:lyrics" class="text-lg {showLyrics ? 'text-(--primary)' : 'opacity-90'}" />
             </button>
         </div>

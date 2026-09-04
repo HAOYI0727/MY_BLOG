@@ -5,6 +5,7 @@ import { getSortedPostsList } from "@utils/post";
 import ArchivePanel from "@components/archivePanel.svelte";
 import GridLayout from "@layouts/grid.astro";
 import BackwardButton from "@components/backwardButton.astro";
+import ContinueReading from "@components/ContinueReading.astro";
 
 
 const pageTitle = LinkPresets[LinkPreset.Archive].name;
@@ -14,6 +15,7 @@ const sortedPostsList = await getSortedPostsList();
 ---
 
 <GridLayout title={pageTitle} description={pageDescription}>
+    <ContinueReading />
     <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
         <div class="card-base z-10 px-9 py-6 relative w-full ">
             <BackwardButton currentPath={Astro.url.pathname} />

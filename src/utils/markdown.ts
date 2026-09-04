@@ -1,3 +1,58 @@
+let markdownActionsBound = false;
+
+function fallbackCopy(text: string): boolean {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.setAttribute("readonly", "");
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "0";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+        return document.execCommand("copy");
+    } catch {
+        return false;
+    } finally {
+        textArea.remove();
+    }
+}
+
+async function copyText(text: string): Promise<boolean> {
+    try {
+        if (window.isSecureContext && navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+        }
+    } catch {
+        // Fall through to the compatibility path below.
+    }
+    return fallbackCopy(text);
+}
+
+function sectionCopyLabels() {
+    const lang = document.documentElement.lang.toLowerCase();
+    if (lang.startsWith("zh")) return { copy: "复制本节链接", copied: "本节链接已复制" };
+    if (lang.startsWith("ja")) return { copy: "セクションリンクをコピー", copied: "リンクをコピーしました" };
+    return { copy: "Copy section link", copied: "Section link copied" };
+}
+
+function decorateSectionLinks() {
+    const labels = sectionCopyLabels();
+    document.querySelectorAll<HTMLElement>(".markdown-content :is(h2, h3, h4, h5, h6)[id]").forEach((heading) => {
+        if (heading.querySelector("[data-heading-anchor]")) return;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "heading-anchor-btn";
+        button.dataset.headingAnchor = heading.id;
+        button.title = labels.copy;
+        button.setAttribute("aria-label", `${labels.copy}：${heading.textContent?.trim() || heading.id}`);
+        button.innerHTML = '<span aria-hidden="true">#</span>';
+        heading.appendChild(button);
+    });
+}
+
 /**
  * Markdown 相关交互逻辑
  * 包括代码块复制和折叠功能
@@ -6,11 +61,41 @@
 
 export function initMarkdownActions() {
     if (typeof document === "undefined") return;
-    // 移除旧的监听器（如果有），防止重复绑定
-    // 注意：由于使用的是匿名函数且通常在页面加载时只运行一次，在 Swup 环境下只要这个脚本在主布局中加载，它就只会运行一次。
+    decorateSectionLinks();
+    if (markdownActionsBound) return;
+    markdownActionsBound = true;
+
     document.addEventListener("click", function (e: MouseEvent) {
         const target = e.target as Element | null;
         if (!target) return;
+
+        const headingAnchor = target.closest<HTMLButtonElement>("[data-heading-anchor]");
+        if (headingAnchor) {
+            e.preventDefault();
+            const id = headingAnchor.dataset.headingAnchor;
+            if (!id) return;
+            const sectionUrl = new URL(window.location.href);
+            sectionUrl.hash = id;
+            const labels = sectionCopyLabels();
+            const defaultAriaLabel = headingAnchor.getAttribute("aria-label") || labels.copy;
+            copyText(sectionUrl.toString()).then((copied) => {
+                if (!copied) return;
+                const oldTimer = Number(headingAnchor.dataset.timeoutId || 0);
+                if (oldTimer) window.clearTimeout(oldTimer);
+                headingAnchor.classList.add("success");
+                headingAnchor.title = labels.copied;
+                headingAnchor.setAttribute("aria-label", labels.copied);
+                headingAnchor.innerHTML = '<span aria-hidden="true">✓</span>';
+                const timer = window.setTimeout(() => {
+                    headingAnchor.classList.remove("success");
+                    headingAnchor.title = labels.copy;
+                    headingAnchor.setAttribute("aria-label", defaultAriaLabel);
+                    headingAnchor.innerHTML = '<span aria-hidden="true">#</span>';
+                }, 1600);
+                headingAnchor.dataset.timeoutId = String(timer);
+            });
+            return;
+        }
 
         // 1. 处理复制按钮点击
         if (target.classList.contains("copy-btn") || target.closest(".copy-btn")) {
@@ -63,33 +148,9 @@ export function initMarkdownActions() {
                 return '\n'.repeat(resultEmptyLines + 1);
             });
 
-            // 尝试多种复制方法
-            const copyToClipboard = async (text: string) => {
-                try {
-                    await navigator.clipboard.writeText(text);
-                } catch (clipboardErr) {
-                    console.warn('Clipboard API 失败，尝试备用方案:', clipboardErr);
-                    const textArea = document.createElement('textarea');
-                    textArea.value = text;
-                    textArea.style.position = 'fixed';
-                    textArea.style.left = '-999999px';
-                    textArea.style.top = '-999999px';
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                    } catch (execErr) {
-                        console.error('execCommand 也失败了:', execErr);
-                        throw new Error('所有复制方法都失败了');
-                    } finally {
-                        document.body.removeChild(textArea);
-                    }
-                }
-            };
-
             // 调用复制函数
-            copyToClipboard(code).then(() => {
+            copyText(code).then((copied) => {
+                if (!copied) throw new Error("复制失败");
                 const timeoutId = btn.getAttribute("data-timeout-id");
                 if (timeoutId) {
                     clearTimeout(parseInt(timeoutId));

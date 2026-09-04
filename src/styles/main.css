@@ -656,6 +656,51 @@
     @apply cursor-zoom-in
 }
 
+.markdown-content :is(h2, h3, h4, h5, h6)[id] {
+    scroll-margin-top: calc(var(--navbar-height, 4rem) + 1.25rem);
+}
+
+.heading-anchor-btn {
+    display: inline-flex;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-inline-start: 0.45rem;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 0.55rem;
+    background: transparent;
+    color: var(--primary);
+    font: inherit;
+    font-size: 0.72em;
+    line-height: 1;
+    opacity: 0;
+    cursor: pointer;
+    translate: 0 0.1rem;
+    transition: opacity 160ms ease, background-color 160ms ease, scale 160ms ease;
+}
+
+.markdown-content :is(h2, h3, h4, h5, h6):hover > .heading-anchor-btn,
+.heading-anchor-btn:focus-visible,
+.heading-anchor-btn.success {
+    opacity: 1;
+}
+
+.heading-anchor-btn:hover,
+.heading-anchor-btn.success {
+    background: color-mix(in oklch, var(--primary) 13%, transparent);
+}
+
+.heading-anchor-btn:active {
+    scale: 0.9;
+}
+
+@media (hover: none) {
+    .heading-anchor-btn {
+        opacity: 0.72;
+    }
+}
+
 ::selection {
     background-color: var(--selection-bg)
 }

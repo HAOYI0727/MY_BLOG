@@ -5,6 +5,8 @@ import { getTranslateLanguageFromConfig, getSiteLanguage, setStoredLanguage, get
 import { onClickOutside } from "@utils/widget";
 import { siteConfig } from "@/config";
 import { getSupportedTranslateLanguages } from "@/i18n/language";
+import { i18n } from "@/i18n/translation";
+import I18nKey from "@/i18n/i18nKey";
 import DropdownItem from "@/components/common/DropdownItem.svelte";
 import DropdownPanel from "@/components/common/DropdownPanel.svelte";
 import Icon from "@components/common/icon.svelte";
@@ -95,10 +97,10 @@ onDestroy(() => {
 
 {#if siteConfig.translate?.enable}
 <!-- svelte-ignore a11y_no_static_element_interactions (pointer leave only dismisses the already keyboard-accessible panel) -->
-<div class="relative z-50" role="group" aria-label="Language translation" onmouseleave={closePanel}>
+<div class="relative z-50" role="group" aria-label={i18n(I18nKey.languageTranslation)} onmouseleave={closePanel}>
     <!-- 翻译按钮 -->
     <button
-        aria-label="Language Translation"
+        aria-label={i18n(I18nKey.languageTranslation)}
         aria-expanded={isOpen}
         aria-controls="translate-panel-wrapper"
         class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center"
@@ -122,7 +124,7 @@ onDestroy(() => {
             class="p-4 w-full"
         >
             <div class="text-sm font-medium text-(--primary) mb-3 px-1">
-                选择语言 / Select Language
+                {i18n(I18nKey.selectLanguage)}
             </div>
             <div class="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto">
                 {#each languages as lang}

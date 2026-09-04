@@ -3,7 +3,7 @@ import { onMount } from "svelte";
 
 import { WALLPAPER_FULLSCREEN, WALLPAPER_BANNER, WALLPAPER_NONE } from "@constants/constants";
 import {
-    getStoredWallpaperMode,
+    getEffectiveWallpaperMode,
     setWallpaperMode,
 } from "@utils/wallpaper";
 import { onClickOutside } from "@utils/widget";
@@ -50,12 +50,18 @@ function handleClickOutside(event: MouseEvent) {
 }
 
 onMount(() => {
-    mode = getStoredWallpaperMode();
+    mode = getEffectiveWallpaperMode();
+    const syncAppliedMode = (event: Event) => {
+        const appliedMode = (event as CustomEvent<{ mode: WALLPAPER_MODE }>).detail?.mode;
+        if (appliedMode) mode = appliedMode;
+    };
+    document.addEventListener("twilight:wallpaper-mode-applied", syncAppliedMode);
     document.addEventListener("click", handleClickOutside);
     document.addEventListener("keydown", handleKeydown);
     return () => {
         document.removeEventListener("click", handleClickOutside);
         document.removeEventListener("keydown", handleKeydown);
+        document.removeEventListener("twilight:wallpaper-mode-applied", syncAppliedMode);
     };
 });
 </script>

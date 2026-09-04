@@ -132,12 +132,12 @@ function initBannerElements(banner: HTMLElement | null) {
 // Function to show banner mode wallpaper
 function showBannerMode() {
     const { bannerWrapper, fullscreenContainer, banner } = getElements();
-    // 隐藏全屏壁纸（通过CSS类控制）
+    // Banner 只负责首屏展示；同源全屏壁纸继续铺在正文背后，避免下滑后出现纯色背景。
     if (fullscreenContainer) {
-        fullscreenContainer.style.opacity = '0';
-        runIfMode(WALLPAPER_BANNER, () => {
-            fullscreenContainer.classList.add('hidden');
-        });
+        fullscreenContainer.classList.remove('hidden');
+        void fullscreenContainer.offsetHeight;
+        fullscreenContainer.style.opacity = siteConfig.wallpaper.fullscreen?.opacity?.toString() || '0.8';
+        window.initFullscreenWallpaperCarousel?.();
     }
     // 显示banner
     if (!bannerWrapper) {
@@ -289,6 +289,7 @@ export function applyWallpaperModeToDocument(mode: WALLPAPER_MODE, force = false
         switch (mode) {
             case WALLPAPER_BANNER:
                 showBannerMode();
+                adjustMainContentTransparency(true);
                 break;
             case WALLPAPER_FULLSCREEN:
                 showFullscreenMode();
@@ -305,6 +306,9 @@ export function applyWallpaperModeToDocument(mode: WALLPAPER_MODE, force = false
         updateNavbarTransparency(mode);
         // 重新初始化相关组件
         reinitializeComponents(mode);
+        document.dispatchEvent(new CustomEvent('twilight:wallpaper-mode-applied', {
+            detail: { mode, forced: getPageWallpaperMode() !== null },
+        }));
         // 等待过渡动画完成后移除过渡保护类
         setTimeout(() => {
             document.documentElement.classList.remove('is-wallpaper-transitioning');
@@ -352,8 +356,21 @@ export function getStoredWallpaperMode(): WALLPAPER_MODE {
     return getDefaultWallpaperMode();
 }
 
+// A page can request a presentation mode without overwriting the visitor's saved preference.
+export function getPageWallpaperMode(): WALLPAPER_MODE | null {
+    if (typeof document === 'undefined') return null;
+    const mode = document.getElementById('page-wallpaper-carrier')?.dataset.wallpaperMode;
+    if (mode === WALLPAPER_FULLSCREEN || mode === WALLPAPER_BANNER || mode === WALLPAPER_NONE) {
+        return mode;
+    }
+    return null;
+}
+
+export function getEffectiveWallpaperMode(): WALLPAPER_MODE {
+    return getPageWallpaperMode() || getStoredWallpaperMode();
+}
+
 // Function to initialize wallpaper mode on page load
 export function initWallpaperMode(): void {
-    const storedMode = getStoredWallpaperMode();
-    applyWallpaperModeToDocument(storedMode, true);
+    applyWallpaperModeToDocument(getEffectiveWallpaperMode(), true);
 }

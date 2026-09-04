@@ -8,13 +8,13 @@ export const LinkPresets: { [key in LinkPreset]: NavbarLink } = {
         name: i18n(I18nKey.home),
         url: "/",
         icon: "material-symbols:home",
-        description: "The homepage of the website.",
+        description: i18n(I18nKey.homeDescription),
     },
     [LinkPreset.Archive]: {
         name: i18n(I18nKey.archive),
         url: "/archive/",
         icon: "material-symbols:archive",
-        description: "A chronological list of all posts.",
+        description: i18n(I18nKey.archiveDescription),
     },
     [LinkPreset.Projects]: {
         name: i18n(I18nKey.projects),
@@ -50,13 +50,13 @@ export const LinkPresets: { [key in LinkPreset]: NavbarLink } = {
         name: i18n(I18nKey.anime),
         url: "/anime/",
         icon: "material-symbols:movie",
-        description: "A list of anime I have watched.",
+        description: i18n(I18nKey.animeDescription),
     },
     [LinkPreset.Friends]: {
         name: i18n(I18nKey.friends),
         url: "/friends/",
         icon: "material-symbols:group",
-        description: "A curated list of friend sites.",
+        description: i18n(I18nKey.friendsDescription),
     },
     [LinkPreset.About]: {
         name: i18n(I18nKey.about),
@@ -68,6 +68,6 @@ export const LinkPresets: { [key in LinkPreset]: NavbarLink } = {
         name: i18n(I18nKey.posts),
         url: "/posts/",
         icon: "material-symbols:article",
-        description: "A Series of Blogs on Artificial Intelligence and Software Development",
+        description: i18n(I18nKey.postsDescription),
     },
 };
